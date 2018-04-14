@@ -12,14 +12,14 @@ public:
 	Entity(float pXPos, float pYPos);
 	~Entity();
 
-	virtual void draw(RenderWindow &window) = 0;
-	virtual void update(float dt, Entity** other = nullptr, int size = 0) = 0;
+	virtual void Draw(RenderWindow &window) = 0;
+	virtual void Update(float dt, Entity** other = nullptr, int size = 0) = 0;
 
-	void setPos(const Vector2f &pos);
-	void setPos(float x, float y);
-	Vector2f getPos() const;
-	float getPosX() const;
-	float getPosY()const;
+	void SetPos(const Vector2f &pos);
+	void SetPos(float x, float y);
+	Vector2f GetPos() const;
+	float GetPosX() const;
+	float GetPosY()const;
 
 };
 

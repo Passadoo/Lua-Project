@@ -20,6 +20,12 @@
     <Filter Include="Objects\Player">
       <UniqueIdentifier>{7445ec2e-17ea-43c0-a311-db5f0f1e96f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{c3147286-2001-483a-bf4e-3553a6e7a98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Defined">
+      <UniqueIdentifier>{ac45d261-bacb-43bd-8489-b449362d2142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -28,10 +34,16 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Objects\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Defined.cpp">
+      <Filter>Defined</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
       <Filter>Objects\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Defined.h">
+      <Filter>Defined</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

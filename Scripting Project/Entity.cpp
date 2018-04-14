@@ -14,28 +14,28 @@ Entity::~Entity()
 
 }
 
-void Entity::setPos(const Vector2f & pPosition)
+void Entity::SetPos(const Vector2f & pPosition)
 {
-	this->setPos(mPosition.x, mPosition.y);
+	this->SetPos(mPosition.x, mPosition.y);
 }
 
-void Entity::setPos(float x, float y)
+void Entity::SetPos(float x, float y)
 {
 	this->mPosition.x = x;
 	this->mPosition.y = y;
 }
 
-Vector2f Entity::getPos() const
+Vector2f Entity::GetPos() const
 {
 	return this->mPosition;
 }
 
-float Entity::getPosX() const
+float Entity::GetPosX() const
 {
 	return this->mPosition.x;
 }
 
-float Entity::getPosY() const
+float Entity::GetPosY() const
 {
 	return this->mPosition.y;
 }
