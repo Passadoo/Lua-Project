@@ -1,8 +1,8 @@
 #include "Defined.h"
 
 //Window
-unsigned int Defined::WINDOW_WIDTH = 0;
-unsigned int Defined::WINDOW_HEIGHT = 0;
+unsigned int Defined::WINDOW_WIDTH = 800;
+unsigned int Defined::WINDOW_HEIGHT = 600;
 
 //Map
 const string Defined::MAP_PATH = "";

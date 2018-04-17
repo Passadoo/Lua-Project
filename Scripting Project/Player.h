@@ -5,6 +5,7 @@
 class Player : public Entity
 {
 private:
+	RectangleShape mPlayerSprite;
 
 
 public:

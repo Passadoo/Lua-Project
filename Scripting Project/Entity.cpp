@@ -2,7 +2,7 @@
 
 
 
-Entity::Entity(float pXPos, float pYPos)
+Entity::Entity(int pXPos, int pYPos)
 {
 	mPosition = Vector2f(pXPos, pYPos);
 	//Test comment
@@ -19,7 +19,7 @@ void Entity::SetPos(const Vector2f & pPosition)
 	this->SetPos(mPosition.x, mPosition.y);
 }
 
-void Entity::SetPos(float x, float y)
+void Entity::SetPos(int x, int y)
 {
 	this->mPosition.x = x;
 	this->mPosition.y = y;

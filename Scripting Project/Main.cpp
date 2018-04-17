@@ -1,11 +1,16 @@
 #include <SFML/Graphics.hpp>
 
+#include "Defined.h"
+#include "Player.h"
+
 int main()
 {
 	sf::RenderWindow window;
-	window.create(sf::VideoMode(800, 600), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
+	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
 	sf::Clock clock;
+
+	Player mPlayer;
 
 	sf::Time time;
 	sf::Event event;
@@ -37,7 +42,13 @@ int main()
 		shape.setFillColor(sf::Color(100, 250, 50));
 
 		window.clear(sf::Color(0, 0, 0, 255));
-		window.draw(shape);
+		//window.draw(shape);
+		if (clock.getElapsedTime().asSeconds() >= 0.01f)
+		{
+			mPlayer.Update(1.0f);
+			clock.restart();
+		}
+		mPlayer.Draw(window);
 		window.display();
 	}
 
