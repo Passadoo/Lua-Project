@@ -15,7 +15,11 @@ Game::Game()
 
 Game::~Game()
 {
-
+	for (int i = 0; i< mObstacles.size(); i++)
+	{
+		delete mObstacles[i];
+	}
+	delete mPlayer;
 }
 
 void Game::Draw(RenderWindow & window)

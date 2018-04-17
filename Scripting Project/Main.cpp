@@ -4,6 +4,7 @@
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
@@ -48,6 +49,8 @@ int main()
 		game->Draw(window);
 		window.display();
 	}
+
+	delete game;
 
 	return 0;
 }
