@@ -2,9 +2,9 @@
 
 Game::Game()
 {
-	for (int i = 1; i < Defined::WORLD_WIDTH - 5; i++)
+	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
 	{
-		for (int j = 1; j < Defined::WORLD_HEIGHT - 5; j++)
+		for (int j = 0; j < Defined::WORLD_HEIGHT; j++)
 		{
 			mObstacles.push_back(new Obstacle(i, j));
 		}

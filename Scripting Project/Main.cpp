@@ -39,22 +39,13 @@ int main()
 				break;
 			}
 		}
-
-		//sf::CircleShape shape(50);
-		//shape.setFillColor(sf::Color(100, 250, 50));
-
 		window.clear(sf::Color(140, 100, 230, 255));
-		//window.draw(shape);
-		if (clock.getElapsedTime().asSeconds() >= 0.01f)
+		if (clock.getElapsedTime().asSeconds() >= 0.1f)
 		{
-			//mPlayer.Update(1.0f);
-			//mObstacle.Update(1.0f);
 			game->Update(1.0f);
 			clock.restart();
 		}
 		game->Draw(window);
-		//mPlayer.Draw(window);
-		//mObstacle.Draw(window);
 		window.display();
 	}
 

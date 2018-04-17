@@ -40,18 +40,22 @@ void Player::Update(float dt)
 {
 	if (Keyboard::isKeyPressed(Keyboard::D))
 	{
-		mPlayerSprite.setPosition(mPlayerSprite.getPosition().x + 1, mPlayerSprite.getPosition().y);
+		SetPos(mPlayerSprite.getPosition().x + Defined::GRID_CELL_SIZE, mPlayerSprite.getPosition().y);
+		mPlayerSprite.setPosition(GetPos());
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S))
 	{
-		mPlayerSprite.setPosition(mPlayerSprite.getPosition().x, mPlayerSprite.getPosition().y + 1);
+		SetPos(mPlayerSprite.getPosition().x, mPlayerSprite.getPosition().y + Defined::GRID_CELL_SIZE);
+		mPlayerSprite.setPosition(GetPos());
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A))
 	{
-		mPlayerSprite.setPosition(mPlayerSprite.getPosition().x - 1, mPlayerSprite.getPosition().y);
+		SetPos(mPlayerSprite.getPosition().x - Defined::GRID_CELL_SIZE, mPlayerSprite.getPosition().y);
+		mPlayerSprite.setPosition(GetPos());
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W))
 	{
-		mPlayerSprite.setPosition(mPlayerSprite.getPosition().x, mPlayerSprite.getPosition().y - 1);
+		SetPos(mPlayerSprite.getPosition().x, mPlayerSprite.getPosition().y - Defined::GRID_CELL_SIZE);
+		mPlayerSprite.setPosition(GetPos());
 	}
 }
