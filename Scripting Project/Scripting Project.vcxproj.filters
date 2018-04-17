@@ -37,6 +37,9 @@
     <ClCompile Include="Defined.cpp">
       <Filter>Defined</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -45,5 +48,6 @@
     <ClInclude Include="Defined.h">
       <Filter>Defined</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h" />
   </ItemGroup>
 </Project>

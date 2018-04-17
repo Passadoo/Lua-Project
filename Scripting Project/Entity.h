@@ -13,7 +13,7 @@ public:
 	~Entity();
 
 	virtual void Draw(RenderWindow &window) = 0;
-	virtual void Update(float dt, Entity** other = nullptr, int size = 0) = 0;
+	virtual void Update(float dt) = 0;
 
 	void SetPos(const Vector2f &pos);
 	void SetPos(float x, float y);
