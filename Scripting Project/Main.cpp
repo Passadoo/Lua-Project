@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#include "Defined.h"
-#include "Player.h"
+#include "Game.h"
 
 int main()
 {
@@ -10,7 +9,10 @@ int main()
 
 	sf::Clock clock;
 
-	Player mPlayer;
+	Game* game = new Game();
+
+	Player mPlayer(0, 0);
+	Obstacle mObstacle(5, 5);
 
 	sf::Time time;
 	sf::Event event;
@@ -38,17 +40,21 @@ int main()
 			}
 		}
 
-		sf::CircleShape shape(50);
-		shape.setFillColor(sf::Color(100, 250, 50));
+		//sf::CircleShape shape(50);
+		//shape.setFillColor(sf::Color(100, 250, 50));
 
-		window.clear(sf::Color(0, 0, 0, 255));
+		window.clear(sf::Color(140, 100, 230, 255));
 		//window.draw(shape);
 		if (clock.getElapsedTime().asSeconds() >= 0.01f)
 		{
-			mPlayer.Update(1.0f);
+			//mPlayer.Update(1.0f);
+			//mObstacle.Update(1.0f);
+			game->Update(1.0f);
 			clock.restart();
 		}
-		mPlayer.Draw(window);
+		game->Draw(window);
+		//mPlayer.Draw(window);
+		//mObstacle.Draw(window);
 		window.display();
 	}
 

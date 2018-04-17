@@ -8,6 +8,6 @@ unsigned int Defined::WINDOW_HEIGHT = 600;
 const string Defined::MAP_PATH = "";
 
 //Grid
-float Defined::GRID_CELL_SIZE = 0;
-int Defined::GRID_HEIGHT = 0;
-int Defined::GRID_WIDTH = 0;
+int Defined::GRID_CELL_SIZE = 40; // 20 x 15 grid squares, each grid square 40 x 40 pixels large
+int Defined::WORLD_WIDTH = 20; //20 grid cells wide
+int Defined::WORLD_HEIGHT = 15; // 15 grid cells tall

@@ -16,9 +16,9 @@ public:
 	static const string MAP_PATH;
 
 	//Grid
-	static float GRID_CELL_SIZE;
-	static int GRID_WIDTH;
-	static int GRID_HEIGHT;
+	static int GRID_CELL_SIZE;
+	static int WORLD_WIDTH;
+	static int WORLD_HEIGHT;
 
 };
 
