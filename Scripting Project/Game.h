@@ -8,14 +8,17 @@
 class Game
 {
 private:
-	Entity** mObstacles;
-	Player* mPlayer;
+	Obstacle** mObstacles;
 	Bullet** mBullets;
+	Enemy** mEnemies;
+	Player* mPlayer;
 	int mNrOfBullets;
 	int mNrOfObstacles;
+	int mNrOfEnemies;
 
 	void playerUpdate(float dt);
 	void bulletUpdate(float dt);
+	void enemyUpdate(float dt);
 
 	void RemoveBullet(int index);
 
@@ -23,8 +26,6 @@ public:
 	Game();
 	Game(Map &map);
 	~Game();
-
-
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);

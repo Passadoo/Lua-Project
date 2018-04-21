@@ -55,6 +55,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Objects\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Objects\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Objects\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Objects\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

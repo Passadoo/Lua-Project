@@ -7,27 +7,55 @@ void Game::playerUpdate(float dt)
 
 	if (Keyboard::isKeyPressed(Keyboard::D))
 	{
-		nextPos = Vector2f(mPlayer->GetPos().x + Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
-		moveInit = true;
-		mPlayer->SetDirection(Defined::RIGHT);
+		if (mPlayer->GetDirection() == Defined::RIGHT)
+		{
+			nextPos = Vector2f(mPlayer->GetPos().x + Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
+			moveInit = true;
+		}
+		else 
+		{
+			mPlayer->SetDirection(Defined::RIGHT);
+		}
+
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S))
 	{
-		nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y + Defined::GRID_CELL_SIZE);
-		moveInit = true;
-		mPlayer->SetDirection(Defined::DOWN);
+		if (mPlayer->GetDirection() == Defined::DOWN)
+		{
+			nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y + Defined::GRID_CELL_SIZE);
+			moveInit = true;
+		}
+		else
+		{
+			mPlayer->SetDirection(Defined::DOWN);
+		}
+
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A))
 	{
-		nextPos = Vector2f(mPlayer->GetPos().x - Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
-		moveInit = true;
-		mPlayer->SetDirection(Defined::LEFT);
+		if (mPlayer->GetDirection() == Defined::LEFT)
+		{
+			nextPos = Vector2f(mPlayer->GetPos().x - Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
+			moveInit = true;
+		}
+		else
+		{
+			mPlayer->SetDirection(Defined::LEFT);
+		}
+
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W))
 	{
-		nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y - Defined::GRID_CELL_SIZE);
-		moveInit = true;
-		mPlayer->SetDirection(Defined::UP);
+		if (mPlayer->GetDirection() == Defined::UP)
+		{
+			nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y - Defined::GRID_CELL_SIZE);
+			moveInit = true;
+		}
+		else
+		{
+			mPlayer->SetDirection(Defined::UP);
+		}
+
 	}
 
 	if (moveInit)
@@ -113,20 +141,30 @@ void Game::bulletUpdate(float dt)
 			RemoveBullet(i);
 		}
 	}
+}
 
+void Game::enemyUpdate(float dt)
+{
+	for (int i = 0; i < mNrOfEnemies; i++)
+	{
 
-	//Check for bullet collisions
+	}
 }
 
 Game::Game()
 {
-	mObstacles = new Entity*[5];
+	mObstacles = new Obstacle*[5];
 	mObstacles[0] = new Obstacle(5, 5);
 	mObstacles[1] = new Obstacle(5, 7);
 	mObstacles[2] = new Obstacle(7, 12);
 	mObstacles[3] = new Obstacle(8, 4);
 	mObstacles[4] = new Obstacle(12, 3);
 	mNrOfObstacles = 5;
+	
+	mEnemies = new Enemy*[2];
+	mEnemies[0] = new Enemy(13, 10);
+	mEnemies[1] = new Enemy(3, 8);
+	mNrOfEnemies = 2;
 
 	mPlayer = new Player();
 }
@@ -136,9 +174,8 @@ Game::Game(Map & map)
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
 	mNrOfObstacles = 0;
-	map.setObjects(mPlayer, mObstacles, mNrOfObstacles);
-
-
+	mNrOfEnemies = 0;
+	map.setObjects(mPlayer, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies);
 }
 
 Game::~Game()
@@ -151,11 +188,17 @@ Game::~Game()
 
 	delete mPlayer;
 
-	for (int i = 0; i<mNrOfBullets; i++)
+	for (int i = 0; i < mNrOfBullets; i++)
 	{
 		delete mBullets[i];
 	}
 	delete[] mBullets;
+
+	for (int i = 0; i < mNrOfEnemies; i++)
+	{
+		delete mEnemies[i];
+	}
+	delete[] mEnemies;
 }
 
 void Game::RemoveBullet(int index)
@@ -183,6 +226,11 @@ void Game::Draw(RenderWindow & window)
 	{
 		mBullets[i]->Draw(window);
 	}
+
+	for (int i = 0; i < mNrOfEnemies; i++)
+	{
+		mEnemies[i]->Draw(window);
+	}
 }
 
 void Game::Update(float dt)
@@ -195,4 +243,6 @@ void Game::Update(float dt)
 	playerUpdate(dt);
 	
 	bulletUpdate(dt);
+
+	//Update enemies
 }

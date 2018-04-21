@@ -25,6 +25,11 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 						objType = Defined::OBSTACLE;
 						mNrOfObstacles++;
 					}
+					else if(temp == 'e')
+					{
+						objType = Defined::ENEMY;
+						mNrOfEnemies++;
+					}
 					else if (temp != '.')
 					{
 						objType = Defined::PLAYER;
@@ -38,7 +43,9 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 
 Map::Map()
 {
-
+	mObjectTypes = nullptr;
+	mNrOfEnemies = 0;
+	mNrOfObstacles = 0;
 }
 
 
@@ -78,10 +85,13 @@ bool Map::ReadMap(const string & path)
 		{
 			chars.push_back(word[0]); //adding "p" to char list
 			ifs >> word;
-			chars.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
+			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
+			ifs >> word;
+			chars.push_back(word[0]); //adding "e" to the char list
+			ifs >> word;
+			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the enemy is facing
 			ifs >> word;
 			chars.push_back(word[0]); //adding "o" to char list for obstacle placement
-			cout << word << endl;
 			ifs >> word;
 
 		}
@@ -118,7 +128,7 @@ bool Map::ReadMap(const string & path)
 
 }
 
-void Map::setObjects(Player* & pPlayer, Entity **& pObstacles, int & pNrOfObstacles)
+void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies)
 {
 	if (pPlayer != nullptr)
 	{
@@ -134,10 +144,22 @@ void Map::setObjects(Player* & pPlayer, Entity **& pObstacles, int & pNrOfObstac
 		delete[] pObstacles;
 	}
 
-	pNrOfObstacles = mNrOfObstacles;
+	if (pEnemies != nullptr)
+	{
+		for (int i = 0; i < pNrOfEnemies; i++)
+		{
+			delete pEnemies[i];
+		}
+		delete[] pEnemies;
+	}
 
-	pObstacles = new Entity*[mNrOfObstacles];
+	pNrOfObstacles = mNrOfObstacles;
+	pNrOfEnemies = mNrOfEnemies;
+
+	pObstacles = new Obstacle*[mNrOfObstacles];
+	pEnemies = new Enemy*[mNrOfEnemies];
 	int tempObstacles = 0;
+	int tempEnemies = 0;
 
 	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
 	{
@@ -151,6 +173,45 @@ void Map::setObjects(Player* & pPlayer, Entity **& pObstacles, int & pNrOfObstac
 			if (mObjectTypes[i][j] == Defined::PLAYER)
 			{
 				pPlayer = new Player(i, j);
+				if (mDirections[0] == 'l')
+				{
+					pPlayer->SetDirection(Defined::LEFT);
+				}
+				if (mDirections[0] == 'r')
+				{
+					pPlayer->SetDirection(Defined::RIGHT);
+				}
+				if (mDirections[0] == 'u')
+				{
+					pPlayer->SetDirection(Defined::UP);
+				}
+				if (mDirections[0] == 'd')
+				{
+					pPlayer->SetDirection(Defined::DOWN);
+				}
+				
+			}
+			if (mObjectTypes[i][j] == Defined::ENEMY)
+			{
+				pEnemies[tempEnemies] = new Enemy(i, j);
+				if (mDirections[1] == 'l')
+				{
+					pEnemies[tempEnemies]->SetDirection(Defined::LEFT);
+				}
+				if (mDirections[1] == 'r')
+				{
+					pEnemies[tempEnemies]->SetDirection(Defined::RIGHT);
+				}
+				if (mDirections[1] == 'u')
+				{
+					pEnemies[tempEnemies]->SetDirection(Defined::UP);
+				}
+				if (mDirections[1] == 'd')
+				{
+					pEnemies[tempEnemies]->SetDirection(Defined::DOWN);
+				}
+
+				tempEnemies++;
 			}
 		}
 	}

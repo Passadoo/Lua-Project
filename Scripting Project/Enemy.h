@@ -1,10 +1,7 @@
 #pragma once
-
 #include "Entity.h"
-#include <iostream>
-#include "Bullet.h"
 
-class Player : public Entity
+class Enemy : public Entity
 {
 private:
 	Texture mTexture;
@@ -13,10 +10,9 @@ private:
 	Defined::eDirection mDirection;
 
 public:
-	Player();
-	Player(int pXPos, int pYPos);
-	~Player();
-	
+	Enemy();
+	Enemy(float pPosX, float pPosY);
+	~Enemy();
 
 	void SetPosition(Vector2f pPosition);
 	Vector2f GetPos()const;
@@ -25,7 +21,5 @@ public:
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
-
-
 };
 
