@@ -2,15 +2,19 @@
 
 #include "Player.h"
 #include "Obstacle.h"
+#include "Map.h"
+#include <iostream>
 
 class Game
 {
 private:
-	std::vector<Obstacle*> mObstacles;
+	Entity** mObstacles;
 	Player* mPlayer;
+	int mNrOfObstacles;
 
 public:
 	Game();
+	Game(Map &map);
 	~Game();
 
 	void Draw(RenderWindow &window);

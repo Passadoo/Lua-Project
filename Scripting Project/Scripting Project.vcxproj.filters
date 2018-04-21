@@ -46,6 +46,9 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

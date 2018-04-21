@@ -20,5 +20,12 @@ public:
 	static int WORLD_WIDTH;
 	static int WORLD_HEIGHT;
 
+	//Object
+	enum ObjectTypes{AIR = 0, PLAYER, OBSTACLE, ENEMY};
+	struct Object
+	{
+		ObjectTypes type;
+	};
+
 };
 

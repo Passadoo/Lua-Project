@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Game.h"
+#include "Map.h"
 
 int main()
 {
@@ -10,7 +11,9 @@ int main()
 
 	sf::Clock clock;
 
-	Game* game = new Game();
+	Map map;
+	map.ReadMap(Defined::MAP_PATH);
+	Game* game = new Game(map);
 
 	Player mPlayer(0, 0);
 	Obstacle mObstacle(5, 5);

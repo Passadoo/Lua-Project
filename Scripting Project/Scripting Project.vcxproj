@@ -126,6 +126,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -133,6 +134,7 @@
     <ClInclude Include="Defined.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
