@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include <iostream>
+#include "Bullet.h"
 
 class Player : public Entity
 {
@@ -12,20 +13,19 @@ public:
 	Player(int pXPos, int pYPos);
 	~Player();
 	
-	enum eDirection { UP = 0, DOWN, LEFT, RIGHT };
 
 	void SetPosition(Vector2f pPosition);
 	Vector2f GetPos()const;
-	void SetDirection(eDirection pDir);
-	eDirection GetDirection()const;
+	void SetDirection(Defined::eDirection pDir);
+	Defined::eDirection GetDirection()const;
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
 
 private:
-	RectangleShape mPlayerSprite;
+	Texture mTexture;
+	Sprite mSprite;
 
-
-	eDirection mDirection;
+	Defined::eDirection mDirection;
 };
 

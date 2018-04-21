@@ -15,9 +15,6 @@ int main()
 	map.ReadMap(Defined::MAP_PATH);
 	Game* game = new Game(map);
 
-	Player mPlayer(0, 0);
-	Obstacle mObstacle(5, 5);
-
 	sf::Time time;
 	sf::Event event;
 	while (window.isOpen())

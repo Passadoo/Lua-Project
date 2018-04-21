@@ -27,5 +27,11 @@ public:
 		ObjectTypes type;
 	};
 
+	//Direction
+	enum eDirection { UP = 0, DOWN, LEFT, RIGHT };
+
+	//Time
+	static const float BULLET_SPEED;
+
 };
 

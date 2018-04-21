@@ -5,7 +5,6 @@
 Entity::Entity(int pXPos, int pYPos)
 {
 	mPosition = Vector2f(pXPos, pYPos);
-	//Test comment
 }
 
 
@@ -14,7 +13,7 @@ Entity::~Entity()
 
 }
 
-void Entity::SetPos(const Vector2f & pPosition)
+void Entity::SetPos(const Vector2f & pPosition) //Broken?
 {
 	this->SetPos(mPosition.x, mPosition.y);
 }

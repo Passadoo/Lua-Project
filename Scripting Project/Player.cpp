@@ -4,18 +4,26 @@
 
 Player::Player()
 {
-	mPlayerSprite = RectangleShape(Vector2f(Defined::GRID_CELL_SIZE, Defined::GRID_CELL_SIZE));
-	mPlayerSprite.setFillColor(Color::Blue);
-	mPlayerSprite.setPosition(GetPos());
-	mDirection = RIGHT;
+	if (!mTexture.loadFromFile("Resources/Obstacle.png"))
+	{
+		//Error
+	}
+	mSprite.setTexture(mTexture);
+	SetPos(0, 0);
+	mSprite.setPosition(GetPos());
+	mDirection = Defined::RIGHT;
 }
 
 Player::Player(int pXPos, int pYPos)
 {
-	mPlayerSprite = RectangleShape(Vector2f(Defined::GRID_CELL_SIZE, Defined::GRID_CELL_SIZE));
-	mPlayerSprite.setFillColor(Color::Blue);
+	if (!mTexture.loadFromFile("Resources/Player.png"))
+	{
+		//Error
+	}
+	mSprite.setTexture(mTexture);
 	SetPos(pXPos * Defined::GRID_CELL_SIZE, pYPos * Defined::GRID_CELL_SIZE);
-	mPlayerSprite.setPosition(GetPos());
+	mSprite.setPosition(GetPos());
+	mDirection = Defined::RIGHT;
 }
 
 
@@ -26,7 +34,7 @@ Player::~Player()
 void Player::SetPosition(Vector2f pPosition)
 {
 	SetPos(pPosition.x, pPosition.y);
-	mPlayerSprite.setPosition(Entity::GetPos());
+	mSprite.setPosition(Entity::GetPos());
 }
 
 Vector2f Player::GetPos()const
@@ -34,12 +42,12 @@ Vector2f Player::GetPos()const
 	return Entity::GetPos();
 }
 
-void Player::SetDirection(eDirection pDir)
+void Player::SetDirection(Defined::eDirection pDir)
 {
 	mDirection = pDir;
 }
 
-Player::eDirection Player::GetDirection() const
+Defined::eDirection Player::GetDirection() const
 {
 	return mDirection;
 }
@@ -48,12 +56,29 @@ void Player::Draw(RenderWindow & window)
 {
 	if (&window != nullptr)
 	{
-		window.draw(mPlayerSprite);
+		window.draw(mSprite);
 	}
 }
 
 void Player::Update(float dt)
 {
+	//if (mDirection == Defined::RIGHT)
+	//{
+	//	mSprite.setRotation(90);
+	//}
+	//else if (mDirection == Defined::LEFT)
+	//{
+	//	mSprite.setRotation(270);
+	//}
+	//else if (mDirection == Defined::UP)
+	//{
+	//	mSprite.setRotation(0);
+	//}
+	//else
+	//{
+	//	mSprite.setRotation(180);
+	//}
+
 	//if (Keyboard::isKeyPressed(Keyboard::D))
 	//{
 	//	SetPos(mPlayerSprite.getPosition().x + Defined::GRID_CELL_SIZE, mPlayerSprite.getPosition().y);

@@ -26,6 +26,9 @@
     <Filter Include="Defined">
       <UniqueIdentifier>{ac45d261-bacb-43bd-8489-b449362d2142}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Bullet">
+      <UniqueIdentifier>{54408bf2-c9dd-4f48-9d83-f9bd7a2a10b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -49,6 +52,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Objects\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -68,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Objects\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,7 +44,11 @@ Map::Map()
 
 Map::~Map()
 {
-
+	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
+	{
+		delete[] mObjectTypes[i];
+	}
+	delete[] mObjectTypes;
 }
 
 bool Map::ReadMap(const string & path)
