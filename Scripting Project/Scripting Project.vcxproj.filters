@@ -11,20 +11,26 @@
     <Filter Include="Objects\Entity">
       <UniqueIdentifier>{66850272-4d64-420f-8b3f-e5d1ad9771f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Obstacle">
-      <UniqueIdentifier>{8001556b-858c-4976-a486-17e324588989}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Enemy">
-      <UniqueIdentifier>{9531ee47-51bc-4fc0-8647-48fae78ba2d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Player">
-      <UniqueIdentifier>{7445ec2e-17ea-43c0-a311-db5f0f1e96f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map">
       <UniqueIdentifier>{c3147286-2001-483a-bf4e-3553a6e7a98e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Defined">
       <UniqueIdentifier>{ac45d261-bacb-43bd-8489-b449362d2142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Entity\Enemy">
+      <UniqueIdentifier>{9531ee47-51bc-4fc0-8647-48fae78ba2d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Entity\Bullet">
+      <UniqueIdentifier>{54408bf2-c9dd-4f48-9d83-f9bd7a2a10b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Entity\Door">
+      <UniqueIdentifier>{d742b7c6-21e7-46c0-a409-2b8409281c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Entity\Obstacle">
+      <UniqueIdentifier>{8001556b-858c-4976-a486-17e324588989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Entity\Player">
+      <UniqueIdentifier>{7445ec2e-17ea-43c0-a311-db5f0f1e96f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,7 +44,25 @@
       <Filter>Defined</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Objects\Entity\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Objects\Entity\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Objects\Entity\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Objects\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Objects\Entity\Door</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +72,26 @@
     <ClInclude Include="Defined.h">
       <Filter>Defined</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Player.h">
+      <Filter>Objects\Entity\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Objects\Entity\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Objects\Entity\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Objects\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Objects\Entity\Door</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,31 +1,28 @@
 #pragma once
-
 #include "Entity.h"
-#include <iostream>
-#include "Bullet.h"
 
-class Player : public Entity
+class Enemy : public Entity
 {
 private:
 	Texture mTexture;
 	Sprite mSprite;
+	int mCurrentHealth;
 
 	Defined::eDirection mDirection;
 
 public:
-	Player();
-	Player(int pXPos, int pYPos);
-	~Player();
-	
+	Enemy();
+	Enemy(float pPosX, float pPosY);
+	~Enemy();
 
 	void SetPosition(Vector2f pPosition);
 	Vector2f GetPos()const;
 	void SetDirection(Defined::eDirection pDir);
 	Defined::eDirection GetDirection()const;
+	void TakeDamage();
+	int GetHealth()const;
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
-
-
 };
 

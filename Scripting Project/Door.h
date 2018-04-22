@@ -1,31 +1,23 @@
 #pragma once
 
 #include "Entity.h"
-#include <iostream>
-#include "Bullet.h"
 
-class Player : public Entity
+class Door : public Entity
 {
 private:
-	Texture mTexture;
 	Sprite mSprite;
-
+	Texture mTexture;
 	Defined::eDirection mDirection;
 
 public:
-	Player();
-	Player(int pXPos, int pYPos);
-	~Player();
-	
+	Door();
+	Door(int pPosX, int pPosY);
+	~Door();
 
-	void SetPosition(Vector2f pPosition);
-	Vector2f GetPos()const;
 	void SetDirection(Defined::eDirection pDir);
 	Defined::eDirection GetDirection()const;
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
-
-
 };
 

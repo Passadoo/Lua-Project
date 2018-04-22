@@ -1,10 +1,10 @@
-#include "Player.h"
+#include "Enemy.h"
 
 
 
-Player::Player()
+Enemy::Enemy()
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile("Resources/Enemy.png"))
 	{
 		//Error
 	}
@@ -12,52 +12,59 @@ Player::Player()
 	SetPos(0, 0);
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
+	mCurrentHealth = Defined::ENEMY_HEALTH;
 }
 
-Player::Player(int pXPos, int pYPos)
+Enemy::Enemy(float pPosX, float pPosY)
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile("Resources/Enemy.png"))
 	{
 		//Error
 	}
 	mSprite.setTexture(mTexture);
-	SetPos(pXPos * Defined::GRID_CELL_SIZE, pYPos * Defined::GRID_CELL_SIZE);
+	SetPos(pPosX * Defined::GRID_CELL_SIZE, pPosY * Defined::GRID_CELL_SIZE);
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
+	mCurrentHealth = Defined::ENEMY_HEALTH;
 }
 
-Player::~Player()
+Enemy::~Enemy()
 {
 }
 
-void Player::SetPosition(Vector2f pPosition)
+void Enemy::SetPosition(Vector2f pPosition)
 {
 	SetPos(pPosition.x, pPosition.y);
 	mSprite.setPosition(Entity::GetPos());
 }
 
-Vector2f Player::GetPos()const
+Vector2f Enemy::GetPos() const
 {
 	return Entity::GetPos();
 }
 
-void Player::SetDirection(Defined::eDirection pDir)
+void Enemy::SetDirection(Defined::eDirection pDir)
 {
 	mDirection = pDir;
 }
 
-Defined::eDirection Player::GetDirection() const
+Defined::eDirection Enemy::GetDirection() const
 {
 	return mDirection;
 }
 
-void Player::Draw(RenderWindow & window)
+void Enemy::TakeDamage()
 {
-	//if (&window != nullptr)
-	//{
-	//	window.draw(mSprite);
-	//}
+	mCurrentHealth--;
+}
 
+int Enemy::GetHealth() const
+{
+	return mCurrentHealth;
+}
+
+void Enemy::Draw(RenderWindow & window)
+{
 	Transform t;
 
 	if (mDirection == Defined::RIGHT)
@@ -80,11 +87,9 @@ void Player::Draw(RenderWindow & window)
 		t.rotate(180, GetPos().x + (Defined::GRID_CELL_SIZE / 2), GetPos().y + (Defined::GRID_CELL_SIZE / 2));
 		window.draw(mSprite, t);
 	}
-
-
 }
 
-void Player::Update(float dt)
+void Enemy::Update(float dt)
 {
 
 }

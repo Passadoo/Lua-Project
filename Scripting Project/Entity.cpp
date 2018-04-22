@@ -2,10 +2,9 @@
 
 
 
-Entity::Entity(float pXPos, float pYPos)
+Entity::Entity(int pXPos, int pYPos)
 {
 	mPosition = Vector2f(pXPos, pYPos);
-	//Test comment
 }
 
 
@@ -14,12 +13,12 @@ Entity::~Entity()
 
 }
 
-void Entity::SetPos(const Vector2f & pPosition)
+void Entity::SetPos(const Vector2f & pPosition) //Broken?
 {
 	this->SetPos(mPosition.x, mPosition.y);
 }
 
-void Entity::SetPos(float x, float y)
+void Entity::SetPos(int x, int y)
 {
 	this->mPosition.x = x;
 	this->mPosition.y = y;

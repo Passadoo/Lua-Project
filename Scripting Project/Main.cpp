@@ -1,11 +1,19 @@
 #include <SFML/Graphics.hpp>
 
+#include "Game.h"
+#include "Map.h"
+
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	sf::RenderWindow window;
-	window.create(sf::VideoMode(800, 600), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
+	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
 	sf::Clock clock;
+
+	Map map;
+	map.ReadMap(Defined::MAP_PATH);
+	Game* game = new Game(map);
 
 	sf::Time time;
 	sf::Event event;
@@ -32,14 +40,17 @@ int main()
 				break;
 			}
 		}
-
-		sf::CircleShape shape(50);
-		shape.setFillColor(sf::Color(100, 250, 50));
-
-		window.clear(sf::Color(0, 0, 0, 255));
-		window.draw(shape);
+		window.clear(sf::Color(140, 100, 230, 255));
+		if (clock.getElapsedTime().asSeconds() >= 0.1f)
+		{
+			game->Update(1.0f);
+			clock.restart();
+		}
+		game->Draw(window);
 		window.display();
 	}
+
+	delete game;
 
 	return 0;
 }
