@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 #include "Enemy.h"
+#include "Door.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ private:
 	Defined::ObjectTypes** mObjectTypes;
 	int mNrOfObstacles;
 	int mNrOfEnemies;
+	int mNrOfDoors;
 	vector<char> mDirections;
 
 	void fillGrid(const vector<string> & lines, const vector<char> & chars);
@@ -25,6 +27,7 @@ public:
 	~Map();
 
 	bool ReadMap(const string & path);
-	void setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies);
+	void setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies, 
+		Door **& pDoors, int & pNrOfDoors);
 };
 

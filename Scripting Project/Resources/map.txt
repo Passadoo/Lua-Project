@@ -2,10 +2,11 @@
 p u
 e r
 o 
+d d
 @Map
-oooooooooooooooooooo
+ooooooooodoooooooooo
 o.p............o.o.o
-o..................o
+o...............e..o
 o..............o.o.o
 o..................o
 o..................o

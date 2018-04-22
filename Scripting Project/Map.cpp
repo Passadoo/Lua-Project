@@ -30,6 +30,11 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 						objType = Defined::ENEMY;
 						mNrOfEnemies++;
 					}
+					else if (temp == 'd')
+					{
+						objType = Defined::DOOR;
+						mNrOfDoors++;
+					}
 					else if (temp != '.')
 					{
 						objType = Defined::PLAYER;
@@ -46,6 +51,7 @@ Map::Map()
 	mObjectTypes = nullptr;
 	mNrOfEnemies = 0;
 	mNrOfObstacles = 0;
+	mNrOfDoors = 0;
 }
 
 
@@ -93,6 +99,10 @@ bool Map::ReadMap(const string & path)
 			ifs >> word;
 			chars.push_back(word[0]); //adding "o" to char list for obstacle placement
 			ifs >> word;
+			chars.push_back(word[0]); //adding "d" to char list for door placement
+			ifs >> word;
+			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the door is facing
+			ifs >> word; 
 
 		}
 		if (word == "@Map")
@@ -128,7 +138,8 @@ bool Map::ReadMap(const string & path)
 
 }
 
-void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies)
+void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
+	Door **& pDoors, int & pNrOfDoors)
 {
 	if (pPlayer != nullptr)
 	{
@@ -153,13 +164,26 @@ void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObst
 		delete[] pEnemies;
 	}
 
+	if (pDoors != nullptr)
+	{
+		for (int i = 0; i < pNrOfDoors; i++)
+		{
+			delete pDoors[i];
+		}
+		delete[] pDoors;
+	}
+
 	pNrOfObstacles = mNrOfObstacles;
 	pNrOfEnemies = mNrOfEnemies;
+	pNrOfDoors = mNrOfDoors;
 
 	pObstacles = new Obstacle*[mNrOfObstacles];
 	pEnemies = new Enemy*[mNrOfEnemies];
+	pDoors = new Door*[mNrOfDoors];
+
 	int tempObstacles = 0;
 	int tempEnemies = 0;
+	int tempDoors = 0;
 
 	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
 	{
@@ -213,8 +237,29 @@ void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObst
 
 				tempEnemies++;
 			}
+			if (mObjectTypes[i][j] == Defined::DOOR)
+			{
+				pDoors[tempDoors] = new Door(i, j);
+				
+				if (mDirections[2] == 'l')
+				{
+					pDoors[tempDoors]->SetDirection(Defined::LEFT);
+				}
+				if (mDirections[2] == 'r')
+				{
+					pDoors[tempDoors]->SetDirection(Defined::RIGHT);
+				}
+				if (mDirections[2] == 'u')
+				{
+					pDoors[tempDoors]->SetDirection(Defined::UP);
+				}
+				if (mDirections[2] == 'd')
+				{
+					pDoors[tempDoors]->SetDirection(Defined::DOWN);
+				}
+
+				tempDoors++;
+			}
 		}
 	}
-
-
 }

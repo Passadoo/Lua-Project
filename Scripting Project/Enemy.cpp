@@ -12,6 +12,7 @@ Enemy::Enemy()
 	SetPos(0, 0);
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
+	mCurrentHealth = Defined::ENEMY_HEALTH;
 }
 
 Enemy::Enemy(float pPosX, float pPosY)
@@ -24,6 +25,7 @@ Enemy::Enemy(float pPosX, float pPosY)
 	SetPos(pPosX * Defined::GRID_CELL_SIZE, pPosY * Defined::GRID_CELL_SIZE);
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
+	mCurrentHealth = Defined::ENEMY_HEALTH;
 }
 
 Enemy::~Enemy()
@@ -49,6 +51,16 @@ void Enemy::SetDirection(Defined::eDirection pDir)
 Defined::eDirection Enemy::GetDirection() const
 {
 	return mDirection;
+}
+
+void Enemy::TakeDamage()
+{
+	mCurrentHealth--;
+}
+
+int Enemy::GetHealth() const
+{
+	return mCurrentHealth;
 }
 
 void Enemy::Draw(RenderWindow & window)

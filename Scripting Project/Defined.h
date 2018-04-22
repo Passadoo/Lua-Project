@@ -7,6 +7,11 @@ using namespace std;
 class Defined
 {
 public:
+	//Object
+	enum ObjectTypes { AIR = 0, PLAYER, OBSTACLE, ENEMY, DOOR};
+
+	//Direction
+	enum eDirection { UP = 0, DOWN, LEFT, RIGHT };
 	
 	//Window
 	static unsigned int WINDOW_WIDTH;
@@ -20,18 +25,15 @@ public:
 	static int WORLD_WIDTH;
 	static int WORLD_HEIGHT;
 
-	//Object
-	enum ObjectTypes{AIR = 0, PLAYER, OBSTACLE, ENEMY};
-	struct Object
-	{
-		ObjectTypes type;
-	};
-
-	//Direction
-	enum eDirection { UP = 0, DOWN, LEFT, RIGHT };
-
 	//Time
 	static const float BULLET_SPEED;
+
+	//Enemies
+	static const int ENEMY_HEALTH;
+
+
+
+
 
 };
 

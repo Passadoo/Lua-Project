@@ -14,3 +14,6 @@ int Defined::WORLD_HEIGHT = 15; // 15 grid cells tall
 
 //Time
 const float Defined::BULLET_SPEED = 0.5;
+
+//Enemies
+const int Defined::ENEMY_HEALTH = 3;

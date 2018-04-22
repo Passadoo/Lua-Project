@@ -7,7 +7,7 @@ Bullet::Bullet(int pXPos, int pYPos, Defined::eDirection pDir)
 	mDirection = pDir;
 	mTimeStep = Defined::BULLET_SPEED;
 
-	if (!mTexture.loadFromFile("Resources/Bullet.png"))
+	if (!mTexture.loadFromFile("Resources/SmallBullet.png"))
 	{
 		std::cout << "Bullet texture could not be loaded" << std::endl;
 	}

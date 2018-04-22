@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	if (!mTexture.loadFromFile("Resources/Obstacle.png"))
+	if (!mTexture.loadFromFile("Resources/Player.png"))
 	{
 		//Error
 	}

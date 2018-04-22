@@ -1,0 +1,23 @@
+To do:
+Enemy movement
+Create Door class (DONE)
+Make doors lead to new maps
+Set up Lua with the project and test a simple function
+
+
+Changes 21/04-2018:
+* Can now read map from file
+* Can now shoot bullets
+* Bullets disappear when hitting obstacles
+* Added sprites for bullet and player
+* Added player sprite rotation
+* Pressing WASD now rotates you on the first press, and then moves you after that
+* Can now create enemies (also works in map file)
+* Bullets disappear when hitting enemies
+* Enemies can now die after taking a certain amount of hits
+* Can now create doors (also works in map file)
+* Added sprite for door
+
+
+Issues:
+* Not sure if Defined::BULLET_SPEED is working as intended

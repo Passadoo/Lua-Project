@@ -1,26 +1,21 @@
 #pragma once
+
 #include "Entity.h"
 
-class Enemy : public Entity
+class Door : public Entity
 {
 private:
-	Texture mTexture;
 	Sprite mSprite;
-	int mCurrentHealth;
-
+	Texture mTexture;
 	Defined::eDirection mDirection;
 
 public:
-	Enemy();
-	Enemy(float pPosX, float pPosY);
-	~Enemy();
+	Door();
+	Door(int pPosX, int pPosY);
+	~Door();
 
-	void SetPosition(Vector2f pPosition);
-	Vector2f GetPos()const;
 	void SetDirection(Defined::eDirection pDir);
 	Defined::eDirection GetDirection()const;
-	void TakeDamage();
-	int GetHealth()const;
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
