@@ -1,6 +1,6 @@
 To do:
 Enemy movement
-Create Door class (DONE)
+Take damage if near enemy
 Make doors lead to new maps
 Set up Lua with the project and test a simple function
 

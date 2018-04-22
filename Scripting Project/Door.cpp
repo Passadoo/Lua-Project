@@ -44,7 +44,28 @@ Defined::eDirection Door::GetDirection() const
 
 void Door::Draw(RenderWindow & window)
 {
-	window.draw(mSprite);
+	Transform t;
+
+	if (mDirection == Defined::RIGHT)
+	{
+		t.rotate(90, GetPos().x + (Defined::GRID_CELL_SIZE / 2), GetPos().y + (Defined::GRID_CELL_SIZE / 2));
+		window.draw(mSprite, t);
+	}
+	else if (mDirection == Defined::LEFT)
+	{
+		t.rotate(270, GetPos().x + (Defined::GRID_CELL_SIZE / 2), GetPos().y + (Defined::GRID_CELL_SIZE / 2));
+		window.draw(mSprite, t);
+	}
+	else if (mDirection == Defined::UP)
+	{
+		t.rotate(0, GetPos().x + (Defined::GRID_CELL_SIZE / 2), GetPos().y + (Defined::GRID_CELL_SIZE / 2));
+		window.draw(mSprite, t);
+	}
+	else
+	{
+		t.rotate(180, GetPos().x + (Defined::GRID_CELL_SIZE / 2), GetPos().y + (Defined::GRID_CELL_SIZE / 2));
+		window.draw(mSprite, t);
+	}
 }
 
 void Door::Update(float dt)
