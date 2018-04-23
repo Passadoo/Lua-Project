@@ -5,7 +5,7 @@ unsigned int Defined::WINDOW_WIDTH = 800;
 unsigned int Defined::WINDOW_HEIGHT = 600;
 
 //Map
-const string Defined::MAP_PATH = "Resources/map.txt";
+const string Defined::MAP_PATH = "Resources/Rooms/StartMap.txt";
 
 //Grid
 int Defined::GRID_CELL_SIZE = 40; // 20 x 15 grid squares, each grid square 40 x 40 pixels large
