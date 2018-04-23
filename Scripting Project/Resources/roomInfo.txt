@@ -1,0 +1,4 @@
+room1.txt 1000 (Up, Right, Down, Left)
+room2.txt 0100
+room3.txt 1000
+room4.txt 1010
