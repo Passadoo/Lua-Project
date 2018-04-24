@@ -11,9 +11,7 @@ int main()
 
 	sf::Clock clock;
 
-	Map map;
-	map.ReadMap(Defined::MAP_PATH);
-	Game* game = new Game(map);
+	Game* game = new Game(0);
 
 	sf::Time time;
 	sf::Event event;

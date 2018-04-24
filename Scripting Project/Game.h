@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Map.h"
+#include "Room.h"
 #include <iostream>
 
 class Game
@@ -11,6 +11,8 @@ private:
 	Enemy** mEnemies;
 	Door** mDoors;
 	Player* mPlayer;
+
+	Room* mRoom;
 
 	int mNrOfBullets;
 	int mNrOfObstacles;
@@ -26,7 +28,7 @@ private:
 
 public:
 	Game();
-	Game(Map &map);
+	Game(int pNothing);
 	~Game();
 
 	void Draw(RenderWindow &window);

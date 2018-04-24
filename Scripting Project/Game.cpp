@@ -179,14 +179,15 @@ Game::Game()
 	mPlayer = new Player();
 }
 
-Game::Game(Map & map)
+Game::Game(int pNothing)
 {
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
 	mNrOfObstacles = 0;
 	mNrOfEnemies = 0;
 	mNrOfDoors = 0;
-	map.setObjects(mPlayer, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
+	mRoom = new Room("Resources/Rooms/StartRoom.txt");
+	mRoom->LoadRoom(mPlayer, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
 }
 
 Game::~Game()
@@ -216,6 +217,8 @@ Game::~Game()
 		delete mDoors[i];
 	}
 	delete[] mDoors;
+
+	delete mRoom;
 }
 
 void Game::RemoveBullet(int index)

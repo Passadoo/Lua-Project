@@ -15,19 +15,19 @@ using namespace std;
 class Map
 {
 private:
-	Defined::ObjectTypes** mObjectTypes;
-	int mNrOfObstacles;
-	int mNrOfEnemies;
-	int mNrOfDoors;
-	vector<char> mDirections;
+	static Defined::ObjectTypes** mObjectTypes;
+	static int mNrOfObstacles;
+	static int mNrOfEnemies;
+	static int mNrOfDoors;
+	static vector<char> mDirections;
 
-	void fillGrid(const vector<string> & lines, const vector<char> & chars);
+	static	void fillGrid(const vector<string> & lines, const vector<char> & chars);
 public:
 	Map();
 	~Map();
 
-	bool ReadMap(const string & path);
-	void setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies, 
+	static	bool ReadMap(const string & path);
+	static	void setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
 		Door **& pDoors, int & pNrOfDoors);
 };
 
