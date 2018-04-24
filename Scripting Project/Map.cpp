@@ -261,4 +261,11 @@ void Map::setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles
 			}
 		}
 	}
+
+	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
+	{
+		delete[] Map::mObjectTypes[i];
+	}
+	delete[] Map::mObjectTypes;
+
 }
