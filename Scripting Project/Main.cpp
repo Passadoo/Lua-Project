@@ -11,7 +11,7 @@ int main()
 
 	sf::Clock clock;
 
-	Game* game = new Game(0);
+	Game* game = new Game();
 
 	sf::Time time;
 	sf::Event event;

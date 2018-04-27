@@ -62,9 +62,9 @@ void Game::playerUpdate(float dt)
 	{
 		bool canMove = true;
 
-		for (int i = 0; i < mNrOfObstacles; i++)
+		for (int i = 0; i < mRoom->GetNrOfObstacles(); i++)
 		{
-			if (mObstacles[i]->GetPos().x == nextPos.x && mObstacles[i]->GetPos().y == nextPos.y)
+			if (mRoom->GetObstacles()[i]->GetPos().x == nextPos.x && mRoom->GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				canMove = false;
 			}
@@ -116,24 +116,24 @@ void Game::bulletUpdate(float dt)
 
 		bool noWall = true;
 
-		for (int i = 0; i < mNrOfObstacles; i++)
+		for (int i = 0; i < mRoom->GetNrOfObstacles(); i++)
 		{
-			if (mObstacles[i]->GetPos().x == nextPos.x && mObstacles[i]->GetPos().y == nextPos.y)
+			if (mRoom->GetObstacles()[i]->GetPos().x == nextPos.x && mRoom->GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				noWall = false;
 			}
 		}
 
 		bool noEnemy = true;
-		for (int i = 0; i < mNrOfEnemies; i++)
+		for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
 		{
-			if (mEnemies[i]->GetPos().x == nextPos.x && mEnemies[i]->GetPos().y == nextPos.y)
+			if (mRoom->GetEnemies()[i]->GetPos().x == nextPos.x && mRoom->GetEnemies()[i]->GetPos().y == nextPos.y)
 			{
 				noEnemy = false;
-				mEnemies[i]->TakeDamage();
-				if (mEnemies[i]->GetHealth() <= 0)
+				mRoom->GetEnemies()[i]->TakeDamage();
+				if (mRoom->GetEnemies()[i]->GetHealth() <= 0)
 				{
-					RemoveEnemy(i);
+					mRoom->RemoveEnemy(i);
 				}
 			}
 		}
@@ -152,7 +152,7 @@ void Game::bulletUpdate(float dt)
 
 void Game::enemyUpdate(float dt)
 {
-	for (int i = 0; i < mNrOfEnemies; i++)
+	for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
 	{
 
 	}
@@ -160,63 +160,20 @@ void Game::enemyUpdate(float dt)
 
 Game::Game()
 {
-	mObstacles = new Obstacle*[5];
-	mObstacles[0] = new Obstacle(5, 5);
-	mObstacles[1] = new Obstacle(5, 7);
-	mObstacles[2] = new Obstacle(7, 12);
-	mObstacles[3] = new Obstacle(8, 4);
-	mObstacles[4] = new Obstacle(12, 3);
-	mNrOfObstacles = 5;
-	
-	mEnemies = new Enemy*[2];
-	mEnemies[0] = new Enemy(13, 10);
-	mEnemies[1] = new Enemy(3, 8);
-	mNrOfEnemies = 2;
-
-	mDoors = new Door*[1];
-	mDoors[0] = new Door(0, 5);
-
-	mPlayer = new Player();
-}
-
-Game::Game(int pNothing)
-{
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
-	mNrOfObstacles = 0;
-	mNrOfEnemies = 0;
-	mNrOfDoors = 0;
-	mRoom = new Room("Resources/Rooms/StartRoom.txt");
-	mRoom->LoadRoom(mPlayer, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
+	mPlayer = new Player(2, 2);
+	mRoom = new Room("StartRoom.txt", true, false, false, false);
+	mRoom->LoadRoom();
 }
 
 Game::~Game()
 {
-	for (int i = 0; i< mNrOfObstacles; i++)
-	{
-		delete mObstacles[i];
-	}
-	delete[] mObstacles;
-
-	delete mPlayer;
-
 	for (int i = 0; i < mNrOfBullets; i++)
 	{
 		delete mBullets[i];
 	}
 	delete[] mBullets;
-
-	for (int i = 0; i < mNrOfEnemies; i++)
-	{
-		delete mEnemies[i];
-	}
-	delete[] mEnemies;
-
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		delete mDoors[i];
-	}
-	delete[] mDoors;
 
 	delete mRoom;
 }
@@ -234,59 +191,23 @@ void Game::RemoveBullet(int index)
 	}
 }
 
-void Game::RemoveEnemy(int index)
-{
-	if (mNrOfEnemies > index)
-	{
-		delete mEnemies[index];
-		for (int i = index; i < mNrOfEnemies - 1; i++)
-		{
-			mEnemies[i] = mEnemies[i + 1];
-		}
-		mNrOfEnemies--;
-	}
-}
-
 void Game::Draw(RenderWindow & window)
 {
 	mPlayer->Draw(window);
-
-	for (int i = 0; i<mNrOfObstacles; i++)
-	{
-		mObstacles[i]->Draw(window);
-	}
 
 	for (int i = 0; i<mNrOfBullets; i++)
 	{
 		mBullets[i]->Draw(window);
 	}
 
-	for (int i = 0; i < mNrOfEnemies; i++)
-	{
-		mEnemies[i]->Draw(window);
-	}
-
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		mDoors[i]->Draw(window);
-	}
+	mRoom->Draw(window);
 }
 
 void Game::Update(float dt)
 {
-	for (int i = 0; i<mNrOfObstacles; i++)
-	{
-		mObstacles[i]->Update(dt);
-	}
-
 	playerUpdate(dt);
 	
 	bulletUpdate(dt);
 
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		mDoors[i]->Update(dt);
-	}
-
-	//Update enemies
+	mRoom->Update(dt);
 }

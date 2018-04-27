@@ -90,10 +90,10 @@ bool Map::ReadMap(const string & path)
 
 		while (word.size() == 1)
 		{
-			chars.push_back(word[0]); //adding "p" to char list
-			ifs >> word;
-			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
-			ifs >> word;
+			//chars.push_back(word[0]); //adding "p" to char list
+			//ifs >> word;
+			//mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
+			//ifs >> word;
 			chars.push_back(word[0]); //adding "e" to the char list
 			ifs >> word;
 			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the enemy is facing
@@ -137,16 +137,11 @@ bool Map::ReadMap(const string & path)
 	return true;
 }
 
-void Map::setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
+void Map::setObjects(string filepath, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
 	Door **& pDoors, int & pNrOfDoors)
 {
 
 	ReadMap(filepath);
-
-	if (pPlayer != nullptr)
-	{
-		delete pPlayer;
-	}
 
 	if (pObstacles != nullptr)
 	{
@@ -196,42 +191,42 @@ void Map::setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles
 				pObstacles[tempObstacles] = new Obstacle(i, j);
 				tempObstacles++;
 			}
-			if (Map::mObjectTypes[i][j] == Defined::PLAYER)
-			{
-				pPlayer = new Player(i, j);
-				if (mDirections[0] == 'l')
-				{
-					pPlayer->SetDirection(Defined::LEFT);
-				}
-				if (mDirections[0] == 'r')
-				{
-					pPlayer->SetDirection(Defined::RIGHT);
-				}
-				if (mDirections[0] == 'u')
-				{
-					pPlayer->SetDirection(Defined::UP);
-				}
-				if (mDirections[0] == 'd')
-				{
-					pPlayer->SetDirection(Defined::DOWN);
-				}
-			}
+			//if (Map::mObjectTypes[i][j] == Defined::PLAYER)
+			//{
+			//	pPlayer = new Player(i, j);
+			//	if (mDirections[0] == 'l')
+			//	{
+			//		pPlayer->SetDirection(Defined::LEFT);
+			//	}
+			//	if (mDirections[0] == 'r')
+			//	{
+			//		pPlayer->SetDirection(Defined::RIGHT);
+			//	}
+			//	if (mDirections[0] == 'u')
+			//	{
+			//		pPlayer->SetDirection(Defined::UP);
+			//	}
+			//	if (mDirections[0] == 'd')
+			//	{
+			//		pPlayer->SetDirection(Defined::DOWN);
+			//	}
+			//}
 			if (Map::mObjectTypes[i][j] == Defined::ENEMY)
 			{
 				pEnemies[tempEnemies] = new Enemy(i, j);
-				if (mDirections[1] == 'l')
+				if (mDirections[0] == 'l')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::LEFT);
 				}
-				if (mDirections[1] == 'r')
+				if (mDirections[0] == 'r')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::RIGHT);
 				}
-				if (mDirections[1] == 'u')
+				if (mDirections[0] == 'u')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::UP);
 				}
-				if (mDirections[1] == 'd')
+				if (mDirections[0] == 'd')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::DOWN);
 				}
@@ -241,19 +236,19 @@ void Map::setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles
 			{
 				pDoors[tempDoors] = new Door(i, j);
 				
-				if (mDirections[2] == 'l')
+				if (mDirections[1] == 'l')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::LEFT);
 				}
-				if (mDirections[2] == 'r')
+				if (mDirections[1] == 'r')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::RIGHT);
 				}
-				if (mDirections[2] == 'u')
+				if (mDirections[1] == 'u')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::UP);
 				}
-				if (mDirections[2] == 'd')
+				if (mDirections[1] == 'd')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::DOWN);
 				}

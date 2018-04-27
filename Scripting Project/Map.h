@@ -27,7 +27,7 @@ public:
 	~Map();
 
 	static	bool ReadMap(const string & path);
-	static	void setObjects(string filepath, Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
+	static	void setObjects(string filepath, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
 		Door **& pDoors, int & pNrOfDoors);
 };
 
