@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Room.h"
+#include "Dungeon.h"
 #include <iostream>
 
 class Game
@@ -11,7 +11,8 @@ private:
 
 	Player* mPlayer;
 
-	Room * mRoom;
+	Dungeon * mDungeon;
+	//Room * mRoom;
 
 	void playerUpdate(float dt);
 	void bulletUpdate(float dt);

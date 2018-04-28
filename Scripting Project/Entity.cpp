@@ -15,7 +15,7 @@ Entity::~Entity()
 
 void Entity::SetPos(const Vector2f & pPosition) //Broken?
 {
-	this->SetPos(mPosition.x, mPosition.y);
+	this->SetPos(pPosition.x, pPosition.y);
 }
 
 void Entity::SetPos(int x, int y)

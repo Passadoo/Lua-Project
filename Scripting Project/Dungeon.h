@@ -25,7 +25,12 @@ public:
 	Dungeon();
 	~Dungeon();
 
+	Room GetCurrentRoom();
+	void LoadCurrentRoom();
 	void LoadRoom(int pXIndex, int pYIndex);
 	bool AddRoom();
+
+	void Draw(RenderWindow &window);
+	void Update(float dt);
 };
 

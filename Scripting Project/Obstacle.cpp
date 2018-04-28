@@ -9,6 +9,7 @@ Obstacle::Obstacle()
 		//Error
 	}
 	mSprite.setTexture(mTexture);
+	SetPos(0, 0);
 	mSprite.setPosition(GetPos());
 }
 

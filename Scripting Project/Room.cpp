@@ -2,6 +2,14 @@
 
 Room::Room()
 {
+	mObstacles = nullptr;
+	mEnemies = nullptr;
+	mDoors = nullptr;
+
+	mNrOfObstacles = 0;
+	mNrOfEnemies = 0;
+	mNrOfDoors = 0;
+
 	mExists = false;
 }
 
@@ -13,6 +21,14 @@ Room::Room(string pFilePath, bool pHasDoorUp, bool pHasDoorRight, bool pHasDoorD
 	mHasDoorDown = pHasDoorDown;
 	mHasDoorLeft = pHasDoorLeft;
 	mExists = true;
+
+	mObstacles = nullptr;
+	mEnemies = nullptr;
+	mDoors = nullptr;
+
+	mNrOfObstacles = 0;
+	mNrOfEnemies = 0;
+	mNrOfDoors = 0;
 }
 
 
@@ -23,8 +39,6 @@ Room::~Room()
 		delete mObstacles[i];
 	}
 	delete[] mObstacles;
-
-	delete mPlayer;
 
 	for (int i = 0; i < mNrOfEnemies; i++)
 	{
@@ -39,32 +53,37 @@ Room::~Room()
 	delete[] mDoors;
 }
 
-Obstacle ** Room::GetObstacles()const
+Obstacle *& Room::GetObstacle(int index)
+{
+	return mObstacles[index];
+}
+
+Obstacle **& Room::GetObstacles()
 {
 	return mObstacles;
 }
 
-Enemy ** Room::GetEnemies()const
+Enemy **& Room::GetEnemies()
 {
 	return mEnemies;
 }
 
-Door ** Room::GetDoors()const
+Door **& Room::GetDoors()
 {
 	return mDoors;
 }
 
-int Room::GetNrOfObstacles() const
+int Room::GetNrOfObstacles() 
 {
 	return mNrOfObstacles;
 }
 
-int Room::GetNrOfEnemies() const
+int Room::GetNrOfEnemies() 
 {
 	return mNrOfEnemies;
 }
 
-int Room::GetNrOfDoors() const
+int Room::GetNrOfDoors() 
 {
 	return mNrOfDoors;
 }
@@ -114,7 +133,7 @@ void Room::LoadRoom()
 
 void Room::Draw(RenderWindow & window)
 {
-	for (int i = 0; i<mNrOfObstacles; i++)
+	for (int i = 0; i < mNrOfObstacles; i++)
 	{
 		mObstacles[i]->Draw(window);
 	}
@@ -140,6 +159,11 @@ void Room::Update(float dt)
 	for (int i = 0; i < mNrOfDoors; i++)
 	{
 		mDoors[i]->Update(dt);
+	}
+
+	for (int i = 0; i < mNrOfEnemies; i++)
+	{
+		mEnemies[i]->Update(dt);
 	}
 
 	//Update enemies

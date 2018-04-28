@@ -62,9 +62,9 @@ void Game::playerUpdate(float dt)
 	{
 		bool canMove = true;
 
-		for (int i = 0; i < mRoom->GetNrOfObstacles(); i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
-			if (mRoom->GetObstacles()[i]->GetPos().x == nextPos.x && mRoom->GetObstacles()[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetObstacle(i)->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacle(i)->GetPos().y == nextPos.y)
 			{
 				canMove = false;
 			}
@@ -116,24 +116,24 @@ void Game::bulletUpdate(float dt)
 
 		bool noWall = true;
 
-		for (int i = 0; i < mRoom->GetNrOfObstacles(); i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
-			if (mRoom->GetObstacles()[i]->GetPos().x == nextPos.x && mRoom->GetObstacles()[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				noWall = false;
 			}
 		}
 
 		bool noEnemy = true;
-		for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfEnemies(); i++)
 		{
-			if (mRoom->GetEnemies()[i]->GetPos().x == nextPos.x && mRoom->GetEnemies()[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPos().y == nextPos.y)
 			{
 				noEnemy = false;
-				mRoom->GetEnemies()[i]->TakeDamage();
-				if (mRoom->GetEnemies()[i]->GetHealth() <= 0)
+				mDungeon->GetCurrentRoom().GetEnemies()[i]->TakeDamage();
+				if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetHealth() <= 0)
 				{
-					mRoom->RemoveEnemy(i);
+					mDungeon->GetCurrentRoom().RemoveEnemy(i);
 				}
 			}
 		}
@@ -152,10 +152,10 @@ void Game::bulletUpdate(float dt)
 
 void Game::enemyUpdate(float dt)
 {
-	for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
-	{
+	//for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
+	//{
 
-	}
+	//}
 }
 
 Game::Game()
@@ -163,8 +163,11 @@ Game::Game()
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
 	mPlayer = new Player(2, 2);
-	mRoom = new Room("StartRoom.txt", true, false, false, false);
-	mRoom->LoadRoom();
+	mDungeon = new Dungeon();
+	mDungeon->LoadCurrentRoom();
+	//std::cout << mDungeon->GetCurrentRoom().GetNrOfObstacles() << std::endl;
+	//mRoom = new Room("StartRoom.txt", true, false, false, false);
+	//mRoom->LoadRoom();
 }
 
 Game::~Game()
@@ -175,7 +178,9 @@ Game::~Game()
 	}
 	delete[] mBullets;
 
-	delete mRoom;
+	delete mPlayer;
+	delete mDungeon;
+	//delete mRoom;
 }
 
 void Game::RemoveBullet(int index)
@@ -193,21 +198,20 @@ void Game::RemoveBullet(int index)
 
 void Game::Draw(RenderWindow & window)
 {
-	mPlayer->Draw(window);
-
 	for (int i = 0; i<mNrOfBullets; i++)
 	{
 		mBullets[i]->Draw(window);
 	}
 
-	mRoom->Draw(window);
+	mPlayer->Draw(window);
+	mDungeon->Draw(window);
 }
 
 void Game::Update(float dt)
 {
+	mDungeon->Update(dt);
 	playerUpdate(dt);
-	
 	bulletUpdate(dt);
 
-	mRoom->Update(dt);
+	//mRoom->Update(dt);
 }

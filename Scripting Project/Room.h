@@ -11,7 +11,6 @@ private:
 	Obstacle ** mObstacles;
 	Enemy** mEnemies;
 	Door** mDoors;
-	Player* mPlayer;
 
 	int mNrOfObstacles;
 	int mNrOfEnemies;
@@ -29,13 +28,15 @@ public:
 	Room(string pFilePath, bool pHasDoorUp, bool pHasDoorRight, bool pHasDoorDown, bool pHasDoorLeft);
 	~Room();
 
-	Obstacle** GetObstacles()const;
-	Enemy** GetEnemies()const;
-	Door** GetDoors()const;
+	Obstacle*& GetObstacle(int index);
 
-	int GetNrOfObstacles()const;
-	int GetNrOfEnemies()const;
-	int GetNrOfDoors()const;
+	Obstacle **& GetObstacles();
+	Enemy **& GetEnemies();
+	Door **& GetDoors();
+
+	int GetNrOfObstacles();
+	int GetNrOfEnemies();
+	int GetNrOfDoors();
 
 	bool HasDoorUp()const;
 	bool HasDoorRight()const;

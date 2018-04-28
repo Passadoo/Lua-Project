@@ -26,11 +26,6 @@ Dungeon::Dungeon()
 
 	ifs.close();
 
-	if (fileNames.size() > 0)
-	{
-		mArrayLength = (2 * fileNames.size()) - 1;
-	}
-
 	for (int i = 0; i < fileNames.size(); i++)
 	{
 		RoomInfo tempInfo;
@@ -54,6 +49,14 @@ Dungeon::Dungeon()
 		mRoomInfo.push_back(tempInfo);
 	}
 
+	if (fileNames.size() > 0)
+	{
+		mArrayLength = (2 * fileNames.size()) - 1;
+	}
+
+	mCurrentRoomX = (mArrayLength - 1) / 2;
+	mCurrentRoomY = (mArrayLength - 1) / 2;
+
 	mRooms = new Room*[mArrayLength];
 	for (int i = 0; i < mArrayLength; i++)
 	{
@@ -72,10 +75,8 @@ Dungeon::Dungeon()
 		}
 	}
 
-	mRooms[mArrayLength][mArrayLength] = Room(mRoomInfo[index].mFilename, mRoomInfo[index].mHasDoorUp, mRoomInfo[index].mHasDoorRight, mRoomInfo[index].mHasDoorDown, mRoomInfo[index].mHasDoorLeft);
+	mRooms[mCurrentRoomX][mCurrentRoomY] = Room(mRoomInfo[index].mFilename, mRoomInfo[index].mHasDoorUp, mRoomInfo[index].mHasDoorRight, mRoomInfo[index].mHasDoorDown, mRoomInfo[index].mHasDoorLeft);
 	mRoomInfo.erase(mRoomInfo.begin() + index);
-	mCurrentRoomX = mArrayLength;
-	mCurrentRoomY = mArrayLength;
 }
 
 
@@ -89,6 +90,17 @@ Dungeon::~Dungeon()
 		}
 	}
 	delete[] mRooms;
+}
+
+Room Dungeon::GetCurrentRoom()
+{
+	std::cout << mRooms[mCurrentRoomX][mCurrentRoomY].Exists() << std::endl;
+	return mRooms[mCurrentRoomX][mCurrentRoomY];
+}
+
+void Dungeon::LoadCurrentRoom()
+{
+	mRooms[mCurrentRoomX][mCurrentRoomY].LoadRoom();
 }
 
 void Dungeon::LoadRoom(int pXIndex, int pYIndex)
@@ -119,6 +131,27 @@ bool Dungeon::AddRoom()
 	}
 
 	return false;
+}
+
+void Dungeon::Draw(RenderWindow & window)
+{
+	mRooms[mCurrentRoomX][mCurrentRoomY].Draw(window);
+
+	/*for (int i = 0; i < mArrayLength; i++)
+	{
+		for (int j = 0; j < mArrayLength; j++)
+		{
+			if (mRooms[i][j].Exists())
+			{
+				mRooms[i][j].Draw(window);
+			}
+		}
+	}*/
+}
+
+void Dungeon::Update(float dt)
+{
+	mRooms[mCurrentRoomX][mCurrentRoomY].Update(dt);
 }
 
 

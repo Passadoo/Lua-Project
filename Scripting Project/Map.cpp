@@ -34,7 +34,7 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 						objType = Defined::ENEMY;
 						Map::mNrOfEnemies++;
 					}
-					else if (temp == 'd')
+					else if (temp != '.')
 					{
 						objType = Defined::DOOR;
 						Map::mNrOfDoors++;

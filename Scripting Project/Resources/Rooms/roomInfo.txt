@@ -1,5 +1,2 @@
 StartRoom.txt 1000
-room1.txt 1000
-room2.txt 0100
-room3.txt 1000
-room4.txt 1010
+room1.txt 0011
