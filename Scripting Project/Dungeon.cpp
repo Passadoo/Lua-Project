@@ -92,9 +92,8 @@ Dungeon::~Dungeon()
 	delete[] mRooms;
 }
 
-Room Dungeon::GetCurrentRoom()
+Room& Dungeon::GetCurrentRoom()
 {
-	std::cout << mRooms[mCurrentRoomX][mCurrentRoomY].Exists() << std::endl;
 	return mRooms[mCurrentRoomX][mCurrentRoomY];
 }
 

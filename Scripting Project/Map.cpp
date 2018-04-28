@@ -149,7 +149,7 @@ void Map::setObjects(string filepath, Obstacle **& pObstacles, int & pNrOfObstac
 		{
 			delete pObstacles[i];
 		}
-		delete[] pObstacles;
+		delete[]pObstacles;
 	}
 
 	if (pEnemies != nullptr)

@@ -25,7 +25,7 @@ public:
 	Dungeon();
 	~Dungeon();
 
-	Room GetCurrentRoom();
+	Room& GetCurrentRoom();
 	void LoadCurrentRoom();
 	void LoadRoom(int pXIndex, int pYIndex);
 	bool AddRoom();
