@@ -99,7 +99,7 @@ Room& Dungeon::GetCurrentRoom()
 
 void Dungeon::LoadCurrentRoom()
 {
-	std::cout << "CurrentRoomX : " << mCurrentRoomX << " , CurrentRoomY: " << mCurrentRoomY << std::endl;
+	std::cout << "Loading room at: " << mCurrentRoomX << ", " << mCurrentRoomY << std::endl;
 	mRooms[mCurrentRoomX][mCurrentRoomY].LoadRoom();
 }
 
@@ -126,12 +126,13 @@ bool Dungeon::AddRoomUp()
 		}
 	}
 
-	mRooms[mCurrentRoomX][mCurrentRoomY - 1] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
-	std::cout << mCurrentRoomY << std::endl;
-	mCurrentRoomY = mCurrentRoomY - 1;
-	std::cout << mCurrentRoomY << std::endl;
-	if(roomIndex >= 0)
+	if (roomIndex >= 0)
+	{
+		mRooms[mCurrentRoomX][mCurrentRoomY - 1] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
+		mCurrentRoomY = mCurrentRoomY - 1;
 		mRoomInfo.erase(mRoomInfo.begin() + roomIndex);
+	}
+
 
 	return roomFound;
 }
@@ -154,10 +155,13 @@ bool Dungeon::AddRoomRight()
 		}
 	}
 
-	mRooms[mCurrentRoomX + 1][mCurrentRoomY] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
-	mCurrentRoomX = mCurrentRoomX + 1;
 	if (roomIndex >= 0)
+	{
+		mRooms[mCurrentRoomX + 1][mCurrentRoomY] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
+		mCurrentRoomX = mCurrentRoomX + 1;
 		mRoomInfo.erase(mRoomInfo.begin() + roomIndex);
+	}
+
 
 	return roomFound;
 }
@@ -180,10 +184,13 @@ bool Dungeon::AddRoomDown()
 		}
 	}
 
-	mRooms[mCurrentRoomX][mCurrentRoomY + 1] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
-	mCurrentRoomY = mCurrentRoomY + 1;
 	if (roomIndex >= 0)
+	{
+		mRooms[mCurrentRoomX][mCurrentRoomY + 1] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
+		mCurrentRoomY = mCurrentRoomY + 1;
 		mRoomInfo.erase(mRoomInfo.begin() + roomIndex);
+	}
+
 
 	return roomFound;
 }
@@ -206,10 +213,13 @@ bool Dungeon::AddRoomLeft()
 		}
 	}
 
-	mRooms[mCurrentRoomX - 1][mCurrentRoomY] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
-	mCurrentRoomX = mCurrentRoomX - 1;
 	if (roomIndex >= 0)
+	{
+		mRooms[mCurrentRoomX - 1][mCurrentRoomY] = Room(mRoomInfo[roomIndex].mFilename, mRoomInfo[roomIndex].mHasDoorUp, mRoomInfo[roomIndex].mHasDoorRight, mRoomInfo[roomIndex].mHasDoorDown, mRoomInfo[roomIndex].mHasDoorLeft);
+		mCurrentRoomX = mCurrentRoomX - 1;
 		mRoomInfo.erase(mRoomInfo.begin() + roomIndex);
+	}
+
 
 	return roomFound;
 }
@@ -268,8 +278,6 @@ Vector2f Dungeon::GetCurrentRoomDownDoorLocation()
 {
 	Vector2f location = Vector2f(-1, -1);
 
-	std::cout << "NrOfDoors: " << GetCurrentRoom().GetNrOfDoors() << std::endl;
-
 	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
 	{
 		if (GetCurrentRoom().GetDoors()[i]->GetPosY() == (Defined::GRID_CELL_SIZE * (Defined::WORLD_HEIGHT - 1)))
@@ -319,17 +327,6 @@ void Dungeon::SwitchRoomLeft()
 void Dungeon::Draw(RenderWindow & window)
 {
 	mRooms[mCurrentRoomX][mCurrentRoomY].Draw(window);
-
-	/*for (int i = 0; i < mArrayLength; i++)
-	{
-		for (int j = 0; j < mArrayLength; j++)
-		{
-			if (mRooms[i][j].Exists())
-			{
-				mRooms[i][j].Draw(window);
-			}
-		}
-	}*/
 }
 
 void Dungeon::Update(float dt)

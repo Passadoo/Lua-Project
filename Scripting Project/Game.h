@@ -15,6 +15,7 @@ private:
 	//Room * mRoom;
 
 	void playerUpdate(float dt);
+	void roomUpdate();
 	void bulletUpdate(float dt);
 	void enemyUpdate(float dt);
 
