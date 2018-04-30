@@ -53,11 +53,6 @@ Room::~Room()
 	delete[] mDoors;
 }
 
-Obstacle *& Room::GetObstacle(int index)
-{
-	return mObstacles[index];
-}
-
 Obstacle **& Room::GetObstacles()
 {
 	return mObstacles;

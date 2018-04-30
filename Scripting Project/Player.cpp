@@ -53,10 +53,6 @@ Defined::eDirection Player::GetDirection() const
 
 void Player::Draw(RenderWindow & window)
 {
-	//if (&window != nullptr)
-	//{
-	//	window.draw(mSprite);
-	//}
 
 	Transform t;
 

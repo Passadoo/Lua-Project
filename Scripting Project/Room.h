@@ -28,8 +28,6 @@ public:
 	Room(string pFilePath, bool pHasDoorUp, bool pHasDoorRight, bool pHasDoorDown, bool pHasDoorLeft);
 	~Room();
 
-	Obstacle*& GetObstacle(int index);
-
 	Obstacle **& GetObstacles();
 	Enemy **& GetEnemies();
 	Door **& GetDoors();

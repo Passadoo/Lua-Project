@@ -61,16 +61,162 @@ void Game::playerUpdate(float dt)
 	if (moveInit)
 	{
 		bool canMove = true;
+		bool enteredDoor = false;
 
 		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
-			if (mDungeon->GetCurrentRoom().GetObstacle(i)->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacle(i)->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				canMove = false;
 			}
 		}
 
-		if (canMove)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfDoors(); i++)
+		{
+			if (mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().y == nextPos.y)
+			{
+				std::cout << "entered door" << std::endl;
+				enteredDoor = true;
+			}
+		}
+
+		bool enteredDoorUp = false;
+		bool enteredDoorRight = false;
+		bool enteredDoorDown = false;
+		bool enteredDoorLeft = false;
+
+		if (enteredDoor)
+		{
+			if (mPlayer->GetPosX() == 1.0f * Defined::GRID_CELL_SIZE)
+				enteredDoorLeft = true;
+
+			if (mPlayer->GetPosY() == 1.0f * Defined::GRID_CELL_SIZE)
+				enteredDoorUp = true;
+
+			if (mPlayer->GetPosX() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_WIDTH - 2)))
+				enteredDoorRight = true;
+
+			if (mPlayer->GetPosY() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_HEIGHT - 2)))
+				enteredDoorDown = true;
+
+			if (enteredDoorUp)
+			{
+				if (!mDungeon->RoomUpExists())
+				{
+					if (mDungeon->AddRoomUp())
+					{
+						mDungeon->LoadCurrentRoom();
+						Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
+						if (newLocation.x >= 0.0f)
+						{
+							mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+						}
+					}
+					else
+					{
+						std::cout << "No more rooms exist in this direction" << std::endl;
+					}
+				}
+				else
+				{
+					mDungeon->SwitchRoomUp();
+					mDungeon->LoadCurrentRoom();
+					Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
+					if (newLocation.x >= 0.0f)
+					{
+						mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+					}
+				}
+			}
+			else if (enteredDoorRight)
+			{
+				if (!mDungeon->RoomRightExists())
+				{
+					if (mDungeon->AddRoomRight())
+					{
+						mDungeon->LoadCurrentRoom();
+						Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
+						if (newLocation.x >= 0.0f)
+						{
+							mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+						}
+					}
+					else
+					{
+						std::cout << "No more rooms exist in this direction" << std::endl;
+					}
+				}
+				else
+				{
+					mDungeon->SwitchRoomRight();
+					mDungeon->LoadCurrentRoom();
+					Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
+					if (newLocation.x >= 0.0f)
+					{
+						mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+					}
+				}
+			}
+			else if (enteredDoorDown)
+			{
+				if (!mDungeon->RoomDownExists())
+				{
+					if (mDungeon->AddRoomDown())
+					{
+						mDungeon->LoadCurrentRoom();
+						Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
+						if (newLocation.x >= 0.0f)
+						{
+							mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+						}
+					}
+					else
+					{
+						std::cout << "No more rooms exist in this direction" << std::endl;
+					}
+				}
+				else
+				{
+					mDungeon->SwitchRoomDown();
+					mDungeon->LoadCurrentRoom();
+					Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
+					if (newLocation.x >= 0.0f)
+					{
+						mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+					}
+				}
+			}
+			else if (enteredDoorLeft)
+			{
+				if (!mDungeon->RoomLeftExists())
+				{
+					if (mDungeon->AddRoomLeft())
+					{
+						mDungeon->LoadCurrentRoom();
+						Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
+						if (newLocation.x >= 0.0f)
+						{
+							mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+						}
+					}
+					else
+					{
+						std::cout << "No more rooms exist in this direction" << std::endl;
+					}
+				}
+				else
+				{
+					mDungeon->SwitchRoomLeft();
+					mDungeon->LoadCurrentRoom();
+					Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
+					if (newLocation.x >= 0.0f)
+					{
+						mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+					}
+				}
+			}
+		}
+		else if (canMove)
 		{
 			mPlayer->SetPosition(nextPos);
 		}

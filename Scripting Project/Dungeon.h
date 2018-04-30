@@ -28,7 +28,26 @@ public:
 	Room& GetCurrentRoom();
 	void LoadCurrentRoom();
 	void LoadRoom(int pXIndex, int pYIndex);
-	bool AddRoom();
+
+	bool AddRoomUp();
+	bool AddRoomRight();
+	bool AddRoomDown();
+	bool AddRoomLeft();
+
+	bool RoomUpExists();
+	bool RoomRightExists();
+	bool RoomDownExists();
+	bool RoomLeftExists();
+
+	Vector2f GetCurrentRoomUpDoorLocation();
+	Vector2f GetCurrentRoomRightDoorLocation();
+	Vector2f GetCurrentRoomDownDoorLocation();
+	Vector2f GetCurrentRoomLeftDoorLocation();
+
+	void SwitchRoomUp();
+	void SwitchRoomRight();
+	void SwitchRoomDown();
+	void SwitchRoomLeft();
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);

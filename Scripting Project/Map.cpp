@@ -10,6 +10,9 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 {
 	char temp;
 	Defined::ObjectTypes objType;
+	mNrOfDoors = 0;
+	mNrOfEnemies = 0;
+	mNrOfObstacles = 0;
 
 	for (int j = 0; j < Defined::WORLD_HEIGHT; j++)
 	{
