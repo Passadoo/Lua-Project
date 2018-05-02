@@ -134,7 +134,7 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomUp();
-			mDungeon->LoadCurrentRoom();
+		//	mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -163,7 +163,7 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomRight();
-			mDungeon->LoadCurrentRoom();
+			//mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -192,7 +192,7 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomDown();
-			mDungeon->LoadCurrentRoom();
+			//mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -222,7 +222,7 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomLeft();
-			mDungeon->LoadCurrentRoom();
+		//	mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
