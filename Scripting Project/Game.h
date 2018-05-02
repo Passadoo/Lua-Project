@@ -12,7 +12,6 @@ private:
 	Player* mPlayer;
 
 	Dungeon * mDungeon;
-	//Room * mRoom;
 
 	void playerUpdate(float dt);
 	void roomUpdate();

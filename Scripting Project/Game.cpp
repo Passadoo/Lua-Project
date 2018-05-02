@@ -134,7 +134,6 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomUp();
-		//	mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -163,7 +162,6 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomRight();
-			//mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -192,7 +190,6 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomDown();
-			//mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -222,7 +219,6 @@ void Game::roomUpdate()
 		else
 		{
 			mDungeon->SwitchRoomLeft();
-		//	mDungeon->LoadCurrentRoom();
 			Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
 			if (newLocation.x >= 0.0f)
 			{
@@ -296,7 +292,6 @@ void Game::bulletUpdate(float dt)
 		}
 		else
 		{
-			//Remove bullet from game
 			RemoveBullet(i);
 		}
 	}
@@ -304,10 +299,7 @@ void Game::bulletUpdate(float dt)
 
 void Game::enemyUpdate(float dt)
 {
-	//for (int i = 0; i < mRoom->GetNrOfEnemies(); i++)
-	//{
 
-	//}
 }
 
 Game::Game()
@@ -317,9 +309,6 @@ Game::Game()
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
 	mDungeon->LoadCurrentRoom();
-	//std::cout << mDungeon->GetCurrentRoom().GetNrOfObstacles() << std::endl;
-	//mRoom = new Room("StartRoom.txt", true, false, false, false);
-	//mRoom->LoadRoom();
 }
 
 Game::~Game()
@@ -332,7 +321,6 @@ Game::~Game()
 
 	delete mPlayer;
 	delete mDungeon;
-	//delete mRoom;
 }
 
 void Game::RemoveBullet(int index)
@@ -364,6 +352,4 @@ void Game::Update(float dt)
 	mDungeon->Update(dt);
 	playerUpdate(dt);
 	bulletUpdate(dt);
-
-	//mRoom->Update(dt);
 }

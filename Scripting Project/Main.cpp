@@ -1,11 +1,57 @@
+#pragma comment(lib, "Irrlicht.lib")
+#ifdef _DEBUG
+#pragma comment(lib, "LuaLibd.lib")
+#else
+#pragma comment(lib, "Lualib.lib")
+#endif
+
+#include <thread>
+#include <Windows.h>
+#include <irrlicht.h>
+#include <lua.hpp>
+#include "lua.hpp"
+
 #include <SFML/Graphics.hpp>
 
 #include "Game.h"
 #include "Map.h"
 
+void ConsoleThread(lua_State* L) {
+	char command[1000];
+	while (GetConsoleWindow()) {
+		memset(command, 0, 1000);
+		std::cin.getline(command, 1000);
+		if (luaL_loadstring(L, command) || lua_pcall(L, 0, 0, 0))
+		{
+
+			std::cout << lua_tostring(L, -1) << '\n';
+			lua_pop(L, 1);
+		}
+	}
+}
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	lua_State* L = luaL_newstate();
+	luaL_openlibs(L);
+
+	std::thread conThread(ConsoleThread, L);
+
+	irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(640, 480), 16, false, false, true, 0);
+	if (!device)
+		return 1;
+
+	device->setWindowCaption(L"Hello World! - Irrlicht Engine Demo");
+	irr::video::IVideoDriver* driver = device->getVideoDriver();
+	irr::scene::ISceneManager* smgr = device->getSceneManager();
+	irr::gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
+
+	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!", irr::core::rect<irr::s32>(10, 10, 260, 22), true);
+
+
+
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
@@ -15,8 +61,15 @@ int main()
 
 	sf::Time time;
 	sf::Event event;
-	while (window.isOpen())
+	while (window.isOpen() && device->run())
 	{
+
+		driver->beginScene(true, true, irr::video::SColor(255, 90, 101, 140));
+
+		smgr->drawAll();
+		guienv->drawAll();
+
+		driver->endScene();
 
 		while (window.pollEvent(event))
 		{
@@ -49,6 +102,10 @@ int main()
 	}
 
 	delete game;
+
+	device->drop();
+
+	conThread.join();
 
 	return 0;
 }
