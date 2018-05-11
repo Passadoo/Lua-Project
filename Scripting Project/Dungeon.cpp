@@ -5,7 +5,7 @@ Dungeon::Dungeon()
 	ifstream ifs;
 	char input;
 
-	ifs.open("Resources/Rooms/RoomInfo.txt");
+	ifs.open(Defined::ROOM_INFO_PATH);
 
 	if (ifs.fail())
 	{

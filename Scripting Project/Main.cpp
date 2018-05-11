@@ -16,6 +16,7 @@
 #include "Game.h"
 #include "Map.h"
 #include "Editor.h"
+#include "MouseInput.h"
 
 #define USE_EDITOR true
 
@@ -65,6 +66,7 @@ int main()
 
 	sf::Time time;
 	sf::Event event;
+	float deltaTime = 1.0f;
 	while (window.isOpen() && device->run())
 	{
 		driver->beginScene(true, true, irr::video::SColor(255, 90, 101, 140));
@@ -76,6 +78,8 @@ int main()
 
 		while (window.pollEvent(event))
 		{
+			MouseInput::ProcessInput(window, event);
+			editor->EnterText(event);
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
@@ -99,10 +103,11 @@ int main()
 		window.clear(sf::Color(140, 100, 230, 255));
 		if (clock.getElapsedTime().asSeconds() >= 0.1f)
 		{
+			MouseInput::Update(deltaTime);
 			if (USE_EDITOR)
-				editor->Update(1.0f, window);
+				editor->Update(deltaTime);
 			else
-				game->Update(1.0f);
+				game->Update(deltaTime);
 			clock.restart();
 		}
 		if (USE_EDITOR)

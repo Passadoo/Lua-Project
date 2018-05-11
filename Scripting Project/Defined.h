@@ -19,6 +19,8 @@ public:
 
 	//Map
 	static const string MAP_PATH;
+	static const string ROOM_INFO_PATH;
+	static const string ROOMS_PATH;
 
 	//Grid
 	static int GRID_CELL_SIZE;

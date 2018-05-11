@@ -6,6 +6,8 @@ unsigned int Defined::WINDOW_HEIGHT = 600;
 
 //Map
 const string Defined::MAP_PATH = "Resources/Rooms/StartRoom.txt";
+const string Defined::ROOM_INFO_PATH = "Resources/Rooms/roomInfo.txt";
+const string Defined::ROOMS_PATH = "Resources/Rooms/";
 
 //Grid
 int Defined::GRID_CELL_SIZE = 40; // 20 x 15 grid squares, each grid square 40 x 40 pixels large
