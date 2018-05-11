@@ -17,3 +17,11 @@ const float Defined::BULLET_SPEED = 0.5;
 
 //Enemies
 const int Defined::ENEMY_HEALTH = 3;
+
+
+// Entity paths
+const string Defined::OBSTACLE_PATH = "Resources/Obstacle.png";
+const string Defined::DOOR_PATH = "Resources/Door.png";
+const string Defined::ENEMY_PATH = "Resources/Enemy.png";
+const string Defined::PLAYER_PATH = "Resources/Player.png";
+const string Defined::BULLET_PATH = "Resources/SmallBullet.png";

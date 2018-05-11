@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile(Defined::PLAYER_PATH))
 	{
 		//Error
 	}
@@ -16,7 +16,7 @@ Player::Player()
 
 Player::Player(int pXPos, int pYPos)
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile(Defined::PLAYER_PATH))
 	{
 		//Error
 	}

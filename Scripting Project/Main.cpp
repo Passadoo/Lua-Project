@@ -15,6 +15,9 @@
 
 #include "Game.h"
 #include "Map.h"
+#include "Editor.h"
+
+#define USE_EDITOR true
 
 void ConsoleThread(lua_State* L) {
 	char command[1000];
@@ -58,12 +61,12 @@ int main()
 	sf::Clock clock;
 
 	Game* game = new Game();
+	Editor* editor = new Editor();
 
 	sf::Time time;
 	sf::Event event;
 	while (window.isOpen() && device->run())
 	{
-
 		driver->beginScene(true, true, irr::video::SColor(255, 90, 101, 140));
 
 		smgr->drawAll();
@@ -78,12 +81,14 @@ int main()
 				if (event.key.code == sf::Keyboard::Escape)
 				{
 					window.close();
+					device->closeDevice();
 				}
 			}
 			switch (event.type)
 			{
 			case sf::Event::Closed:
 				window.close();
+				device->closeDevice();
 				break;
 			case sf::Event::GainedFocus:
 				break;
@@ -94,14 +99,21 @@ int main()
 		window.clear(sf::Color(140, 100, 230, 255));
 		if (clock.getElapsedTime().asSeconds() >= 0.1f)
 		{
-			game->Update(1.0f);
+			if (USE_EDITOR)
+				editor->Update(1.0f, window);
+			else
+				game->Update(1.0f);
 			clock.restart();
 		}
-		game->Draw(window);
+		if (USE_EDITOR)
+			editor->Draw(window);
+		else
+			game->Draw(window);
 		window.display();
 	}
 
 	delete game;
+	delete editor;
 
 	device->drop();
 
