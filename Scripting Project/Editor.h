@@ -6,6 +6,7 @@
 #include "Defined.h"
 #include "MouseInput.h"
 #include <fstream>
+#include <cctype>
 
 class Editor
 {
@@ -14,8 +15,9 @@ public:
 	~Editor();
 
 	void Update(float dt);
+	void ProcessInputs();
 	void Draw(sf::RenderWindow &window);
-	void EnterText(const sf::Event & event);
+	void EnterText();
 
 private:
 	enum OBJECT_TYPES { NONE, OBSTACLE, DOOR, ENEMY, END, START = NONE};
@@ -36,9 +38,10 @@ private:
 
 	// Save level
 	bool mSaveLevel = false;
-	sf::String mPlayerInput;
-	sf::Text mPlayerText;
 	sf::Font mFont;
+	std::string mText;
+	sf::Text mTextField;
+	bool mKeys[sf::Keyboard::KeyCount];
 
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);
@@ -57,4 +60,5 @@ private:
 
 	// Utilities
 	sf::Vector2i mouseToWorldCoord();
+	char fromKeyToStr(sf::Keyboard::Key key);
 };

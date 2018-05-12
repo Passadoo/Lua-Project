@@ -79,7 +79,7 @@ int main()
 		while (window.pollEvent(event))
 		{
 			MouseInput::ProcessInput(window, event);
-			editor->EnterText(event);
+			editor->EnterText();
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
@@ -101,6 +101,9 @@ int main()
 			}
 		}
 		window.clear(sf::Color(140, 100, 230, 255));
+
+		if (USE_EDITOR)
+			editor->ProcessInputs();
 		if (clock.getElapsedTime().asSeconds() >= 0.1f)
 		{
 			MouseInput::Update(deltaTime);

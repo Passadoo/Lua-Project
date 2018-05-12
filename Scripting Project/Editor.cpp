@@ -3,13 +3,18 @@
 Editor::Editor()
 {
 	initObjects();
-	mPlayerText.setPosition(Defined::WINDOW_WIDTH / 2.0f, Defined::WINDOW_HEIGHT / 2.0f);
+	mTextField.setPosition(Defined::WINDOW_WIDTH / 2.0f, Defined::WINDOW_HEIGHT / 2.0f);
 
 	if (!mFont.loadFromFile("Resources/Gabriola.ttf"))
 	{
 		std::cout << "Could not load the font" << std::endl;
 	}
-	mPlayerText.setFont(mFont);
+	mTextField.setFont(mFont);
+
+	for (int i = 0; i < sf::Keyboard::KeyCount; i++)
+	{
+		mKeys[i] = false;
+	}
 }
 
 Editor::~Editor()
@@ -29,6 +34,12 @@ Editor::~Editor()
 }
 
 void Editor::Update(float dt)
+{
+	if (mText.size() != 0)
+		mTextField.setString(mText);
+}
+
+void Editor::ProcessInputs()
 {
 	processInput();
 }
@@ -58,27 +69,58 @@ void Editor::Draw(sf::RenderWindow & window)
 		window.draw(mObjectTypes[mToCreate]->sprite);
 
 		// Draw textbox for saveing the level
-		float width = mPlayerText.getLocalBounds().width;
-		mPlayerText.setOrigin(width / 2.0f, 0);
-		window.draw(mPlayerText);
+		if (mSaveLevel)
+		{
+			float h = Defined::WINDOW_HEIGHT / 6.0f;
+			float w = Defined::WINDOW_WIDTH / 3.0f;
+			sf::RectangleShape box(sf::Vector2f(w, h));
+			box.setPosition(Defined::WINDOW_WIDTH / 2.0f, Defined::WINDOW_HEIGHT / 2.0f);
+			box.setOrigin(w / 2.0f, h / 4.0f);
+			sf::Color color = sf::Color::Green;
+			color.a = 50;
+			box.setFillColor(color);
+			box.setOutlineColor(sf::Color::Black);
+			box.setOutlineThickness(border);
+			window.draw(box);
+			float width = mTextField.getLocalBounds().width;
+			mTextField.setOrigin(width / 2.0f, 0);
+			window.draw(mTextField);
+		}
 	}
 }
 
-void Editor::EnterText(const sf::Event & event)
+void Editor::EnterText()
 {
 	if (mSaveLevel)
 	{
-		if (event.type == sf::Event::TextEntered)
+		bool toLower = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RShift))
+			toLower = true;
+
+		for (int key = sf::Keyboard::Key::A; key < sf::Keyboard::Key::KeyCount; key++)
 		{
-			if (event.text.unicode == '\b')
+			if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)key) && !mKeys[key])
 			{
-				mPlayerInput.erase(mPlayerInput.getSize() - 1, 1);
-				mPlayerText.setString(mPlayerInput);
+				mKeys[key] = true;
+				char ch = fromKeyToStr((sf::Keyboard::Key)key);
+				if (ch != '?')
+				{
+					if (key >= sf::Keyboard::Key::A && key <= sf::Keyboard::Key::Z && !toLower)
+					{
+						ch = std::tolower(ch);
+					}
+					mText.push_back(ch);
+				}
+				else if ((sf::Keyboard::Key)key == sf::Keyboard::BackSpace)
+				{
+					if (mText.size() > 0)
+						mText.pop_back();
+					mTextField.setString(mText);
+				}
 			}
-			else if (event.text.unicode < 128)
+			else
 			{
-				mPlayerInput += static_cast<char>(event.text.unicode);
-				mPlayerText.setString(mPlayerInput);
+				mKeys[key] = false;
 			}
 		}
 	}
@@ -140,42 +182,49 @@ void Editor::initObjects()
 
 void Editor::processInput()
 {
-	if (MouseInput::wheelUp() && !mSaveLevel)
+	if (!mSaveLevel)
 	{
-		mToCreate--;
-		if (mToCreate < 0)
-			mToCreate = END - 1;
-	}
-	if (MouseInput::wheelDown() && !mSaveLevel)
-	{
-		mToCreate++;
-		if (mToCreate >= END)
-			mToCreate = START;
-	}
+		if (MouseInput::wheelUp())
+		{
+			mToCreate--;
+			if (mToCreate < 0)
+				mToCreate = END - 1;
+		}
+		if (MouseInput::wheelDown())
+		{
+			mToCreate++;
+			if (mToCreate >= END)
+				mToCreate = START;
+		}
 
-	if (MouseInput::isPressed(sf::Mouse::Left) && !mSaveLevel)
-	{
-		if (mToCreate != NONE)
-			createObject((OBJECT_TYPES)mToCreate);
-	}
-	if (MouseInput::isPressed(sf::Mouse::Right) && !mSaveLevel)
-	{
-		createObject(NONE);
-	}
+		if (MouseInput::isPressed(sf::Mouse::Left))
+		{
+			if (mToCreate != NONE)
+				createObject((OBJECT_TYPES)mToCreate);
+		}
+		if (MouseInput::isPressed(sf::Mouse::Right))
+		{
+			createObject(NONE);
+		}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !mSaveLevel)
-	{
-		mSaveLevel = true;
-		mPlayerText.setString("Write the name of the file");
-		float width = mPlayerText.getLocalBounds().width;
-		mPlayerText.setOrigin(width / 2.0f, 0);
-	}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+		{
+			mSaveLevel = true;
+			mTextField.setString("Write the name of the file");
+			float width = mTextField.getLocalBounds().width;
+			mTextField.setOrigin(width / 2.0f, 0);
+		}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && mSaveLevel)
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 	{
 		mSaveLevel = false;
-		if (saveLevel(std::string(mPlayerInput)))
+		if (saveLevel(mText))
+		{
+			mText = "";
+			mTextField.setString("");
 			std::cout << "Saved level" << std::endl;
+		}
 	}
 }
 
@@ -340,4 +389,165 @@ sf::Vector2i Editor::mouseToWorldCoord()
 	pos.x = ((float)(MouseInput::GetX() / (float)Defined::WINDOW_WIDTH) * Defined::WORLD_WIDTH);
 	pos.y = ((float)(MouseInput::GetY() / (float)Defined::WINDOW_HEIGHT) * Defined::WORLD_HEIGHT);
 	return pos;
+}
+
+char Editor::fromKeyToStr(sf::Keyboard::Key key)
+{
+	switch (key)
+	{
+	case sf::Keyboard::A:
+		return 'A';
+		break;
+	case sf::Keyboard::B:
+		return 'B';
+		break;
+	case sf::Keyboard::C:
+		return 'C';
+		break;
+	case sf::Keyboard::D:
+		return 'D';
+		break;
+	case sf::Keyboard::E:
+		return 'E';
+		break;
+	case sf::Keyboard::F:
+		return 'F';
+		break;
+	case sf::Keyboard::G:
+		return 'G';
+		break;
+	case sf::Keyboard::H:
+		return 'H';
+		break;
+	case sf::Keyboard::I:
+		return 'I';
+		break;
+	case sf::Keyboard::J:
+		return 'J';
+		break;
+	case sf::Keyboard::K:
+		return 'K';
+		break;
+	case sf::Keyboard::L:
+		return 'L';
+		break;
+	case sf::Keyboard::M:
+		return 'M';
+		break;
+	case sf::Keyboard::N:
+		return 'N';
+		break;
+	case sf::Keyboard::O:
+		return 'O';
+		break;
+	case sf::Keyboard::P:
+		return 'P';
+		break;
+	case sf::Keyboard::Q:
+		return 'Q';
+		break;
+	case sf::Keyboard::R:
+		return 'R';
+		break;
+	case sf::Keyboard::S:
+		return 'D';
+		break;
+	case sf::Keyboard::T:
+		return 'T';
+		break;
+	case sf::Keyboard::U:
+		return 'U';
+		break;
+	case sf::Keyboard::V:
+		return 'V';
+		break;
+	case sf::Keyboard::W:
+		return 'W';
+		break;
+	case sf::Keyboard::X:
+		return 'X';
+		break;
+	case sf::Keyboard::Y:
+		return 'Y';
+		break;
+	case sf::Keyboard::Z:
+		return 'Z';
+		break;
+	case sf::Keyboard::Num0:
+		return '0';
+		break;
+	case sf::Keyboard::Num1:
+		return '1';
+		break;
+	case sf::Keyboard::Num2:
+		return '2';
+		break;
+	case sf::Keyboard::Num3:
+		return '3';
+		break;
+	case sf::Keyboard::Num4:
+		return '4';
+		break;
+	case sf::Keyboard::Num5:
+		return '5';
+		break;
+	case sf::Keyboard::Num6:
+		return '6';
+		break;
+	case sf::Keyboard::Num7:
+		return '7';
+		break;
+	case sf::Keyboard::Num8:
+		return '8';
+		break;
+	case sf::Keyboard::Num9:
+		return '9';
+		break;
+	case sf::Keyboard::Tilde:
+		return '~';
+		break;
+	case sf::Keyboard::Dash:
+		return '-';
+		break;
+	case sf::Keyboard::Space:
+		return ' ';
+		break;
+	case sf::Keyboard::Period:
+		return '.';
+		break;
+	case sf::Keyboard::Numpad0:
+		return '0';
+		break;
+	case sf::Keyboard::Numpad1:
+		return '1';
+		break;
+	case sf::Keyboard::Numpad2:
+		return '2';
+		break;
+	case sf::Keyboard::Numpad3:
+		return '3';
+		break;
+	case sf::Keyboard::Numpad4:
+		return '4';
+		break;
+	case sf::Keyboard::Numpad5:
+		return '5';
+		break;
+	case sf::Keyboard::Numpad6:
+		return '6';
+		break;
+	case sf::Keyboard::Numpad7:
+		return '7';
+		break;
+	case sf::Keyboard::Numpad8:
+		return '8';
+		break;
+	case sf::Keyboard::Numpad9:
+		return '9';
+		break;
+	default:
+		break;
+	}
+
+	return '?';
 }
