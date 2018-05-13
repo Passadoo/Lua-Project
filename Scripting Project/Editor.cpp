@@ -450,7 +450,7 @@ char Editor::fromKeyToStr(sf::Keyboard::Key key)
 		return 'R';
 		break;
 	case sf::Keyboard::S:
-		return 'D';
+		return 'S';
 		break;
 	case sf::Keyboard::T:
 		return 'T';
