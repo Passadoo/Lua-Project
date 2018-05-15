@@ -85,6 +85,9 @@
     <ClCompile Include="MouseInput.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
