@@ -324,6 +324,54 @@ void Dungeon::SwitchRoomLeft()
 	mCurrentRoomX -= 1;
 }
 
+bool Dungeon::LeftRoomHasRightDoor()
+{
+	if (mRooms[mCurrentRoomX - 1][mCurrentRoomY].HasDoorRight())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Dungeon::UpRoomHasDownDoor()
+{
+	if (mRooms[mCurrentRoomX][mCurrentRoomY - 1].HasDoorDown())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Dungeon::RightRoomHasLeftDoor()
+{
+	if (mRooms[mCurrentRoomX + 1][mCurrentRoomY].HasDoorLeft())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Dungeon::DownRoomHasUpDoor()
+{
+	if (mRooms[mCurrentRoomX][mCurrentRoomY + 1].HasDoorUp())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Dungeon::Draw(RenderWindow & window)
 {
 	mRooms[mCurrentRoomX][mCurrentRoomY].Draw(window);
