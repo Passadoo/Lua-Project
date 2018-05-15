@@ -7,7 +7,7 @@
 
 #include <thread>
 #include <Windows.h>
-#include <irrlicht.h>
+//#include <irrlicht.h>
 #include <lua.hpp>
 #include "lua.hpp"
 
@@ -20,40 +20,27 @@
 
 #define USE_EDITOR true
 
-void ConsoleThread(lua_State* L) {
-	char command[1000];
-	while (GetConsoleWindow()) {
-		memset(command, 0, 1000);
-		std::cin.getline(command, 1000);
-		if (luaL_loadstring(L, command) || lua_pcall(L, 0, 0, 0))
-		{
-
-			std::cout << lua_tostring(L, -1) << '\n';
-			lua_pop(L, 1);
-		}
-	}
-}
+//void ConsoleThread(lua_State* L) {
+//	char command[1000];
+//	while (GetConsoleWindow()) {
+//		memset(command, 0, 1000);
+//		std::cin.getline(command, 1000);
+//		if (luaL_loadstring(L, command) || lua_pcall(L, 0, 0, 0))
+//		{
+//
+//			std::cout << lua_tostring(L, -1) << '\n';
+//			lua_pop(L, 1);
+//		}
+//	}
+//}
 
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(189);
 
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
-
-	std::thread conThread(ConsoleThread, L);
-
-	irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(640, 480), 16, false, false, true, 0);
-	if (!device)
-		return 1;
-
-	device->setWindowCaption(L"Hello World! - Irrlicht Engine Demo");
-	irr::video::IVideoDriver* driver = device->getVideoDriver();
-	irr::scene::ISceneManager* smgr = device->getSceneManager();
-	irr::gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
-
-	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!", irr::core::rect<irr::s32>(10, 10, 260, 22), true);
-
 
 
 	sf::RenderWindow window;
@@ -67,15 +54,8 @@ int main()
 	sf::Time time;
 	sf::Event event;
 	float deltaTime = 1.0f;
-	while (window.isOpen() && device->run())
+	while (window.isOpen())
 	{
-		driver->beginScene(true, true, irr::video::SColor(255, 90, 101, 140));
-
-		smgr->drawAll();
-		guienv->drawAll();
-
-		driver->endScene();
-
 		while (window.pollEvent(event))
 		{
 			MouseInput::ProcessInput(window, event);
@@ -85,14 +65,12 @@ int main()
 				if (event.key.code == sf::Keyboard::Escape)
 				{
 					window.close();
-					device->closeDevice();
 				}
 			}
 			switch (event.type)
 			{
 			case sf::Event::Closed:
 				window.close();
-				device->closeDevice();
 				break;
 			case sf::Event::GainedFocus:
 				break;
@@ -123,9 +101,7 @@ int main()
 	delete game;
 	delete editor;
 
-	device->drop();
-
-	conThread.join();
+	lua_close(L);
 
 	return 0;
 }
