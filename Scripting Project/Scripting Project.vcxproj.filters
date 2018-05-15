@@ -41,6 +41,9 @@
     <Filter Include="Lua">
       <UniqueIdentifier>{917ce035-db30-495c-bd10-7d369607dee1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua\Scripts">
+      <UniqueIdentifier>{008ca383-1153-4db3-88ed-ae28abb4beca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -132,5 +135,10 @@
     <ClInclude Include="LuaManager.h">
       <Filter>Lua</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Lua\test.lua">
+      <Filter>Lua\Scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>

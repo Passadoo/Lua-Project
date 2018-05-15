@@ -27,3 +27,7 @@ const string Defined::DOOR_PATH = "Resources/Door.png";
 const string Defined::ENEMY_PATH = "Resources/Enemy.png";
 const string Defined::PLAYER_PATH = "Resources/Player.png";
 const string Defined::BULLET_PATH = "Resources/SmallBullet.png";
+
+
+// Script paths
+const string Defined::LUA_TEST_PATH = "Resources/Lua/test.lua";

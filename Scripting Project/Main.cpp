@@ -39,10 +39,6 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(189);
 
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-
-
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
@@ -100,8 +96,6 @@ int main()
 
 	delete game;
 	delete editor;
-
-	lua_close(L);
 
 	return 0;
 }

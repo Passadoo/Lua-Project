@@ -39,5 +39,9 @@ public:
 	static const string ENEMY_PATH;
 	static const string PLAYER_PATH;
 	static const string BULLET_PATH;
+
+	// Script paths
+	static const string LUA_TEST_PATH;
+
 };
 

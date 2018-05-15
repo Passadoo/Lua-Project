@@ -8,6 +8,8 @@
 #include <fstream>
 #include <cctype>
 
+#include "LuaManager.h"
+
 class Editor
 {
 public:
@@ -18,6 +20,9 @@ public:
 	void ProcessInputs();
 	void Draw(sf::RenderWindow &window);
 	void EnterText();
+
+	// Functions called from Lua
+	static int initNew(lua_State * pL);
 
 private:
 	enum OBJECT_TYPES { NONE, OBSTACLE, DOOR, ENEMY, END, START = NONE};
@@ -43,6 +48,9 @@ private:
 	sf::Text mTextField;
 	bool mKeys[sf::Keyboard::KeyCount];
 
+	// Lua manager
+	LuaManager* mLuaManager;
+
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);
 	void createObjectTypes();
@@ -61,4 +69,7 @@ private:
 	// Utilities
 	sf::Vector2i mouseToWorldCoord();
 	char fromKeyToStr(sf::Keyboard::Key key);
+
+	// Lua
+	void initLuaManager();
 };

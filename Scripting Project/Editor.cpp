@@ -2,6 +2,8 @@
 
 Editor::Editor()
 {
+	initLuaManager();
+
 	initObjects();
 	mTextField.setPosition(Defined::WINDOW_WIDTH / 2.0f, Defined::WINDOW_HEIGHT / 2.0f);
 
@@ -19,6 +21,8 @@ Editor::Editor()
 
 Editor::~Editor()
 {
+	delete mLuaManager;
+
 	if (mObjects)
 	{
 		delete[] mObjects;
@@ -124,6 +128,12 @@ void Editor::EnterText()
 			}
 		}
 	}
+}
+
+int Editor::initNew(lua_State * pL)
+{
+	std::cout << "Hello from " << __func__ << std::endl;
+	return 0;
 }
 
 void Editor::loadObjectTexture(Obj* obj, const std::string & objectPath)
@@ -550,4 +560,14 @@ char Editor::fromKeyToStr(sf::Keyboard::Key key)
 	}
 
 	return '?';
+}
+
+void Editor::initLuaManager()
+{
+	mLuaManager = new LuaManager();
+	luaL_Reg functionList[] = {{"new", initNew},{NULL, NULL}};
+	mLuaManager->RegisterObjectFunctions("Test", functionList);
+	mLuaManager->LoadScript(Defined::LUA_TEST_PATH);
+
+	mLuaManager->CallLuaFunction("init");
 }
