@@ -155,6 +155,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Obstacle.h" />

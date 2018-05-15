@@ -38,6 +38,9 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{f5514803-504f-4044-b751-7058d209be78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua">
+      <UniqueIdentifier>{917ce035-db30-495c-bd10-7d369607dee1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="MouseInput.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaManager.h">
+      <Filter>Lua</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
