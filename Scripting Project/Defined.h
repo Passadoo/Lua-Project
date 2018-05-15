@@ -19,6 +19,8 @@ public:
 
 	//Map
 	static const string MAP_PATH;
+	static const string ROOM_INFO_PATH;
+	static const string ROOMS_PATH;
 
 	//Grid
 	static int GRID_CELL_SIZE;
@@ -31,9 +33,11 @@ public:
 	//Enemies
 	static const int ENEMY_HEALTH;
 
-
-
-
-
+	// Entity paths
+	static const string OBSTACLE_PATH;
+	static const string DOOR_PATH;
+	static const string ENEMY_PATH;
+	static const string PLAYER_PATH;
+	static const string BULLET_PATH;
 };
 

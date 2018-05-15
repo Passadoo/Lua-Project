@@ -1,11 +1,18 @@
 #include "Map.h"
 
-
+Defined::ObjectTypes** Map::mObjectTypes = nullptr;
+int Map::mNrOfEnemies = 0;
+int Map::mNrOfObstacles = 0;
+int Map::mNrOfDoors = 0;
+vector<char> Map::mDirections;
 
 void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 {
 	char temp;
 	Defined::ObjectTypes objType;
+	mNrOfDoors = 0;
+	mNrOfEnemies = 0;
+	mNrOfObstacles = 0;
 
 	for (int j = 0; j < Defined::WORLD_HEIGHT; j++)
 	{
@@ -14,7 +21,7 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 			temp = lines.at(j).at(i);
 
 			objType = Defined::AIR;
-			mObjectTypes[i][j] = objType;
+			Map::mObjectTypes[i][j] = objType;
 
 			for (int k = 0; k < chars.size(); k++)
 			{
@@ -23,23 +30,23 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 					if (temp == 'o')
 					{
 						objType = Defined::OBSTACLE;
-						mNrOfObstacles++;
+						Map::mNrOfObstacles++;
 					}
 					else if(temp == 'e')
 					{
 						objType = Defined::ENEMY;
-						mNrOfEnemies++;
+						Map::mNrOfEnemies++;
 					}
-					else if (temp == 'd')
+					else if (temp != '.')
 					{
 						objType = Defined::DOOR;
-						mNrOfDoors++;
+						Map::mNrOfDoors++;
 					}
 					else if (temp != '.')
 					{
 						objType = Defined::PLAYER;
 					}
-					mObjectTypes[i][j] = objType;
+					Map::mObjectTypes[i][j] = objType;
 				}
 			}
 		}
@@ -48,10 +55,7 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 
 Map::Map()
 {
-	mObjectTypes = nullptr;
-	mNrOfEnemies = 0;
-	mNrOfObstacles = 0;
-	mNrOfDoors = 0;
+
 }
 
 
@@ -59,9 +63,9 @@ Map::~Map()
 {
 	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
 	{
-		delete[] mObjectTypes[i];
+		delete[] Map::mObjectTypes[i];
 	}
-	delete[] mObjectTypes;
+	delete[] Map::mObjectTypes;
 }
 
 bool Map::ReadMap(const string & path)
@@ -89,10 +93,10 @@ bool Map::ReadMap(const string & path)
 
 		while (word.size() == 1)
 		{
-			chars.push_back(word[0]); //adding "p" to char list
-			ifs >> word;
-			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
-			ifs >> word;
+			//chars.push_back(word[0]); //adding "p" to char list
+			//ifs >> word;
+			//mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
+			//ifs >> word;
 			chars.push_back(word[0]); //adding "e" to the char list
 			ifs >> word;
 			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the enemy is facing
@@ -125,7 +129,7 @@ bool Map::ReadMap(const string & path)
 		mObjectTypes = new Defined::ObjectTypes*[Defined::WORLD_WIDTH];
 		for (int i = 0; i < Defined::WORLD_WIDTH; i++)
 		{
-			this->mObjectTypes[i] = new Defined::ObjectTypes[Defined::WORLD_HEIGHT];
+			Map::mObjectTypes[i] = new Defined::ObjectTypes[Defined::WORLD_HEIGHT];
 		}
 
 		fillGrid(lines, chars);
@@ -134,17 +138,13 @@ bool Map::ReadMap(const string & path)
 	ifs.close();
 
 	return true;
-
-
 }
 
-void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
+void Map::setObjects(string filepath, Obstacle **& pObstacles, int & pNrOfObstacles, Enemy **& pEnemies, int & pNrOfEnemies,
 	Door **& pDoors, int & pNrOfDoors)
 {
-	if (pPlayer != nullptr)
-	{
-		delete pPlayer;
-	}
+
+	ReadMap(filepath);
 
 	if (pObstacles != nullptr)
 	{
@@ -152,7 +152,7 @@ void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObst
 		{
 			delete pObstacles[i];
 		}
-		delete[] pObstacles;
+		delete[]pObstacles;
 	}
 
 	if (pEnemies != nullptr)
@@ -173,13 +173,13 @@ void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObst
 		delete[] pDoors;
 	}
 
-	pNrOfObstacles = mNrOfObstacles;
-	pNrOfEnemies = mNrOfEnemies;
-	pNrOfDoors = mNrOfDoors;
+	pNrOfObstacles = Map::mNrOfObstacles;
+	pNrOfEnemies = Map::mNrOfEnemies;
+	pNrOfDoors = Map::mNrOfDoors;
 
-	pObstacles = new Obstacle*[mNrOfObstacles];
-	pEnemies = new Enemy*[mNrOfEnemies];
-	pDoors = new Door*[mNrOfDoors];
+	pObstacles = new Obstacle*[Map::mNrOfObstacles];
+	pEnemies = new Enemy*[Map::mNrOfEnemies];
+	pDoors = new Door*[Map::mNrOfDoors];
 
 	int tempObstacles = 0;
 	int tempEnemies = 0;
@@ -189,77 +189,81 @@ void Map::setObjects(Player* & pPlayer, Obstacle **& pObstacles, int & pNrOfObst
 	{
 		for (int j = 0; j < Defined::WORLD_HEIGHT; j++)
 		{
-			if (mObjectTypes[i][j] == Defined::OBSTACLE)
+			if (Map::mObjectTypes[i][j] == Defined::OBSTACLE)
 			{
 				pObstacles[tempObstacles] = new Obstacle(i, j);
 				tempObstacles++;
 			}
-			if (mObjectTypes[i][j] == Defined::PLAYER)
-			{
-				pPlayer = new Player(i, j);
-				if (mDirections[0] == 'l')
-				{
-					pPlayer->SetDirection(Defined::LEFT);
-				}
-				if (mDirections[0] == 'r')
-				{
-					pPlayer->SetDirection(Defined::RIGHT);
-				}
-				if (mDirections[0] == 'u')
-				{
-					pPlayer->SetDirection(Defined::UP);
-				}
-				if (mDirections[0] == 'd')
-				{
-					pPlayer->SetDirection(Defined::DOWN);
-				}
-				
-			}
-			if (mObjectTypes[i][j] == Defined::ENEMY)
+			//if (Map::mObjectTypes[i][j] == Defined::PLAYER)
+			//{
+			//	pPlayer = new Player(i, j);
+			//	if (mDirections[0] == 'l')
+			//	{
+			//		pPlayer->SetDirection(Defined::LEFT);
+			//	}
+			//	if (mDirections[0] == 'r')
+			//	{
+			//		pPlayer->SetDirection(Defined::RIGHT);
+			//	}
+			//	if (mDirections[0] == 'u')
+			//	{
+			//		pPlayer->SetDirection(Defined::UP);
+			//	}
+			//	if (mDirections[0] == 'd')
+			//	{
+			//		pPlayer->SetDirection(Defined::DOWN);
+			//	}
+			//}
+			if (Map::mObjectTypes[i][j] == Defined::ENEMY)
 			{
 				pEnemies[tempEnemies] = new Enemy(i, j);
-				if (mDirections[1] == 'l')
+				if (mDirections[0] == 'l')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::LEFT);
 				}
-				if (mDirections[1] == 'r')
+				if (mDirections[0] == 'r')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::RIGHT);
 				}
-				if (mDirections[1] == 'u')
+				if (mDirections[0] == 'u')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::UP);
 				}
-				if (mDirections[1] == 'd')
+				if (mDirections[0] == 'd')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::DOWN);
 				}
-
 				tempEnemies++;
 			}
-			if (mObjectTypes[i][j] == Defined::DOOR)
+			if (Map::mObjectTypes[i][j] == Defined::DOOR)
 			{
 				pDoors[tempDoors] = new Door(i, j);
 				
-				if (mDirections[2] == 'l')
+				if (mDirections[1] == 'l')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::LEFT);
 				}
-				if (mDirections[2] == 'r')
+				if (mDirections[1] == 'r')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::RIGHT);
 				}
-				if (mDirections[2] == 'u')
+				if (mDirections[1] == 'u')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::UP);
 				}
-				if (mDirections[2] == 'd')
+				if (mDirections[1] == 'd')
 				{
 					pDoors[tempDoors]->SetDirection(Defined::DOWN);
 				}
-
 				tempDoors++;
 			}
 		}
 	}
+
+	for (int i = 0; i < Defined::WORLD_WIDTH; i++)
+	{
+		delete[] Map::mObjectTypes[i];
+	}
+	delete[] Map::mObjectTypes;
+
 }

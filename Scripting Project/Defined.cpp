@@ -5,7 +5,9 @@ unsigned int Defined::WINDOW_WIDTH = 800;
 unsigned int Defined::WINDOW_HEIGHT = 600;
 
 //Map
-const string Defined::MAP_PATH = "Resources/Rooms/StartMap.txt";
+const string Defined::MAP_PATH = "Resources/Rooms/StartRoom.txt";
+const string Defined::ROOM_INFO_PATH = "Resources/Rooms/roomInfo.txt";
+const string Defined::ROOMS_PATH = "Resources/Rooms/";
 
 //Grid
 int Defined::GRID_CELL_SIZE = 40; // 20 x 15 grid squares, each grid square 40 x 40 pixels large
@@ -17,3 +19,11 @@ const float Defined::BULLET_SPEED = 0.5;
 
 //Enemies
 const int Defined::ENEMY_HEALTH = 3;
+
+
+// Entity paths
+const string Defined::OBSTACLE_PATH = "Resources/Obstacle.png";
+const string Defined::DOOR_PATH = "Resources/Door.png";
+const string Defined::ENEMY_PATH = "Resources/Enemy.png";
+const string Defined::PLAYER_PATH = "Resources/Player.png";
+const string Defined::BULLET_PATH = "Resources/SmallBullet.png";

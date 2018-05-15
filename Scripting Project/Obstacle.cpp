@@ -4,17 +4,18 @@
 
 Obstacle::Obstacle()
 {
-	if (!mTexture.loadFromFile("Resources/Obstacle.png"))
+	if (!mTexture.loadFromFile(Defined::OBSTACLE_PATH))
 	{
 		//Error
 	}
 	mSprite.setTexture(mTexture);
+	SetPos(0, 0);
 	mSprite.setPosition(GetPos());
 }
 
 Obstacle::Obstacle(int pXPos, int pYPos)
 {
-	if (!mTexture.loadFromFile("Resources/Obstacle.png"))
+	if (!mTexture.loadFromFile(Defined::OBSTACLE_PATH))
 	{
 		//Error
 	}

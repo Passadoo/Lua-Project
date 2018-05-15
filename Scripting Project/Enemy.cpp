@@ -4,7 +4,7 @@
 
 Enemy::Enemy()
 {
-	if (!mTexture.loadFromFile("Resources/Enemy.png"))
+	if (!mTexture.loadFromFile(Defined::ENEMY_PATH))
 	{
 		//Error
 	}
@@ -17,7 +17,7 @@ Enemy::Enemy()
 
 Enemy::Enemy(float pPosX, float pPosY)
 {
-	if (!mTexture.loadFromFile("Resources/Enemy.png"))
+	if (!mTexture.loadFromFile(Defined::ENEMY_PATH))
 	{
 		//Error
 	}

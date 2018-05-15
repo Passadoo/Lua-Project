@@ -32,6 +32,12 @@
     <Filter Include="Objects\Entity\Player">
       <UniqueIdentifier>{7445ec2e-17ea-43c0-a311-db5f0f1e96f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{79c9adac-6fe3-422f-bc78-1c8d6019cc57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{f5514803-504f-4044-b751-7058d209be78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -64,6 +70,18 @@
     <ClCompile Include="Door.cpp">
       <Filter>Objects\Entity\Door</Filter>
     </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Dungeon.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseInput.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -92,6 +110,18 @@
     </ClInclude>
     <ClInclude Include="Door.h">
       <Filter>Objects\Entity\Door</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Dungeon.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseInput.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

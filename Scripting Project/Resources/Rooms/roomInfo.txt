@@ -1,0 +1,8 @@
+StartRoom.txt 1000
+Room1.txt 0110
+Room2.txt 0011
+levelTest.txt 1010
+levelTest2.txt 0011
+test2.txt 1111
+textLevel3.txt 0001
+text4.txt 1111

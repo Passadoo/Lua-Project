@@ -4,7 +4,7 @@
 
 Door::Door()
 {
-	if (!mTexture.loadFromFile("Resources/Door.png"))
+	if (!mTexture.loadFromFile(Defined::DOOR_PATH))
 	{
 
 	}
@@ -16,7 +16,7 @@ Door::Door()
 
 Door::Door(int pPosX, int pPosY)
 {
-	if (!mTexture.loadFromFile("Resources/Door.png"))
+	if (!mTexture.loadFromFile(Defined::DOOR_PATH))
 	{
 		//Error
 	}

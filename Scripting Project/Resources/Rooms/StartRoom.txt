@@ -1,0 +1,20 @@
+@Objects
+e r
+o 
+d d
+@Map
+ooooooooodoooooooooo
+o..............o.o.o
+o...............e..o
+o..............o.o.o
+o..................o
+o..................o
+o..................o
+o.o..o..o..........o
+o.o..o..o...e......o
+o.o..o..o..........o
+o.o..o..o..........o
+o.o.....o..........o
+o.ooooooo...e......o
+o..................o
+oooooooooooooooooooo

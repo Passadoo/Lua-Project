@@ -1,32 +1,27 @@
 #pragma once
 
-#include "Map.h"
+#include "Dungeon.h"
 #include <iostream>
 
 class Game
 {
 private:
-	Obstacle** mObstacles;
-	Bullet** mBullets;
-	Enemy** mEnemies;
-	Door** mDoors;
+	Bullet ** mBullets;
+	int mNrOfBullets;
+
 	Player* mPlayer;
 
-	int mNrOfBullets;
-	int mNrOfObstacles;
-	int mNrOfEnemies;
-	int mNrOfDoors;
+	Dungeon * mDungeon;
 
 	void playerUpdate(float dt);
+	void roomUpdate();
 	void bulletUpdate(float dt);
 	void enemyUpdate(float dt);
 
 	void RemoveBullet(int index);
-	void RemoveEnemy(int index);
 
 public:
 	Game();
-	Game(Map &map);
 	~Game();
 
 	void Draw(RenderWindow &window);

@@ -62,22 +62,170 @@ void Game::playerUpdate(float dt)
 	{
 		bool canMove = true;
 
-		for (int i = 0; i < mNrOfObstacles; i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
-			if (mObstacles[i]->GetPos().x == nextPos.x && mObstacles[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				canMove = false;
 			}
 		}
 
-		if (canMove)
+		bool enteredDoor = false;
+
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfDoors(); i++)
+		{
+			if (mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().y == nextPos.y)
+			{
+				std::cout << "entered door" << std::endl;
+				enteredDoor = true;
+			}
+		}
+
+		if (enteredDoor)
+		{
+			roomUpdate();
+		}
+		else if (canMove)
 		{
 			mPlayer->SetPosition(nextPos);
 		}
 	}
 
-
 	mPlayer->Update(dt);
+}
+
+void Game::roomUpdate()
+{
+	bool enteredDoorUp = false;
+	bool enteredDoorRight = false;
+	bool enteredDoorDown = false;
+	bool enteredDoorLeft = false;
+
+	if (mPlayer->GetPosX() == 1.0f * Defined::GRID_CELL_SIZE)
+		enteredDoorLeft = true;
+
+	if (mPlayer->GetPosY() == 1.0f * Defined::GRID_CELL_SIZE)
+		enteredDoorUp = true;
+
+	if (mPlayer->GetPosX() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_WIDTH - 2)))
+		enteredDoorRight = true;
+
+	if (mPlayer->GetPosY() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_HEIGHT - 2)))
+		enteredDoorDown = true;
+
+	if (enteredDoorUp)
+	{
+		if (!mDungeon->RoomUpExists())
+		{
+			if (mDungeon->AddRoomUp())
+			{
+				mDungeon->LoadCurrentRoom();
+				Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+				}
+			}
+			else
+			{
+				std::cout << "No more rooms exist in this direction" << std::endl;
+			}
+		}
+		else
+		{
+			mDungeon->SwitchRoomUp();
+			Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
+			if (newLocation.x >= 0.0f)
+			{
+				mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+			}
+		}
+	}
+	else if (enteredDoorRight)
+	{
+		if (!mDungeon->RoomRightExists())
+		{
+			if (mDungeon->AddRoomRight())
+			{
+				mDungeon->LoadCurrentRoom();
+				Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+				}
+			}
+			else
+			{
+				std::cout << "No more rooms exist in this direction" << std::endl;
+			}
+		}
+		else
+		{
+			mDungeon->SwitchRoomRight();
+			Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
+			if (newLocation.x >= 0.0f)
+			{
+				mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+			}
+		}
+	}
+	else if (enteredDoorDown)
+	{
+		if (!mDungeon->RoomDownExists())
+		{
+			if (mDungeon->AddRoomDown())
+			{
+				mDungeon->LoadCurrentRoom();
+				Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+				}
+			}
+			else
+			{
+				std::cout << "No more rooms exist in this direction" << std::endl;
+			}
+		}
+		else
+		{
+			mDungeon->SwitchRoomDown();
+			Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
+			if (newLocation.x >= 0.0f)
+			{
+				mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+			}
+		}
+	}
+	else if (enteredDoorLeft)
+	{
+		std::cout << "Entered door left" << std::endl;
+		if (!mDungeon->RoomLeftExists())
+		{
+			if (mDungeon->AddRoomLeft())
+			{
+				mDungeon->LoadCurrentRoom();
+				Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+				}
+			}
+			else
+			{
+				std::cout << "No more rooms exist in this direction" << std::endl;
+			}
+		}
+		else
+		{
+			mDungeon->SwitchRoomLeft();
+			Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
+			if (newLocation.x >= 0.0f)
+			{
+				mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+			}
+		}
+	}
 }
 
 void Game::bulletUpdate(float dt)
@@ -116,24 +264,24 @@ void Game::bulletUpdate(float dt)
 
 		bool noWall = true;
 
-		for (int i = 0; i < mNrOfObstacles; i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
-			if (mObstacles[i]->GetPos().x == nextPos.x && mObstacles[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
 			{
 				noWall = false;
 			}
 		}
 
 		bool noEnemy = true;
-		for (int i = 0; i < mNrOfEnemies; i++)
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfEnemies(); i++)
 		{
-			if (mEnemies[i]->GetPos().x == nextPos.x && mEnemies[i]->GetPos().y == nextPos.y)
+			if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPos().y == nextPos.y)
 			{
 				noEnemy = false;
-				mEnemies[i]->TakeDamage();
-				if (mEnemies[i]->GetHealth() <= 0)
+				mDungeon->GetCurrentRoom().GetEnemies()[i]->TakeDamage();
+				if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetHealth() <= 0)
 				{
-					RemoveEnemy(i);
+					mDungeon->GetCurrentRoom().RemoveEnemy(i);
 				}
 			}
 		}
@@ -144,7 +292,6 @@ void Game::bulletUpdate(float dt)
 		}
 		else
 		{
-			//Remove bullet from game
 			RemoveBullet(i);
 		}
 	}
@@ -152,70 +299,28 @@ void Game::bulletUpdate(float dt)
 
 void Game::enemyUpdate(float dt)
 {
-	for (int i = 0; i < mNrOfEnemies; i++)
-	{
 
-	}
 }
 
 Game::Game()
 {
-	mObstacles = new Obstacle*[5];
-	mObstacles[0] = new Obstacle(5, 5);
-	mObstacles[1] = new Obstacle(5, 7);
-	mObstacles[2] = new Obstacle(7, 12);
-	mObstacles[3] = new Obstacle(8, 4);
-	mObstacles[4] = new Obstacle(12, 3);
-	mNrOfObstacles = 5;
-	
-	mEnemies = new Enemy*[2];
-	mEnemies[0] = new Enemy(13, 10);
-	mEnemies[1] = new Enemy(3, 8);
-	mNrOfEnemies = 2;
-
-	mDoors = new Door*[1];
-	mDoors[0] = new Door(0, 5);
-
-	mPlayer = new Player();
-}
-
-Game::Game(Map & map)
-{
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
-	mNrOfObstacles = 0;
-	mNrOfEnemies = 0;
-	mNrOfDoors = 0;
-	map.setObjects(mPlayer, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
+	mPlayer = new Player(2, 2);
+	mDungeon = new Dungeon();
+	mDungeon->LoadCurrentRoom();
 }
 
 Game::~Game()
 {
-	for (int i = 0; i< mNrOfObstacles; i++)
-	{
-		delete mObstacles[i];
-	}
-	delete[] mObstacles;
-
-	delete mPlayer;
-
 	for (int i = 0; i < mNrOfBullets; i++)
 	{
 		delete mBullets[i];
 	}
 	delete[] mBullets;
 
-	for (int i = 0; i < mNrOfEnemies; i++)
-	{
-		delete mEnemies[i];
-	}
-	delete[] mEnemies;
-
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		delete mDoors[i];
-	}
-	delete[] mDoors;
+	delete mPlayer;
+	delete mDungeon;
 }
 
 void Game::RemoveBullet(int index)
@@ -231,59 +336,20 @@ void Game::RemoveBullet(int index)
 	}
 }
 
-void Game::RemoveEnemy(int index)
-{
-	if (mNrOfEnemies > index)
-	{
-		delete mEnemies[index];
-		for (int i = index; i < mNrOfEnemies - 1; i++)
-		{
-			mEnemies[i] = mEnemies[i + 1];
-		}
-		mNrOfEnemies--;
-	}
-}
-
 void Game::Draw(RenderWindow & window)
 {
-	mPlayer->Draw(window);
-
-	for (int i = 0; i<mNrOfObstacles; i++)
-	{
-		mObstacles[i]->Draw(window);
-	}
-
 	for (int i = 0; i<mNrOfBullets; i++)
 	{
 		mBullets[i]->Draw(window);
 	}
 
-	for (int i = 0; i < mNrOfEnemies; i++)
-	{
-		mEnemies[i]->Draw(window);
-	}
-
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		mDoors[i]->Draw(window);
-	}
+	mPlayer->Draw(window);
+	mDungeon->Draw(window);
 }
 
 void Game::Update(float dt)
 {
-	for (int i = 0; i<mNrOfObstacles; i++)
-	{
-		mObstacles[i]->Update(dt);
-	}
-
+	mDungeon->Update(dt);
 	playerUpdate(dt);
-	
 	bulletUpdate(dt);
-
-	for (int i = 0; i < mNrOfDoors; i++)
-	{
-		mDoors[i]->Update(dt);
-	}
-
-	//Update enemies
 }

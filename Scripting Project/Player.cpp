@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile(Defined::PLAYER_PATH))
 	{
 		//Error
 	}
@@ -16,7 +16,7 @@ Player::Player()
 
 Player::Player(int pXPos, int pYPos)
 {
-	if (!mTexture.loadFromFile("Resources/Player.png"))
+	if (!mTexture.loadFromFile(Defined::PLAYER_PATH))
 	{
 		//Error
 	}
@@ -53,10 +53,6 @@ Defined::eDirection Player::GetDirection() const
 
 void Player::Draw(RenderWindow & window)
 {
-	//if (&window != nullptr)
-	//{
-	//	window.draw(mSprite);
-	//}
 
 	Transform t;
 
