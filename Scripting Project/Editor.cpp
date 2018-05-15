@@ -21,7 +21,10 @@ Editor::Editor()
 
 Editor::~Editor()
 {
-	delete mLuaManager;
+	Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
+	if (enemy)
+		delete enemy;
+	LuaManager::CloseLuaManager();
 
 	if (mObjects)
 	{
@@ -45,6 +48,19 @@ void Editor::Update(float dt)
 
 void Editor::ProcessInputs()
 {
+	// Lua test
+	if (Keyboard::isKeyPressed(Keyboard::Key::F))
+	{
+		Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
+		if (enemy->GetPosX() == 0 && enemy->GetPosY() == 0)
+		{
+			lua_getglobal(LuaManager::GetCurrentState(), "setPos");
+			LuaManager::PushFloat(10.0f);
+			LuaManager::PushFloat(15.2f);
+			LuaManager::CallLuaFunction("setPos", 2, 0);
+		}
+	}
+
 	processInput();
 }
 
@@ -132,7 +148,31 @@ void Editor::EnterText()
 
 int Editor::initNew(lua_State * pL)
 {
-	std::cout << "Hello from " << __func__ << std::endl;
+	std::cout << "Called function [" << __func__ << "]" << std::endl;
+	
+	// Monster is a C++ class defined somewhere...
+	Enemy** monster = reinterpret_cast<Enemy**>(lua_newuserdata(LuaManager::GetCurrentState(), sizeof(Enemy*)));
+	*monster = new Enemy();
+	luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable("Test").c_str());
+	lua_setmetatable(LuaManager::GetCurrentState(), -2);
+	std::cout << "[C++] Created enemy" << std::endl;
+
+	return 1;
+}
+
+int Editor::setPos(lua_State * pL)
+{
+	std::cout << std::endl << "Called function [" << __func__ << "]" << std::endl;
+
+	float y = LuaManager::GetFloat();
+	float x = LuaManager::GetFloat();
+	Enemy* enemy = LuaManager::GetObjectPtr<Enemy>("Test");
+	if (enemy)
+	{
+		std::cout << "old pos: (" << enemy->GetPosX() << "; " << enemy->GetPosY() << ")" << std::endl;
+		enemy->SetPosition(sf::Vector2f(x, y));
+		std::cout << "new pos: (" << enemy->GetPosX() << "; " << enemy->GetPosY() << ")" << std::endl;
+	}
 	return 0;
 }
 
@@ -564,10 +604,15 @@ char Editor::fromKeyToStr(sf::Keyboard::Key key)
 
 void Editor::initLuaManager()
 {
-	mLuaManager = new LuaManager();
-	luaL_Reg functionList[] = {{"new", initNew},{NULL, NULL}};
-	mLuaManager->RegisterObjectFunctions("Test", functionList);
-	mLuaManager->LoadScript(Defined::LUA_TEST_PATH);
+	LuaManager::InitLuaManager();
 
-	mLuaManager->CallLuaFunction("init");
+	// Register C/C++ functions
+	luaL_Reg functionList[] = { {"new", initNew}, { "setPos", setPos }, {NULL, NULL} };
+	LuaManager::RegisterObjectFunctions("Test", functionList);
+
+	// Load Lua script
+	LuaManager::LoadScript(Defined::LUA_TEST_PATH);
+
+	// Test calling Lua function "init"
+	LuaManager::CallLuaFunction("init");
 }

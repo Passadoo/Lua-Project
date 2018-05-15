@@ -10,6 +10,9 @@
 
 #include "LuaManager.h"
 
+// Testing Lua
+#include "Enemy.h"
+
 class Editor
 {
 public:
@@ -23,6 +26,7 @@ public:
 
 	// Functions called from Lua
 	static int initNew(lua_State * pL);
+	static int setPos(lua_State * pL);
 
 private:
 	enum OBJECT_TYPES { NONE, OBSTACLE, DOOR, ENEMY, END, START = NONE};
@@ -47,9 +51,6 @@ private:
 	std::string mText;
 	sf::Text mTextField;
 	bool mKeys[sf::Keyboard::KeyCount];
-
-	// Lua manager
-	LuaManager* mLuaManager;
 
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);

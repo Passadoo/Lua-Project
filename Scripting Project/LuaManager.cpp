@@ -11,12 +11,24 @@
 	return var;\
 }\
 
+lua_State * LuaManager::mL = nullptr;
+std::vector<std::string> LuaManager::mMetaTables;
+
 LuaManager::LuaManager()
 {
-	initLua();
 }
 
 LuaManager::~LuaManager()
+{
+}
+
+void LuaManager::InitLuaManager()
+{
+	mL = luaL_newstate();
+	luaL_openlibs(mL);
+}
+
+void LuaManager::CloseLuaManager()
 {
 	lua_close(mL);
 }
@@ -28,7 +40,7 @@ void LuaManager::LoadScript(const std::string & pPath)
 	{
 		std::cout << "ERROR: could not load lua script [" << pPath << "]" << std::endl;
 		lua_pop(mL, 1);
-		printStackSize(mL);
+		PrintStackSize();
 	}
 	else
 	{
@@ -44,18 +56,40 @@ void LuaManager::CallLuaFunction(const std::string & pFuncName)
 
 void LuaManager::CallLuaFunction(const std::string & pFuncName, int pArg, int pResults)
 {
+	if (pArg == 0 && pResults != 0)
+		lua_getglobal(mL, pFuncName.c_str());
 	int error = lua_pcall(mL, pArg, pResults, 0);
 	if (error)
 	{
 		std::cout << "ERROR: could not call function: [" << pFuncName << "]" << std::endl;
 		lua_pop(mL, 1);
-		printStackSize(mL);
+		PrintStackSize();
 	}
 }
 
-lua_State * LuaManager::GetCurrentState() const
+lua_State * LuaManager::GetCurrentState()
 {
 	return mL;
+}
+
+void LuaManager::PushInteger(int pInteger)
+{
+	lua_pushinteger(mL, pInteger);
+}
+
+void LuaManager::PushFloat(float pFloat)
+{
+	lua_pushnumber(mL, pFloat);
+}
+
+void LuaManager::PushString(std::string pString)
+{
+	lua_pushstring(mL, pString.c_str());
+}
+
+void LuaManager::PushBool(bool pBool)
+{
+	lua_pushboolean(mL, pBool);
 }
 
 int LuaManager::GetInteger()
@@ -86,6 +120,24 @@ bool LuaManager::GetBool()
 	return boolean;
 }
 
+std::string LuaManager::GetMetaTable(const std::string & pObjectName)
+{
+	return "Meta" + pObjectName;
+}
+
+std::string LuaManager::GetMetaTableAndCheck(const std::string & pObjectName)
+{
+	std::string ret = "";
+	for (std::string str : mMetaTables)
+	{
+		if (str.find(pObjectName) != std::string::npos)
+		{
+			ret = str;
+		}
+	}
+	return ret;
+}
+
 void LuaManager::RegisterObjectFunctions(const std::string & pObjectName, luaL_Reg sMonsterRegs[])
 {
 	std::string metatable = "Meta" + pObjectName;
@@ -101,13 +153,7 @@ void LuaManager::RegisterObjectFunctions(const std::string & pObjectName, luaL_R
 	}
 }
 
-void LuaManager::initLua()
+void LuaManager::PrintStackSize()
 {
-	mL = luaL_newstate();
-	luaL_openlibs(mL);
-}
-
-void LuaManager::printStackSize(lua_State *& pL) const
-{
-	std::cout << "Size of Lua stack: " << lua_gettop(pL) << std::endl;
+	std::cout << "Size of Lua stack: " << lua_gettop(mL) << std::endl;
 }

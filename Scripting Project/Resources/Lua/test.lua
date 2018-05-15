@@ -1,8 +1,12 @@
 -- Test Script
 
-function init()
-	print("INIT lua")
+enemy = nil
 
-	Test.new()
+function init()
+	print("Calling C/C++ function from Lua")
+	enemy = Test.new()
 end
 
+function setPos(x, y)
+	enemy:setPos(x, y)
+end
