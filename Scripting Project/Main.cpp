@@ -18,7 +18,7 @@
 #include "Editor.h"
 #include "MouseInput.h"
 
-#define USE_EDITOR true
+#define USE_EDITOR false
 
 //void ConsoleThread(lua_State* L) {
 //	char command[1000];
