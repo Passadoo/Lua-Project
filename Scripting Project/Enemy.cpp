@@ -1,7 +1,5 @@
 #include "Enemy.h"
 
-
-
 Enemy::Enemy()
 {
 	if (!mTexture.loadFromFile(Defined::ENEMY_PATH))
@@ -92,4 +90,14 @@ void Enemy::Draw(RenderWindow & window)
 void Enemy::Update(float dt)
 {
 
+}
+
+void Enemy::TestLuaFunction1()
+{
+	std::cout << "Called " << __func__ << std::endl;
+}
+
+void Enemy::TestLuaFunction2(int i)
+{
+	std::cout << "Called " << __func__ << ", Return: " << i << std::endl;
 }

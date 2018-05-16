@@ -31,3 +31,4 @@ const string Defined::BULLET_PATH = "Resources/SmallBullet.png";
 
 // Script paths
 const string Defined::LUA_TEST_PATH = "Resources/Lua/test.lua";
+const string Defined::LUA_TEST2_PATH = "Resources/Lua/test2.lua";

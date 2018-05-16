@@ -42,6 +42,7 @@ public:
 
 	// Script paths
 	static const string LUA_TEST_PATH;
+	static const string LUA_TEST2_PATH;
 
 };
 

@@ -21,9 +21,10 @@ Editor::Editor()
 
 Editor::~Editor()
 {
-	Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
+	/*Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
 	if (enemy)
-		delete enemy;
+		delete enemy;*/
+	delete mEnemy;
 	LuaManager::CloseLuaManager();
 
 	if (mObjects)
@@ -49,7 +50,7 @@ void Editor::Update(float dt)
 void Editor::ProcessInputs()
 {
 	// Lua test
-	if (Keyboard::isKeyPressed(Keyboard::Key::F))
+	/*if (Keyboard::isKeyPressed(Keyboard::Key::F))
 	{
 		Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
 		if (enemy->GetPosX() == 0 && enemy->GetPosY() == 0)
@@ -59,7 +60,7 @@ void Editor::ProcessInputs()
 			LuaManager::PushFloat(15.2f);
 			LuaManager::CallLuaFunction("setPos", 2, 0);
 		}
-	}
+	}*/
 
 	processInput();
 }
@@ -156,7 +157,7 @@ int Editor::initNew(lua_State * pL)
 	luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable("Test").c_str());
 	lua_setmetatable(LuaManager::GetCurrentState(), -2);
 	std::cout << "[C++] Created enemy" << std::endl;
-
+	
 	return 1;
 }
 
@@ -607,12 +608,21 @@ void Editor::initLuaManager()
 	LuaManager::InitLuaManager();
 
 	// Register C/C++ functions
-	luaL_Reg functionList[] = { {"new", initNew}, { "setPos", setPos }, {NULL, NULL} };
+	/*luaL_Reg functionList[] = { {"new", initNew}, { "setPos", setPos }, {NULL, NULL} };
 	LuaManager::RegisterObjectFunctions("Test", functionList);
 
 	// Load Lua script
 	LuaManager::LoadScript(Defined::LUA_TEST_PATH);
 
 	// Test calling Lua function "init"
-	LuaManager::CallLuaFunction("init");
+	LuaManager::CallLuaFunction("init");*/
+	mEnemy = new Enemy();
+
+	LuaManager::LoadScript(Defined::LUA_TEST2_PATH);
+
+	mEnemy->AddFunction<void, Enemy, int>("TestLuaFunction", mEnemy, &Enemy::TestLuaFunction2);
+
+	LuaFunctionsWrapper::AddCFunction<Enemy, void, int>(mEnemy);
+	
+	LuaManager::CallLuaFunction("callCFunc");
 }

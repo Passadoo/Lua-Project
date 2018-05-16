@@ -1,7 +1,8 @@
 #pragma once
 #include "Entity.h"
+#include "ILuaMember.h"
 
-class Enemy : public Entity
+class Enemy : public Entity, public ILuaMember
 {
 private:
 	Texture mTexture;
@@ -24,5 +25,8 @@ public:
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
+
+	void TestLuaFunction1();
+	void TestLuaFunction2(int i);
 };
 

@@ -9,9 +9,11 @@
 #include <cctype>
 
 #include "LuaManager.h"
+#include "LuaFunctionsWrapper.h"
 
 // Testing Lua
 #include "Enemy.h"
+typedef void(Enemy::*FP_void)();
 
 class Editor
 {
@@ -51,6 +53,8 @@ private:
 	std::string mText;
 	sf::Text mTextField;
 	bool mKeys[sf::Keyboard::KeyCount];
+
+	Enemy* mEnemy;
 
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);
