@@ -24,7 +24,8 @@ Editor::~Editor()
 	/*Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
 	if (enemy)
 		delete enemy;*/
-	delete mEnemy;
+	if (mEnemy)
+		delete mEnemy;
 	LuaManager::CloseLuaManager();
 
 	if (mObjects)
@@ -91,9 +92,6 @@ void Editor::Draw(sf::RenderWindow & window)
 		int ret = LuaManager::GetInteger();
 		mObjectTypes[ret]->sprite.setPosition(border, border);
 		window.draw(mObjectTypes[ret]->sprite);
-
-		/*mObjectTypes[mToCreate]->sprite.setPosition(border, border);
-		window.draw(mObjectTypes[mToCreate]->sprite);*/
 
 		// Draw textbox for saveing the level
 		if (mSaveLevel)
@@ -243,9 +241,6 @@ void Editor::processInput()
 	{
 		if (MouseInput::wheelUp())
 		{
-			/*mToCreate--;
-			if (mToCreate < 0)
-				mToCreate = END - 1;*/
 			lua_getglobal(LuaManager::GetCurrentState(), "decrementToCreate");
 			LuaManager::PushInteger(START);
 			LuaManager::PushInteger(END);
@@ -253,9 +248,6 @@ void Editor::processInput()
 		}
 		if (MouseInput::wheelDown())
 		{
-			/*mToCreate++;
-			if (mToCreate >= END)
-				mToCreate = START;*/
 			lua_getglobal(LuaManager::GetCurrentState(), "incrementToCreate");
 			LuaManager::PushInteger(START);
 			LuaManager::PushInteger(END);
@@ -268,9 +260,6 @@ void Editor::processInput()
 			int ret = LuaManager::GetInteger();
 			if (ret != NONE)
 				createObject((OBJECT_TYPES)ret);
-
-			/*if (mToCreate != NONE)
-				createObject((OBJECT_TYPES)mToCreate);*/
 		}
 		if (MouseInput::isPressed(sf::Mouse::Right))
 		{
@@ -647,4 +636,20 @@ void Editor::initLuaManager()
 	LuaManager::CallLuaFunction("callCFunc");*/
 
 	LuaManager::LoadScript(Defined::LUA_EDITOR_PATH);
+
+	mEnemy = new Enemy();
+#define FUNC TestLuaFunction4
+#define FUNCS "TestLuaFunction4"
+	//mEnemy->AddFunction2("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
+	//mEnemy->CallFunction2<int>("TestLuaFunction4", 1);
+
+	mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
+	mEnemy->CallFunctionMap<int>("TestLuaFunction4", 1);
+
+	/*int ret = -1;
+	mEnemy->AddFunction2("TestLuaFunction3", mEnemy, &Enemy::TestLuaFunction3, _1);
+	mEnemy->CallFunction2<int, int>(ret, "TestLuaFunction3", 1);
+	std::cout << ret << std::endl;*/
+
+	//std::cout << mEnemy->CallFunction2<void, int>("TestLuaFunction4", 1) << std::endl;
 }

@@ -150,6 +150,9 @@
     <ClInclude Include="ILuaMember.h">
       <Filter>Lua\FunctionWrapper</Filter>
     </ClInclude>
+    <ClInclude Include="FunctionTypes.h">
+      <Filter>Lua\FunctionWrapper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Lua\test.lua">

@@ -10,7 +10,6 @@ private:
 	int mCurrentHealth;
 
 	Defined::eDirection mDirection;
-
 public:
 	Enemy();
 	Enemy(float pPosX, float pPosY);
@@ -28,5 +27,9 @@ public:
 
 	void TestLuaFunction1();
 	void TestLuaFunction2(int i);
+	int TestLuaFunction3(int i);
+	void TestLuaFunction4(int i);
+
+	int mI = 0;
 };
 

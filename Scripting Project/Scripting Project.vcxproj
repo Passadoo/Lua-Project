@@ -157,6 +157,7 @@
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="FunctionTypes.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ILuaMember.h" />
     <ClInclude Include="LuaFunctionsWrapper.h" />

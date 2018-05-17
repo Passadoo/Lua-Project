@@ -10,10 +10,26 @@ public:
 	~LuaFunctionsWrapper();
 
 	template<typename Clazz, typename Ret, typename ...Arg>
+	static void AddCFunction2(Clazz* pPointer);
+
+	template<typename Clazz, typename Ret, typename ...Arg>
+	static Ret FunctionWrapper2(lua_State * L);
+
+	template<typename ... Args>
+	bool pushToFunction(int id, Args && ... args) {
+		const int params = sizeof...(args);
+		push(std::forward<Args>(args)...);
+		return _run(params);
+	}
+
+
+	template<typename Clazz, typename Ret, typename ...Arg>
 	static void AddCFunction(Clazz* pPointer);
 
 	template<typename Clazz, typename Ret, typename ...Arg>
 	static int FunctionWrapper(lua_State * L);
+
+	
 
 private:
 	/*template <std::size_t n, typename = std::make_index_sequence<n>>
@@ -32,7 +48,52 @@ private:
 	using nth_element = typename decltype(
 		nth_element_impl<n>::f(static_cast<wrapper<T>*>(0)...)
 		)::type;*/
+
+	// euqual
+	template <class A, class B>
+	struct eq {
+		static const bool result = false;
+	};
+
+	template<class A>
+	struct eq<A, A> {
+		static const bool result = true;
+	};
 };
+
+template<typename Clazz, typename Ret, typename ...Arg>
+inline void LuaFunctionsWrapper::AddCFunction2(Clazz * pPointer)
+{
+	ILuaMember* ptr = dynamic_cast<ILuaMember*>(pPointer);
+	if (ptr == nullptr)
+		std::cout << "ERROR: wrong class in [" << __func__ << "]" << std::endl;
+	else
+	{
+		lua_pushlightuserdata(LuaManager::GetCurrentState(), pPointer);
+		lua_pushcclosure(LuaManager::GetCurrentState(), LuaFunctionsWrapper::FunctionWrapper2<Clazz, Ret, Arg...>, 1);
+		lua_setglobal(LuaManager::GetCurrentState(), "MemberFunction2");
+	}
+}
+
+template<typename Clazz, typename Ret, typename ...Arg>
+inline Ret LuaFunctionsWrapper::FunctionWrapper2(lua_State * L)
+{
+	Clazz* luaMember = reinterpret_cast<Clazz*>(lua_touserdata(LuaManager::GetCurrentState(), lua_upvalueindex(1)));
+
+	Arg... args = getArgs(Arg...);
+
+
+	int arg1 = LuaManager::GetInteger();
+	std::string function = LuaManager::GetString();
+
+	pushToFunction(luaMember->MemberFunction<Ret, Arg...>(function, arg1));
+	if (eq<void, Ret>::result)
+		return 1;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename Clazz, typename Ret, typename ...Arg>
 inline void LuaFunctionsWrapper::AddCFunction(Clazz * pPointer)

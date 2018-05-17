@@ -101,3 +101,15 @@ void Enemy::TestLuaFunction2(int i)
 {
 	std::cout << "Called " << __func__ << ", Return: " << i << std::endl;
 }
+
+int Enemy::TestLuaFunction3(int i)
+{
+	std::cout << "Called func [" << __func__ << "], that returns value: " << i + 1 << std::endl;
+	return i + 1;
+}
+
+void Enemy::TestLuaFunction4(int i)
+{
+	mI += i;
+	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
+}
