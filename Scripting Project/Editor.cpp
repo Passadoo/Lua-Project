@@ -26,6 +26,8 @@ Editor::~Editor()
 		delete enemy;*/
 	if (mEnemy)
 		delete mEnemy;
+	if (mEnemy2)
+		delete mEnemy2;
 	LuaManager::CloseLuaManager();
 
 	if (mObjects)
@@ -638,13 +640,20 @@ void Editor::initLuaManager()
 	LuaManager::LoadScript(Defined::LUA_EDITOR_PATH);
 
 	mEnemy = new Enemy();
+	mEnemy2 = new Enemy();
 #define FUNC TestLuaFunction4
 #define FUNCS "TestLuaFunction4"
 	//mEnemy->AddFunction2("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
 	//mEnemy->CallFunction2<int>("TestLuaFunction4", 1);
 
 	mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
+	mEnemy2->RegisterCaller("TestLuaFunction42", mEnemy2, &Enemy::TestLuaFunction4, _1);
+
 	mEnemy->CallFunctionMap<int>("TestLuaFunction4", 1);
+	mEnemy->CallFunctionMap<int>("TestLuaFunction4", 1);
+
+	// Different names because MapHolder::CallbackMap is a static member
+	mEnemy2->CallFunctionMap<int>("TestLuaFunction42", 1);
 
 	/*int ret = -1;
 	mEnemy->AddFunction2("TestLuaFunction3", mEnemy, &Enemy::TestLuaFunction3, _1);

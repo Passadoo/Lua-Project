@@ -54,6 +54,7 @@ private:
 	bool mKeys[sf::Keyboard::KeyCount];
 
 	Enemy* mEnemy;
+	Enemy* mEnemy2;
 
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);

@@ -9,11 +9,11 @@
 
 using namespace std::placeholders;
 
+
 template <typename... Args>
 struct MapHolder {
 	static std::map<std::string, std::function<void(Args...)>> CallbackMap;
 };
-
 template <typename... Args>
 std::map<std::string, std::function<void(Args...)>> MapHolder<Args...>::CallbackMap;
 
