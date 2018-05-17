@@ -2,63 +2,32 @@
 
 void Game::playerUpdate(float dt)
 {
-	bool moveInit = false;
 	Vector2f nextPos;
+	LuaManager::CallLuaFunction("SetMoveInitFalse");
 
 	if (Keyboard::isKeyPressed(Keyboard::D))
 	{
-		if (mPlayer->GetDirection() == Defined::RIGHT)
-		{
-			nextPos = Vector2f(mPlayer->GetPos().x + Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
-			moveInit = true;
-		}
-		else 
-		{
-			mPlayer->SetDirection(Defined::RIGHT);
-		}
-
+		lua_playerMovement(Defined::RIGHT, nextPos);
+		
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S))
 	{
-		if (mPlayer->GetDirection() == Defined::DOWN)
-		{
-			nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y + Defined::GRID_CELL_SIZE);
-			moveInit = true;
-		}
-		else
-		{
-			mPlayer->SetDirection(Defined::DOWN);
-		}
+		lua_playerMovement(Defined::DOWN, nextPos);
 
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A))
 	{
-		if (mPlayer->GetDirection() == Defined::LEFT)
-		{
-			nextPos = Vector2f(mPlayer->GetPos().x - Defined::GRID_CELL_SIZE, mPlayer->GetPos().y);
-			moveInit = true;
-		}
-		else
-		{
-			mPlayer->SetDirection(Defined::LEFT);
-		}
+		lua_playerMovement(Defined::LEFT, nextPos);
 
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W))
 	{
-		if (mPlayer->GetDirection() == Defined::UP)
-		{
-			nextPos = Vector2f(mPlayer->GetPos().x, mPlayer->GetPos().y - Defined::GRID_CELL_SIZE);
-			moveInit = true;
-		}
-		else
-		{
-			mPlayer->SetDirection(Defined::UP);
-		}
+		lua_playerMovement(Defined::UP, nextPos);
 
 	}
 
-	if (moveInit)
+	LuaManager::CallLuaFunction("GetMoveInit", 0, 1);
+	if (LuaManager::GetBool())
 	{
 		bool canMove = true;
 
@@ -96,24 +65,14 @@ void Game::playerUpdate(float dt)
 
 void Game::roomUpdate()
 {
-	bool enteredDoorUp = false;
-	bool enteredDoorRight = false;
-	bool enteredDoorDown = false;
-	bool enteredDoorLeft = false;
+	lua_getglobal(LuaManager::GetCurrentState(), "EnterRoom");
+	LuaManager::PushInteger(Defined::GRID_CELL_SIZE);
+	LuaManager::PushInteger(Defined::WORLD_WIDTH);
+	LuaManager::PushInteger(Defined::WORLD_HEIGHT);
+	LuaManager::CallLuaFunction("EnterRoom", 3, 0);
 
-	if (mPlayer->GetPosX() == 1.0f * Defined::GRID_CELL_SIZE)
-		enteredDoorLeft = true;
-
-	if (mPlayer->GetPosY() == 1.0f * Defined::GRID_CELL_SIZE)
-		enteredDoorUp = true;
-
-	if (mPlayer->GetPosX() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_WIDTH - 2)))
-		enteredDoorRight = true;
-
-	if (mPlayer->GetPosY() == (float)(Defined::GRID_CELL_SIZE * (Defined::WORLD_HEIGHT - 2)))
-		enteredDoorDown = true;
-
-	if (enteredDoorUp)
+	LuaManager::CallLuaFunction("GetEnteredDoorUp", 0, 1);
+	if (LuaManager::GetBool())
 	{
 		if (!mDungeon->RoomUpExists())
 		{
@@ -141,7 +100,8 @@ void Game::roomUpdate()
 			}
 		}
 	}
-	else if (enteredDoorRight)
+	LuaManager::CallLuaFunction("GetEnteredDoorRight", 0, 1);
+	if (LuaManager::GetBool())
 	{
 		if (!mDungeon->RoomRightExists())
 		{
@@ -169,7 +129,8 @@ void Game::roomUpdate()
 			}
 		}
 	}
-	else if (enteredDoorDown)
+	LuaManager::CallLuaFunction("GetEnteredDoorDown", 0, 1);
+	if (LuaManager::GetBool())
 	{
 		if (!mDungeon->RoomDownExists())
 		{
@@ -197,7 +158,8 @@ void Game::roomUpdate()
 			}
 		}
 	}
-	else if (enteredDoorLeft)
+	LuaManager::CallLuaFunction("GetEnteredDoorLeft", 0, 1);
+	if (LuaManager::GetBool())
 	{
 		std::cout << "Entered door left" << std::endl;
 		if (!mDungeon->RoomLeftExists())
@@ -234,7 +196,7 @@ void Game::bulletUpdate(float dt)
 	{
 		if (mNrOfBullets < 5)
 		{
-			mBullets[mNrOfBullets] = new Bullet(mPlayer->GetPos().x, mPlayer->GetPos().y, mPlayer->GetDirection());
+			mBullets[mNrOfBullets] = new Bullet(mPlayer->GetPos().x, mPlayer->GetPos().y, (Defined::eDirection)mPlayer->GetDirection());
 			mNrOfBullets++;
 		}
 	}
@@ -309,6 +271,8 @@ Game::Game()
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
 	mDungeon->LoadCurrentRoom();
+
+	initLuaManager();
 }
 
 Game::~Game()
@@ -321,6 +285,8 @@ Game::~Game()
 
 	delete mPlayer;
 	delete mDungeon;
+
+	LuaManager::CloseLuaManager();
 }
 
 void Game::RemoveBullet(int index)
@@ -352,4 +318,38 @@ void Game::Update(float dt)
 	mDungeon->Update(dt);
 	playerUpdate(dt);
 	bulletUpdate(dt);
+}
+
+void Game::initLuaManager()
+{
+	LuaManager::InitLuaManager();
+
+	LuaManager::LoadScript(Defined::LUA_GAME_LOGIC_PATH);
+
+	mPlayer->AddFunction<void, Player, int>("SetDirection", mPlayer, &Player::SetDirection);
+	LuaFunctionsWrapper::AddCFunction<Player, void, int>(mPlayer);
+
+
+	mPlayer->AddFunctionI<int, Player>("GetDirection", mPlayer, &Player::GetDirection);
+	LuaFunctionsWrapper::AddCFunction<Player, int>(mPlayer);
+
+	mPlayer->AddFunctionF<float, Player>("GetPosX", mPlayer, &Player::GetPosX);
+	LuaFunctionsWrapper::AddCFunction<Player, float>(mPlayer);
+	mPlayer->AddFunctionF<float, Player>("GetPosY", mPlayer, &Player::GetPosY);
+	LuaFunctionsWrapper::AddCFunction<Player, float>(mPlayer);
+}
+
+void Game::lua_playerMovement(int dir, Vector2f& pos)
+{
+	lua_getglobal(LuaManager::GetCurrentState(), "MovePlayer");
+	LuaManager::PushInteger(dir);
+	LuaManager::PushInteger(Defined::GRID_CELL_SIZE);
+	LuaManager::CallLuaFunction("MovePlayer", 2, 3);
+
+	float y = LuaManager::GetFloat();
+	float x = LuaManager::GetFloat();
+	if (LuaManager::GetBool())
+	{
+		pos = Vector2f(x, y);
+	}
 }

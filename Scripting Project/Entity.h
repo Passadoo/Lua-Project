@@ -19,8 +19,8 @@ public:
 	void SetPos(const Vector2f &pos);
 	void SetPos(int x, int y);
 	Vector2f GetPos() const;
-	float GetPosX() const;
-	float GetPosY()const;
+	float GetPosX();
+	float GetPosY();
 
 };
 

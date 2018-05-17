@@ -41,12 +41,12 @@ Vector2f Player::GetPos()const
 	return Entity::GetPos();
 }
 
-void Player::SetDirection(Defined::eDirection pDir)
+void Player::SetDirection(/*Defined::eDirection*/int pDir)
 {
-	mDirection = pDir;
+	mDirection = (Defined::eDirection)pDir;
 }
 
-Defined::eDirection Player::GetDirection() const
+/*Defined::eDirection*/int Player::GetDirection()
 {
 	return mDirection;
 }

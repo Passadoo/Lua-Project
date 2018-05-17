@@ -51,11 +51,30 @@ inline void LuaFunctionsWrapper::AddCFunction(Clazz * pPointer)
 template<typename Clazz, typename Ret, typename ...Arg>
 inline int LuaFunctionsWrapper::FunctionWrapper(lua_State* L)
 {
-	Clazz* luaMember = static_cast<Clazz*>(lua_touserdata(LuaManager::GetCurrentState(), lua_upvalueindex(1)));
-	int arg1 = LuaManager::GetInteger();
-	std::string function = LuaManager::GetString();
+	//reinterpret_cast
+	Clazz* luaMember = reinterpret_cast<Clazz*>(lua_touserdata(LuaManager::GetCurrentState(), lua_upvalueindex(1)));
+	int type = LuaManager::GetInteger();
+	if (type == 0)
+	{
+		int arg1 = LuaManager::GetInteger();
+		std::string function = LuaManager::GetString();
 
-	luaMember->MemberFunction<Ret, Arg...>(function, arg1);
+		/*Ret r = */luaMember->MemberFunction<Ret, Arg...>(function, arg1);
+	}
+	if (type == 1)
+	{
+		std::string function = LuaManager::GetString();
 
+		LuaManager::PushInteger(luaMember->MemberFunctionI<Ret, Arg...>(function));
+		return 1;
+	}
+	if (type == 2)
+	{
+		std::string function = LuaManager::GetString();
+
+		LuaManager::PushFloat(luaMember->MemberFunctionF<Ret, Arg...>(function));
+		return 1;
+	}
+	
 	return 0;
 }

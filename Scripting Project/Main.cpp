@@ -18,7 +18,7 @@
 #include "Editor.h"
 #include "MouseInput.h"
 
-#define USE_EDITOR true
+#define USE_EDITOR false
 
 //void ConsoleThread(lua_State* L) {
 //	char command[1000];
@@ -44,8 +44,13 @@ int main()
 
 	sf::Clock clock;
 
-	Game* game = new Game();
-	Editor* editor = new Editor();
+	Game* game = nullptr;
+	Editor* editor = nullptr;
+
+	if (USE_EDITOR)
+		editor = new Editor();
+	else
+		game = new Game();
 
 	sf::Time time;
 	sf::Event event;
@@ -54,8 +59,11 @@ int main()
 	{
 		while (window.pollEvent(event))
 		{
-			MouseInput::ProcessInput(window, event);
-			editor->EnterText();
+			if (USE_EDITOR)
+			{
+				MouseInput::ProcessInput(window, event);
+				editor->EnterText();
+			}
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
@@ -94,8 +102,10 @@ int main()
 		window.display();
 	}
 
-	delete game;
-	delete editor;
+	if (game)
+		delete game;
+	if (editor)
+		delete editor;
 
 	return 0;
 }

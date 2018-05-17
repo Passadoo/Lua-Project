@@ -3,6 +3,10 @@
 #include "Dungeon.h"
 #include <iostream>
 
+// Lua
+#include "LuaManager.h"
+#include "LuaFunctionsWrapper.h"
+
 class Game
 {
 private:
@@ -26,5 +30,9 @@ public:
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
+
+	// Lua
+	void initLuaManager();
+	void lua_playerMovement(int dir, Vector2f& pos);
 };
 

@@ -86,8 +86,14 @@ void Editor::Draw(sf::RenderWindow & window)
 		// Draw toCreate
 		float border = 10;
 		drawSelectionBox(window, 0, 0, border);
-		mObjectTypes[mToCreate]->sprite.setPosition(border, border);
-		window.draw(mObjectTypes[mToCreate]->sprite);
+
+		LuaManager::CallLuaFunction("GetToCreate", 0, 1);
+		int ret = LuaManager::GetInteger();
+		mObjectTypes[ret]->sprite.setPosition(border, border);
+		window.draw(mObjectTypes[ret]->sprite);
+
+		/*mObjectTypes[mToCreate]->sprite.setPosition(border, border);
+		window.draw(mObjectTypes[mToCreate]->sprite);*/
 
 		// Draw textbox for saveing the level
 		if (mSaveLevel)
@@ -237,21 +243,34 @@ void Editor::processInput()
 	{
 		if (MouseInput::wheelUp())
 		{
-			mToCreate--;
+			/*mToCreate--;
 			if (mToCreate < 0)
-				mToCreate = END - 1;
+				mToCreate = END - 1;*/
+			lua_getglobal(LuaManager::GetCurrentState(), "decrementToCreate");
+			LuaManager::PushInteger(START);
+			LuaManager::PushInteger(END);
+			LuaManager::CallLuaFunction("decrementToCreate", 2, 0);
 		}
 		if (MouseInput::wheelDown())
 		{
-			mToCreate++;
+			/*mToCreate++;
 			if (mToCreate >= END)
-				mToCreate = START;
+				mToCreate = START;*/
+			lua_getglobal(LuaManager::GetCurrentState(), "incrementToCreate");
+			LuaManager::PushInteger(START);
+			LuaManager::PushInteger(END);
+			LuaManager::CallLuaFunction("incrementToCreate", 2, 0);
 		}
 
 		if (MouseInput::isPressed(sf::Mouse::Left))
 		{
-			if (mToCreate != NONE)
-				createObject((OBJECT_TYPES)mToCreate);
+			LuaManager::CallLuaFunction("GetToCreate", 0, 1);
+			int ret = LuaManager::GetInteger();
+			if (ret != NONE)
+				createObject((OBJECT_TYPES)ret);
+
+			/*if (mToCreate != NONE)
+				createObject((OBJECT_TYPES)mToCreate);*/
 		}
 		if (MouseInput::isPressed(sf::Mouse::Right))
 		{
@@ -616,13 +635,16 @@ void Editor::initLuaManager()
 
 	// Test calling Lua function "init"
 	LuaManager::CallLuaFunction("init");*/
-	mEnemy = new Enemy();
+	//-------------------------------------------------------------------------------------
+	/*mEnemy = new Enemy();
 
 	LuaManager::LoadScript(Defined::LUA_TEST2_PATH);
 
-	mEnemy->AddFunction<void, Enemy, int>("TestLuaFunction", mEnemy, &Enemy::TestLuaFunction2);
+	mEnemy->AddFunction<void, Enemy, int>("TestLuaFunction2", mEnemy, &Enemy::TestLuaFunction2);
 
 	LuaFunctionsWrapper::AddCFunction<Enemy, void, int>(mEnemy);
 	
-	LuaManager::CallLuaFunction("callCFunc");
+	LuaManager::CallLuaFunction("callCFunc");*/
+
+	LuaManager::LoadScript(Defined::LUA_EDITOR_PATH);
 }

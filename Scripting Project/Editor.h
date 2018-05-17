@@ -13,7 +13,6 @@
 
 // Testing Lua
 #include "Enemy.h"
-typedef void(Enemy::*FP_void)();
 
 class Editor
 {

@@ -168,6 +168,8 @@
     <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Lua\gameLogic.lua" />
+    <None Include="Resources\Lua\editor.lua" />
     <None Include="Resources\Lua\test.lua" />
     <None Include="Resources\Lua\test2.lua" />
   </ItemGroup>

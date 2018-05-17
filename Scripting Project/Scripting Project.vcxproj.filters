@@ -155,6 +155,14 @@
     <None Include="Resources\Lua\test.lua">
       <Filter>Lua\Scripts</Filter>
     </None>
-    <None Include="Resources\Lua\test2.lua" />
+    <None Include="Resources\Lua\test2.lua">
+      <Filter>Lua\Scripts</Filter>
+    </None>
+    <None Include="Resources\Lua\editor.lua">
+      <Filter>Lua\Scripts</Filter>
+    </None>
+    <None Include="Resources\Lua\gameLogic.lua">
+      <Filter>Lua\Scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>
