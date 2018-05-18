@@ -3,11 +3,11 @@
 // PE = Print Error
 #define PE_LUA_TOP(type) std::cout << "ERROR: not a " << typeid(type).name() << " on top of the stack [" << __func__ << "]" << std::endl;
 
-#define LUA_GETTOP(var){\
-	if (!lua_is##var(mL, -1))\
+#define LUA_GETTOP(var, L){\
+	if (!lua_is##var(L, -1))\
 		PE_LUA_TOP(var);\
-	var = lua_to##var(mL, -1);\
-	lua_pop(mL, 1);\
+	var = lua_to##var(L, -1);\
+	lua_pop(L, 1);\
 	return var;\
 }\
 
@@ -92,31 +92,79 @@ void LuaManager::PushBool(bool pBool)
 	lua_pushboolean(mL, pBool);
 }
 
+void LuaManager::PushInteger(lua_State *& pL, int pInteger)
+{
+	lua_pushinteger(pL, pInteger);
+}
+
+void LuaManager::PushFloat(lua_State *& pL, float pFloat)
+{
+	lua_pushnumber(pL, pFloat);
+}
+
+void LuaManager::PushString(lua_State *& pL, std::string pString)
+{
+	lua_pushstring(pL, pString.c_str());
+}
+
+void LuaManager::PushBool(lua_State *& pL, bool pBool)
+{
+	lua_pushboolean(pL, pBool);
+}
+
 int LuaManager::GetInteger()
 {
 	int integer;
-	LUA_GETTOP(integer);
+	LUA_GETTOP(integer, mL);
 	return integer;
 }
 
 float LuaManager::GetFloat()
 {
 	float number;
-	LUA_GETTOP(number);
+	LUA_GETTOP(number, mL);
 	return number;
 }
 
 std::string LuaManager::GetString()
 {
 	std::string string;
-	LUA_GETTOP(string);
+	LUA_GETTOP(string, mL);
 	return string;
 }
 
 bool LuaManager::GetBool()
 {
 	bool boolean;
-	LUA_GETTOP(boolean);
+	LUA_GETTOP(boolean, mL);
+	return boolean;
+}
+
+int LuaManager::GetInteger(lua_State *& pL)
+{
+	int integer;
+	LUA_GETTOP(integer, pL);
+	return integer;
+}
+
+float LuaManager::GetFloat(lua_State *& pL)
+{
+	float number;
+	LUA_GETTOP(number, pL);
+	return number;
+}
+
+std::string LuaManager::GetString(lua_State *& pL)
+{
+	std::string string;
+	LUA_GETTOP(string, pL);
+	return string;
+}
+
+bool LuaManager::GetBool(lua_State *& pL)
+{
+	bool boolean;
+	LUA_GETTOP(boolean, pL);
 	return boolean;
 }
 

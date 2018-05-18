@@ -22,23 +22,12 @@ if (MapHolder<ret, args>::CallbackMap.find(name) == MapHolder<ret, args>::Callba
 class ILuaMember
 {
 private:
-	/*template <class A, class B>
-	struct eq {
-		static const bool result = false;
-	};
-
-	template<class A>
-	struct eq<A, A> {
-		static const bool result = true;
-	};*/
-
 	template <typename Ret, typename... Args>
 	struct MapHolder {
 		static std::map<std::string, std::function<Ret(Args...)>> CallbackMap;
 	};
 
 public:
-
 	template<typename Ret, typename Clazz, typename ...Args, typename ...T>
 	static void RegisterCaller(std::string name, Clazz*& pClass, Ret(Clazz::*Callback)(Args...), T... p) {
 		const int params = sizeof...(Args);
@@ -53,14 +42,14 @@ public:
 	}
 
 	template <typename... Args>
-	static void CallFunc(const std::string &name, Args &&... args) {
+	static void CallMemFunc(const std::string &name, Args &&... args) {
 		CALL_VOID_ERROR(Args...)
 		std::cout << "Called function [" << name << "]" << std::endl;
 		MapHolder<void, Args...>::CallbackMap[name](std::forward<Args>(args)...);
 	}
 
 	template <typename Ret, typename... Args>
-	static Ret CallFuncRet(const std::string &name, Args &&... args) {
+	static Ret CallMemFuncRet(const std::string &name, Args &&... args) {
 		CALL_RET_ERROR(Ret, Args...)
 		std::cout << "Called function [" << name << "]" << std::endl;
 		return MapHolder<Ret, Args...>::CallbackMap[name](std::forward<Args>(args)...);

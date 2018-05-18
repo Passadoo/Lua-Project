@@ -18,3 +18,10 @@ end
 function GetToCreate()
 	return toCreate
 end
+
+function Update(ptr, a, b, c)
+	print("called Update")
+	--print(ptr + " " + a + " " + b + " " + c)
+	--ptr::func();
+	return 10
+end

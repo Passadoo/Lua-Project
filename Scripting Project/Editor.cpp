@@ -645,17 +645,27 @@ void Editor::initLuaManager()
 	mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
 	mEnemy2->RegisterCaller("TestLuaFunction6", mEnemy2, &Enemy::TestLuaFunction6, _1, _2);
 
-	mEnemy->CallFunc("TestLuaFunction4", 1);
-	mEnemy->CallFunc("TestLuaFunction4", 1);
+	mEnemy->CallMemFunc("TestLuaFunction4", 1);
+	mEnemy->CallMemFunc("TestLuaFunction4", 1);
 
 	// Different names because MapHolder::CallbackMap need to be a static member
 	bool ret = false;
-	ret = mEnemy2->CallFuncRet<bool>("TestLuaFunction6", 1, 5);
+	ret = mEnemy2->CallMemFuncRet<bool>("TestLuaFunction6", 1, 5);
 	std::cout << (ret? "true": "false") << std::endl;
-	/*int ret = -1;
-	mEnemy->AddFunction2("TestLuaFunction3", mEnemy, &Enemy::TestLuaFunction3, _1);
-	mEnemy->CallFunction2<int, int>(ret, "TestLuaFunction3", 1);
-	std::cout << ret << std::endl;*/
 
-	//std::cout << mEnemy->CallFunction2<void, int>("TestLuaFunction4", 1) << std::endl;
+	//mEnemy->RegisterCaller("TestLuaFunction1", mEnemy, &Enemy::TestLuaFunction1);
+	//LuaFunctionsWrapper::AddCFunction2<void, Enemy>(mEnemy);
+
+	int ret2 = false;
+	ret2 = LuaManager::CallLuaFuncRet<int>("Update", 0, 1, 2, 3);
+	std::cout << ret2 << std::endl;
+
+	/*
+	// Monster is a C++ class defined somewhere...
+	Enemy** monster = reinterpret_cast<Enemy**>(lua_newuserdata(LuaManager::GetCurrentState(), sizeof(Enemy*)));
+	*monster = new Enemy();
+	luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable("Test").c_str());
+	lua_setmetatable(LuaManager::GetCurrentState(), -2);
+	std::cout << "[C++] Created enemy" << std::endl;
+	*/
 }

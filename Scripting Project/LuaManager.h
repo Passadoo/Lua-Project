@@ -10,6 +10,93 @@
 
 class LuaManager
 {
+private:
+	inline static void _push(lua_State * pL, int arg) {
+		LuaManager::PushInteger(pL, arg);
+	}
+	inline static void _push(lua_State * pL, bool arg) {
+		LuaManager::PushBool(pL, arg);
+	}
+	inline static void _push(lua_State * pL, std::string arg) {
+		LuaManager::PushString(pL, arg);
+	}
+	inline static void _push(lua_State * pL, float arg) {
+		LuaManager::PushFloat(pL, arg);
+	}
+
+	template <typename Ret>
+	inline static Ret _get(lua_State * pL) {
+		return 0;
+	}
+
+	template <>
+	inline static int _get<int>(lua_State * pL) {
+		return LuaManager::GetInteger(pL);
+	}
+	template <>
+	inline static bool _get<bool>(lua_State * pL) {
+		return LuaManager::GetBool(pL);
+	}
+	template <>
+	inline static std::string _get<std::string>(lua_State * pL) {
+		return LuaManager::GetString(pL);
+	}
+	template <>
+	inline static float _get<float>(lua_State * pL) {
+		return LuaManager::GetFloat(pL);
+	}
+
+public:
+	// Push values to lua
+	template <typename Arg>
+	static void push(lua_State * L, Arg&& arg) {
+		return _push(L, std::forward<Arg>(arg));
+	}
+
+	template <typename... Args>
+	static void push_all(lua_State * L, Args&&... args) {
+		std::initializer_list<int>{(push(L, std::forward<Args>(args)), 0)...};
+	}
+
+	template<typename ... Args>
+	static void CallLuaFunc(const std::string & pFuncName, Args && ... args) {
+		const int params = sizeof...(args);
+		lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
+		push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
+		LuaManager::CallLuaFunction(pFuncName, params, 0);
+	}
+
+	template <class A, class B>
+	struct eq {
+		static const bool result = false;
+	};
+
+	template<class A>
+	struct eq<A, A> {
+		static const bool result = true;
+	};
+
+
+	// Push values to lua
+	template <typename Ret>
+	static Ret get(lua_State * L) {
+		return _get<Ret>(L);
+	}
+
+	template <typename... Args>
+	static void get_all(lua_State * L, Args&&... args) {
+		/*args... = */std::initializer_list<int>{(get(L, std::forward<Args>(args)), 0)...};
+	}
+
+	template<typename Ret, typename ... Args>
+	static Ret CallLuaFuncRet(const std::string & pFuncName, Args && ... args) {
+		const int params = sizeof...(args);
+		lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
+		push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
+		LuaManager::CallLuaFunction(pFuncName, params, 1);
+		return get<Ret>(LuaManager::GetCurrentState());
+	}
+
 public:
 	LuaManager();
 	~LuaManager();
@@ -28,10 +115,21 @@ public:
 	static void PushString(std::string pString);
 	static void PushBool(bool pBool);
 
+
+	static void PushInteger(lua_State *& pL, int pInteger);
+	static void PushFloat(lua_State *& pL, float pFloat);
+	static void PushString(lua_State *& pL, std::string pString);
+	static void PushBool(lua_State *& pL, bool pBool);
+
 	static int GetInteger();
 	static float GetFloat();
 	static std::string GetString();
 	static bool GetBool();
+
+	static int GetInteger(lua_State *& pL);
+	static float GetFloat(lua_State *& pL);
+	static std::string GetString(lua_State *& pL);
+	static bool GetBool(lua_State *& pL);
 
 	static std::string GetMetaTable(const std::string & pObjectName);
 	static std::string GetMetaTableAndCheck(const std::string & pObjectName);
