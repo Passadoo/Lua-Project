@@ -29,6 +29,8 @@ public:
 	void TestLuaFunction2(int i);
 	int TestLuaFunction3(int i);
 	void TestLuaFunction4(int i);
+	void TestLuaFunction5(int i, int j);
+	bool TestLuaFunction6(int i, int j);
 
 	int mI = 0;
 };

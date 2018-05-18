@@ -6,8 +6,6 @@
 class LuaFunctionsWrapper
 {
 public:
-	LuaFunctionsWrapper();
-	~LuaFunctionsWrapper();
 
 	template<typename Clazz, typename Ret, typename ...Arg>
 	static void AddCFunction2(Clazz* pPointer);

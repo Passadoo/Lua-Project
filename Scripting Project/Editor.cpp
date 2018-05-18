@@ -641,20 +641,17 @@ void Editor::initLuaManager()
 
 	mEnemy = new Enemy();
 	mEnemy2 = new Enemy();
-#define FUNC TestLuaFunction4
-#define FUNCS "TestLuaFunction4"
-	//mEnemy->AddFunction2("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
-	//mEnemy->CallFunction2<int>("TestLuaFunction4", 1);
 
 	mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
-	mEnemy2->RegisterCaller("TestLuaFunction42", mEnemy2, &Enemy::TestLuaFunction4, _1);
+	mEnemy2->RegisterCaller("TestLuaFunction6", mEnemy2, &Enemy::TestLuaFunction6, _1, _2);
 
-	mEnemy->CallFunctionMap<int>("TestLuaFunction4", 1);
-	mEnemy->CallFunctionMap<int>("TestLuaFunction4", 1);
+	mEnemy->CallFunc("TestLuaFunction4", 1);
+	mEnemy->CallFunc("TestLuaFunction4", 1);
 
-	// Different names because MapHolder::CallbackMap is a static member
-	mEnemy2->CallFunctionMap<int>("TestLuaFunction42", 1);
-
+	// Different names because MapHolder::CallbackMap need to be a static member
+	bool ret = false;
+	ret = mEnemy2->CallFuncRet<bool>("TestLuaFunction6", 1, 5);
+	std::cout << (ret? "true": "false") << std::endl;
 	/*int ret = -1;
 	mEnemy->AddFunction2("TestLuaFunction3", mEnemy, &Enemy::TestLuaFunction3, _1);
 	mEnemy->CallFunction2<int, int>(ret, "TestLuaFunction3", 1);

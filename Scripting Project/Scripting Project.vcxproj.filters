@@ -94,12 +94,6 @@
     <ClCompile Include="LuaManager.cpp">
       <Filter>Lua</Filter>
     </ClCompile>
-    <ClCompile Include="LuaFunctionsWrapper.cpp">
-      <Filter>Lua\FunctionWrapper</Filter>
-    </ClCompile>
-    <ClCompile Include="ILuaMember.cpp">
-      <Filter>Lua\FunctionWrapper</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -148,9 +142,6 @@
       <Filter>Lua\FunctionWrapper</Filter>
     </ClInclude>
     <ClInclude Include="ILuaMember.h">
-      <Filter>Lua\FunctionWrapper</Filter>
-    </ClInclude>
-    <ClInclude Include="FunctionTypes.h">
       <Filter>Lua\FunctionWrapper</Filter>
     </ClInclude>
   </ItemGroup>

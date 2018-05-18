@@ -326,7 +326,7 @@ void Game::initLuaManager()
 
 	LuaManager::LoadScript(Defined::LUA_GAME_LOGIC_PATH);
 
-	mPlayer->AddFunction<void, Player, int>("SetDirection", mPlayer, &Player::SetDirection);
+	/*mPlayer->AddFunction<void, Player, int>("SetDirection", mPlayer, &Player::SetDirection);
 	LuaFunctionsWrapper::AddCFunction<Player, void, int>(mPlayer);
 
 
@@ -336,7 +336,7 @@ void Game::initLuaManager()
 	mPlayer->AddFunctionF<float, Player>("GetPosX", mPlayer, &Player::GetPosX);
 	LuaFunctionsWrapper::AddCFunction<Player, float>(mPlayer);
 	mPlayer->AddFunctionF<float, Player>("GetPosY", mPlayer, &Player::GetPosY);
-	LuaFunctionsWrapper::AddCFunction<Player, float>(mPlayer);
+	LuaFunctionsWrapper::AddCFunction<Player, float>(mPlayer);*/
 }
 
 void Game::lua_playerMovement(int dir, Vector2f& pos)

@@ -113,3 +113,16 @@ void Enemy::TestLuaFunction4(int i)
 	mI += i;
 	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
 }
+
+void Enemy::TestLuaFunction5(int i, int j)
+{
+	mI += i;
+	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
+}
+
+bool Enemy::TestLuaFunction6(int i, int j)
+{
+	mI += i;
+	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
+	return true;
+}
