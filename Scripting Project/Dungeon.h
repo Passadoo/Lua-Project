@@ -49,6 +49,11 @@ public:
 	void SwitchRoomDown();
 	void SwitchRoomLeft();
 
+	bool LeftRoomHasRightDoor();
+	bool UpRoomHasDownDoor();
+	bool RightRoomHasLeftDoor();
+	bool DownRoomHasUpDoor();
+
 	void Draw(RenderWindow &window);
 	void Update(float dt);
 };

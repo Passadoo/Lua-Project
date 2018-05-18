@@ -133,11 +133,18 @@ void Game::roomUpdate()
 		}
 		else
 		{
-			mDungeon->SwitchRoomUp();
-			Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
-			if (newLocation.x >= 0.0f)
+			if (mDungeon->UpRoomHasDownDoor())
 			{
-				mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+				mDungeon->SwitchRoomUp();
+				Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
+				}
+			}
+			else
+			{
+				std::cout << "A room exists but it does not have the required door" << std::endl;
 			}
 		}
 	}
@@ -161,11 +168,18 @@ void Game::roomUpdate()
 		}
 		else
 		{
-			mDungeon->SwitchRoomRight();
-			Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
-			if (newLocation.x >= 0.0f)
+			if (mDungeon->RightRoomHasLeftDoor())
 			{
-				mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+				mDungeon->SwitchRoomRight();
+				Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
+				}
+			}
+			else
+			{
+				std::cout << "A room exists but it does not have the required door" << std::endl;
 			}
 		}
 	}
@@ -189,11 +203,18 @@ void Game::roomUpdate()
 		}
 		else
 		{
-			mDungeon->SwitchRoomDown();
-			Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
-			if (newLocation.x >= 0.0f)
+			if (mDungeon->DownRoomHasUpDoor())
 			{
-				mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+				mDungeon->SwitchRoomDown();
+				Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
+				}
+			}
+			else
+			{
+				std::cout << "A room exists but it does not have the required door" << std::endl;
 			}
 		}
 	}
@@ -218,11 +239,18 @@ void Game::roomUpdate()
 		}
 		else
 		{
-			mDungeon->SwitchRoomLeft();
-			Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
-			if (newLocation.x >= 0.0f)
+			if (mDungeon->LeftRoomHasRightDoor())
 			{
-				mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+				mDungeon->SwitchRoomLeft();
+				Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
+				if (newLocation.x >= 0.0f)
+				{
+					mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
+				}
+			}
+			else
+			{
+				std::cout << "A room exists but it does not have the required door" << std::endl;
 			}
 		}
 	}
