@@ -7,6 +7,8 @@ using namespace std;
 class Defined
 {
 public:
+	static const bool DEBUG;
+
 	//Object
 	enum ObjectTypes { AIR = 0, PLAYER, OBSTACLE, ENEMY, DOOR};
 

@@ -7,6 +7,8 @@
 
 #include <functional>
 
+#include "Defined.h" // Only for DEBUG
+
 using namespace std::placeholders;
 
 #define ILuaMember_CALL_ERROR(ret, args, retV)\
@@ -37,7 +39,7 @@ public:
 			std::cout << "Class of function [" << name << "] is not a Lua member" << std::endl;
 			return;
 		}
-		std::cout << "Register function [" << name << "] with [" << params << "] nr of arguments" << std::endl;
+		std::cout << "Register function [" << name << "] with [" << params << "] arguments" << std::endl;
 		MapHolder<Ret, Args...>::CallbackMap[name] = std::bind(Callback, pClass, p...);
 	}
 
@@ -46,14 +48,16 @@ public:
 		template<typename Ret, typename... Args> struct Function {
 			static Ret CallMemFunc(const std::string &name, Args &&... args) {
 				CALL_RET_ERROR(Ret, Args...)
-				std::cout << "Called function [" << name << "]" << std::endl;
+				if (Defined::DEBUG)
+					std::cout << "Called function [" << name << "]" << std::endl;
 				return MapHolder<Ret, Args...>::CallbackMap[name](std::forward<Args>(args)...);
 			}
 		};
 		template<> struct Function<void, Args...> {
 			static void CallMemFunc(const std::string &name, Args &&... args) {
 				CALL_RET_ERROR(void, Args...)
-				std::cout << "Called function [" << name << "]" << std::endl;
+				if (Defined::DEBUG)
+					std::cout << "Called function [" << name << "]" << std::endl;
 				MapHolder<void, Args...>::CallbackMap[name](std::forward<Args>(args)...);
 			}
 		};

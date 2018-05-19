@@ -8,15 +8,19 @@
 #include "Defined.h"
 #include <vector>
 
+#include <typeinfo>
+
 class LuaManager
 {
 private:
-	template <typename Arg>
+	/*template <typename Arg>
 	inline static void _push(lua_State * pL, Arg arg) {
-		return 0;
+		std::cout << "ERROR: Could not push [" << arg << "] of type [" << typeid(arg).name() << "] to the stack" << std::endl;
+		return;
 	}
 	template <>
 	inline static void _push<int>(lua_State * pL, int arg) {
+		std::cout << "pus_int: " << arg << std::endl;
 		LuaManager::PushInteger(pL, arg);
 	}
 	template <>
@@ -29,6 +33,19 @@ private:
 	}
 	template <>
 	inline static void _push<float>(lua_State * pL, float arg) {
+		LuaManager::PushFloat(pL, arg);
+	}*/
+
+	inline static void _push(lua_State * pL, int arg) {
+		LuaManager::PushInteger(pL, arg);
+	}
+	inline static void _push(lua_State * pL, bool arg) {
+		LuaManager::PushBool(pL, arg);
+	}
+	inline static void _push(lua_State * pL, std::string arg) {
+		LuaManager::PushString(pL, arg);
+	}
+	inline static void _push(lua_State * pL, float arg) {
 		LuaManager::PushFloat(pL, arg);
 	}
 
@@ -58,7 +75,8 @@ public:
 	// Push values to lua
 	template <typename Arg>
 	static void push(lua_State * L, Arg&& arg) {
-		return _push<Arg>(L, std::forward<Arg>(arg));
+		//return _push<Arg>(L, std::forward<Arg>(arg));
+		return _push(L, std::forward<Arg>(arg));
 	}
 	
 	template <typename... Args>
@@ -66,33 +84,47 @@ public:
 		std::initializer_list<int>{(push<Args>(L, std::forward<Args>(args)), 0)...};
 	}
 
-	template<typename ... Args>
-	static void CallLuaFunc(const std::string & pFuncName, Args && ... args) {
-		const int params = sizeof...(args);
-		lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
-		push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
-		LuaManager::CallLuaFunction(pFuncName, params, 0);
-	}
-
-
-	// Push values to lua
+	// Get values from lua
 	template <typename Ret>
 	static Ret get(lua_State * L) {
 		return _get<Ret>(L);
 	}
+	
+	template<typename Ret, typename... Args>
+	struct Func {
+		template<typename Ret, typename... Args> struct Function {
+			static Ret CallLuaFunc(const std::string & pFuncName, int r, Args && ... args) {
+				const int params = sizeof...(args);
+				lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
+				push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
+				if (params == 0)
+					lua_pop(LuaManager::GetCurrentState(), -1);
+				if (r == 0)
+					r = 1;
+				LuaManager::CallLuaFunction(pFuncName, params, r);
+				return get<Ret>(LuaManager::GetCurrentState());
+			}
+		};
+		template<> struct Function<void, Args...> {
+			static void CallLuaFunc(const std::string & pFuncName, int r, Args&& ... args) {
+				const int params = sizeof...(args);
+				lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
+				push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
+				LuaManager::CallLuaFunction(pFuncName, params, r);
+			}
+		};
+	};
 
-	template <typename ... Args>
-	static void get_all(lua_State * L) {
-		/*args... = */std::initializer_list<int>{(get<Args>(L), 0)...};
+	// If the lua function returns more than one values
+	template <typename Ret, typename... Args>
+	static Ret CallLuaFuncS(const std::string & pFuncName, int r, Args&& ... args) {
+		return Func<Ret, Args...>::Function<Ret, Args...>::CallLuaFunc(pFuncName, r, std::forward<Args>(args)...);
 	}
 
-	template<typename Ret, typename ... Args>
-	static Ret CallLuaFuncRet(const std::string & pFuncName, Args && ... args) {
-		const int params = sizeof...(args);
-		lua_getglobal(LuaManager::GetCurrentState(), pFuncName.c_str());
-		push_all(LuaManager::GetCurrentState(), std::forward<Args>(args)...);
-		LuaManager::CallLuaFunction(pFuncName, params, 1);
-		return get<Ret>(LuaManager::GetCurrentState());
+	// If the lua function returns one or none values
+	template <typename Ret, typename... Args>
+	static Ret CallLuaFunc(const std::string & pFuncName, Args&& ... args) {
+		return Func<Ret, Args...>::Function<Ret, Args...>::CallLuaFunc(pFuncName, 0, std::forward<Args>(args)...);
 	}
 
 public:

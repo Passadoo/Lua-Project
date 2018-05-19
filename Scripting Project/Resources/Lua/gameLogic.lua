@@ -8,25 +8,32 @@ local enteredDoorLeft = false;
 
 function MovePlayer(direction, cellSize)
 
-	local offsetX = 0
-	local offsetY = 0
+	local offsetX = 0.0
+	local offsetY = 0.0
 	if (direction == 0) then -- UP
-		offsetY = -1
+		offsetY = -1.0
 	elseif (direction == 1) then -- DOWN
-		offsetY = 1
+		offsetY = 1.0
 	elseif (direction == 2) then -- LEFT
-		offsetX = -1
+		offsetX = -1.0
 	elseif (direction == 3) then -- RIGHT
-		offsetX = 1
+		offsetX = 1.0
 	end
 
-	if (MemberFunction("GetDirection", 1) == direction) then
+	local x = -1.0
+	local y = -1.0
+	local r = false
+
+	if (GetDirection() == direction) then
 		moveInit = true
-		return true, MemberFunction("GetPosX", 2) + cellSize * offsetX, MemberFunction("GetPosY", 2) + cellSize * offsetY
+		x = GetPosX() + cellSize * offsetX
+		y = GetPosY() + cellSize * offsetY
+		r = true
 	else
-		MemberFunction("SetDirection", direction, 0)
-		return false, -1, -1
+		SetDirection(direction)
 	end
+	
+	return x, y, r
 end
 
 function SetMoveInitFalse()
@@ -44,17 +51,17 @@ function EnterRoom(cellSize, worldWidth, worldHeight)
 	enteredDoorDown = false;
 	enteredDoorLeft = false;
 
-	if (MemberFunction("GetPosX", 2) == 1 * cellSize) then
+	if (GetPosX() == 1 * cellSize) then
 		enteredDoorLeft = true
 	end
-	if (MemberFunction("GetPosY", 2) == 1 * cellSize) then
+	if (GetPosY() == 1 * cellSize) then
 		enteredDoorUp = true
 	end
 
-	if (MemberFunction("GetPosX", 2) == cellSize * (worldWidth - 2)) then
+	if (GetPosX() == cellSize * (worldWidth - 2)) then
 		enteredDoorRight = true
 	end
-	if (MemberFunction("GetPosY", 2) == cellSize * (worldHeight - 2)) then
+	if (GetPosY() == cellSize * (worldHeight - 2)) then
 		enteredDoorDown = true
 	end
 	

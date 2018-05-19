@@ -90,8 +90,7 @@ void Editor::Draw(sf::RenderWindow & window)
 		float border = 10;
 		drawSelectionBox(window, 0, 0, border);
 
-		LuaManager::CallLuaFunction("GetToCreate", 0, 1);
-		int ret = LuaManager::GetInteger();
+		int ret = LuaManager::CallLuaFunc<int>("GetToCreate");
 		mObjectTypes[ret]->sprite.setPosition(border, border);
 		window.draw(mObjectTypes[ret]->sprite);
 
@@ -243,23 +242,16 @@ void Editor::processInput()
 	{
 		if (MouseInput::wheelUp())
 		{
-			lua_getglobal(LuaManager::GetCurrentState(), "decrementToCreate");
-			LuaManager::PushInteger(START);
-			LuaManager::PushInteger(END);
-			LuaManager::CallLuaFunction("decrementToCreate", 2, 0);
+			LuaManager::CallLuaFunc<void>("decrementToCreate", (int)START, (int)END);
 		}
 		if (MouseInput::wheelDown())
 		{
-			lua_getglobal(LuaManager::GetCurrentState(), "incrementToCreate");
-			LuaManager::PushInteger(START);
-			LuaManager::PushInteger(END);
-			LuaManager::CallLuaFunction("incrementToCreate", 2, 0);
+			LuaManager::CallLuaFunc<void>("incrementToCreate", (int)START, (int)END);
 		}
 
 		if (MouseInput::isPressed(sf::Mouse::Left))
 		{
-			LuaManager::CallLuaFunction("GetToCreate", 0, 1);
-			int ret = LuaManager::GetInteger();
+			int ret = LuaManager::CallLuaFunc<int>("GetToCreate");
 			if (ret != NONE)
 				createObject((OBJECT_TYPES)ret);
 		}
@@ -642,43 +634,25 @@ void Editor::initLuaManager()
 	mEnemy = new Enemy();
 	mEnemy2 = new Enemy();
 
-	mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
-	LuaFunctionsWrapper::AddCFunction2<Enemy, void, int>(mEnemy, "cFunc1");
-	mEnemy2->RegisterCaller("TestLuaFunction6", mEnemy2, &Enemy::TestLuaFunction6, _1, _2);
-	LuaFunctionsWrapper::AddCFunction2<Enemy, bool, int, int>(mEnemy2, "cFunc2");
+	//mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
+	//LuaFunctionsWrapper::AddCFunction<void, Enemy, int>(mEnemy, "TestLuaFunction4");
 
-	//ILuaMember::Func<void, int>::Function<void, int>::CallMemFunc("TestLuaFunction4", 1);
-	//ILuaMember::Func<bool, int, int>::Function<bool, int, int>::CallMemFunc("TestLuaFunction6", 1, 5);
+	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
+	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction6", mEnemy2, &Enemy::TestLuaFunction6, _1, _2);
+	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction7", mEnemy, &Enemy::TestLuaFunction7);
+	LuaManager::PrintStackSize();
 
 	ILuaMember::CallMemFunc<void>("TestLuaFunction4", 1);
-	ILuaMember::CallMemFunc<void>("TestLuaFunction4", 1);
-	//mEnemy->CallMemFunc<void>("TestLuaFunction4", 1);
-	//mEnemy->CallMemFunc<void>("TestLuaFunction4", 1);
 
-	// Different names because MapHolder::CallbackMap need to be a static member
 	bool ret = false;
 	ret = mEnemy2->CallMemFunc<bool>("TestLuaFunction6", 1, 5);
 	std::cout << (ret? "true": "false") << std::endl;
 
-	bool ret4 = false;
-	ret4 = ILuaMember::CallMemFunc<bool>("TestLuaFunction6", 1, 5);
-	std::cout << (ret4 ? "true" : "false") << std::endl;
-
-	//LuaFunctionsWrapper::AddCFunction2<bool, Enemy, int, int>(mEnemy2);
-	//LuaFunctionsWrapper::AddCFunction2<void, Enemy, int>(mEnemy); // make a overloaded function to determine which function to call one for ret=void and one for the others 
-
-	//mEnemy->RegisterCaller("TestLuaFunction1", mEnemy, &Enemy::TestLuaFunction1);
-	
-	int ret2 = false;
-	ret2 = LuaManager::CallLuaFuncRet<int>("Update", 0, 1, 2, 3);
+	int ret2 = 0;
+	ret2 = LuaManager::CallLuaFunc<int>("Update", 0, 1, 2, 3);
 	std::cout << ret2 << std::endl;
+	LuaManager::PrintStackSize();
 
-	/*
-	// Monster is a C++ class defined somewhere...
-	Enemy** monster = reinterpret_cast<Enemy**>(lua_newuserdata(LuaManager::GetCurrentState(), sizeof(Enemy*)));
-	*monster = new Enemy();
-	luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable("Test").c_str());
-	lua_setmetatable(LuaManager::GetCurrentState(), -2);
-	std::cout << "[C++] Created enemy" << std::endl;
-	*/
+	LuaManager::CallLuaFunc<bool>("m4");
+	LuaManager::PrintStackSize();
 }

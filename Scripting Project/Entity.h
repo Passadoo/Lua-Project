@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Defined.h"
+#include "ILuaMember.h"
 
 using namespace sf;
 
-class Entity
+class Entity : public ILuaMember
 {
 private:
 	Vector2f mPosition;

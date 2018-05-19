@@ -1,5 +1,7 @@
 #include "Defined.h"
 
+const bool Defined::DEBUG = false;
+
 //Window
 unsigned int Defined::WINDOW_WIDTH = 800;
 unsigned int Defined::WINDOW_HEIGHT = 600;

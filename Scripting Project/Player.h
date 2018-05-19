@@ -3,9 +3,8 @@
 #include "Entity.h"
 #include <iostream>
 #include "Bullet.h"
-#include "ILuaMember.h"
 
-class Player : public Entity, public ILuaMember
+class Player : public Entity
 {
 private:
 	Texture mTexture;
@@ -26,7 +25,6 @@ public:
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
-
 
 };
 

@@ -97,6 +97,12 @@ void Enemy::TestLuaFunction1()
 	std::cout << "Called " << __func__ << std::endl;
 }
 
+float Enemy::TestLuaFunction7()
+{
+	std::cout << "Called " << __func__ << std::endl;
+	return 1.0f;
+}
+
 void Enemy::TestLuaFunction2(int i)
 {
 	std::cout << "Called " << __func__ << ", Return: " << i << std::endl;
