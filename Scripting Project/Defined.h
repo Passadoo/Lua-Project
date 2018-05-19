@@ -47,6 +47,7 @@ public:
 	static const string LUA_TEST2_PATH;
 	static const string LUA_EDITOR_PATH;
 	static const string LUA_GAME_LOGIC_PATH;
+	static const string LUA_ENEMY_PATH;
 
 };
 

@@ -4,7 +4,6 @@
 #include <iostream>
 
 // Lua
-#include "LuaManager.h"
 #include "LuaFunctionsWrapper.h"
 
 class Game

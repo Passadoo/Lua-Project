@@ -29,7 +29,19 @@ private:
 		static std::map<std::string, std::function<Ret(Args...)>> CallbackMap;
 	};
 
+	static unsigned int freeID;
+	unsigned int id;
+	std::string luaObject;
+	//static std::map<ILuaMember*, std::string> m_pointers;
+
 public:
+	ILuaMember() {id = freeID++;};
+	~ILuaMember() {};
+
+	unsigned int GetID() const { return id; };
+	void SetLuaObject(const std::string & luaObject) { this->luaObject = luaObject; };
+	std::string GetLuaObject() const { return luaObject; };
+
 	template<typename Ret, typename Clazz, typename ...Args, typename ...T>
 	static void RegisterCaller(std::string name, Clazz*& pClass, Ret(Clazz::*Callback)(Args...), T... p) {
 		const int params = sizeof...(Args);
@@ -67,7 +79,6 @@ public:
 	static Ret CallMemFunc(const std::string &name, Args &&... args) {
 		return Func<Ret, Args...>::Function<Ret, Args...>::CallMemFunc(name, std::forward<Args>(args)...);
 	}
-	
 };
 
 template <typename Ret, typename... Args>

@@ -7,6 +7,8 @@
 #include <iostream>
 #include "Defined.h"
 #include <vector>
+#include "ILuaMember.h"
+#include <sstream>
 
 #include <typeinfo>
 
@@ -35,7 +37,12 @@ private:
 	inline static void _push<float>(lua_State * pL, float arg) {
 		LuaManager::PushFloat(pL, arg);
 	}*/
-
+	inline static void _push(lua_State * pL, ILuaMember* arg) {
+		ILuaMember** ptr = reinterpret_cast<ILuaMember**>(lua_newuserdata(LuaManager::GetCurrentState(), sizeof(ILuaMember*)));
+		*ptr = arg;
+		luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable(arg->GetLuaObject()).c_str());
+		lua_setmetatable(LuaManager::GetCurrentState(), -2);
+	}
 	inline static void _push(lua_State * pL, int arg) {
 		LuaManager::PushInteger(pL, arg);
 	}

@@ -655,4 +655,18 @@ void Editor::initLuaManager()
 
 	LuaManager::CallLuaFunc<bool>("m4");
 	LuaManager::PrintStackSize();
+
+	/*luaL_Reg functionList[] = { { "call", call },{ NULL, NULL } };
+	LuaManager::RegisterObjectFunctions("Enemy", functionList);*/
+
+	LuaFunctionsWrapper::RegisterObject(mEnemy2);
+	LuaFunctionsWrapper::RegisterObject(mEnemy);
+
+	LuaManager::LoadScript(Defined::LUA_ENEMY_PATH);
+
+	LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemy), (Entity*&)mEnemy, &Enemy::GetPosX);
+	LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemy2), (Entity*&)mEnemy2, &Enemy::GetPosX);
+	mEnemy2->SetPos(10, 0);
+	mEnemy->SetPos(100, 0);
+	LuaManager::CallLuaFunc<void>("UpdateEnemy", mEnemy2, mEnemy2->GetLuaObject());
 }

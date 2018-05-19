@@ -94,6 +94,12 @@
     <ClCompile Include="LuaManager.cpp">
       <Filter>Lua</Filter>
     </ClCompile>
+    <ClCompile Include="ILuaMember.cpp">
+      <Filter>Lua\FunctionWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaFunctionsWrapper.cpp">
+      <Filter>Lua\FunctionWrapper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -156,6 +162,9 @@
       <Filter>Lua\Scripts</Filter>
     </None>
     <None Include="Resources\Lua\gameLogic.lua">
+      <Filter>Lua\Scripts</Filter>
+    </None>
+    <None Include="Resources\Lua\Enemy.lua">
       <Filter>Lua\Scripts</Filter>
     </None>
   </ItemGroup>

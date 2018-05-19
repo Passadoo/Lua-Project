@@ -124,6 +124,11 @@ void Room::RemoveEnemy(int index)
 void Room::LoadRoom()
 {
 	Map::setObjects(mFilePath, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
+
+	for (int i = 0; i < mNrOfEnemies; i++)
+	{
+
+	}
 }
 
 void Room::Draw(RenderWindow & window)
