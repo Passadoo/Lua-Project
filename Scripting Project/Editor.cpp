@@ -669,4 +669,5 @@ void Editor::initLuaManager()
 	mEnemy2->SetPos(10, 0);
 	mEnemy->SetPos(100, 0);
 	LuaManager::CallLuaFunc<void>("UpdateEnemy", mEnemy2, mEnemy2->GetLuaObject());
+	LuaManager::CallLuaFunc<void>("UpdateEnemy", mEnemy, mEnemy->GetLuaObject());
 }
