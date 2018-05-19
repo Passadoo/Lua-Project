@@ -3,13 +3,15 @@
 // PE = Print Error
 #define PE_LUA_TOP(type) std::cout << "ERROR: not a " << typeid(type).name() << " on top of the stack [" << __func__ << "]" << std::endl;
 
-#define LUA_GETTOP(var, L){\
-	if (!lua_is##var(L, -1))\
+#define LUA_GETTOP_I(var, L, i){\
+	if (!lua_is##var(L, i))\
 		PE_LUA_TOP(var);\
-	var = lua_to##var(L, -1);\
-	lua_pop(L, 1);\
+	var = lua_to##var(L, i);\
+	lua_remove(L, i);\
 	return var;\
 }\
+
+#define LUA_GETTOP(var, L) LUA_GETTOP_I(var, L, -1)
 
 lua_State * LuaManager::mL = nullptr;
 std::vector<std::string> LuaManager::mMetaTables;
@@ -165,6 +167,39 @@ bool LuaManager::GetBool(lua_State *& pL)
 {
 	bool boolean;
 	LUA_GETTOP(boolean, pL);
+	return boolean;
+}
+
+/////////////////////////////////////////////////////////
+int LuaManager::GetInteger(int params)
+{
+	int index = 0 - params;
+	int integer;
+	LUA_GETTOP_I(integer, mL, index);
+	return integer;
+}
+
+float LuaManager::GetFloat(int params)
+{
+	int index = 0 - params;
+	float number;
+	LUA_GETTOP_I(number, mL, index);
+	return number;
+}
+
+std::string LuaManager::GetString(int params)
+{
+	int index = 0 - params;
+	std::string string;
+	LUA_GETTOP_I(string, mL, index);
+	return string;
+}
+
+bool LuaManager::GetBool(int params)
+{
+	int index = 0 - params;
+	bool boolean;
+	LUA_GETTOP_I(boolean, mL, index);
 	return boolean;
 }
 

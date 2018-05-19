@@ -123,6 +123,6 @@ void Enemy::TestLuaFunction5(int i, int j)
 bool Enemy::TestLuaFunction6(int i, int j)
 {
 	mI += i;
-	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
+	std::cout << "Called func [" << __func__ << "], mI: " << mI << ", i: " << i << ", j: " <<j  << std::endl;
 	return true;
 }

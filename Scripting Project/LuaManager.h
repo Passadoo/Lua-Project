@@ -52,7 +52,7 @@ public:
 	static void push(lua_State * L, Arg&& arg) {
 		return _push(L, std::forward<Arg>(arg));
 	}
-
+	
 	template <typename... Args>
 	static void push_all(lua_State * L, Args&&... args) {
 		std::initializer_list<int>{(push(L, std::forward<Args>(args)), 0)...};
@@ -66,16 +66,6 @@ public:
 		LuaManager::CallLuaFunction(pFuncName, params, 0);
 	}
 
-	template <class A, class B>
-	struct eq {
-		static const bool result = false;
-	};
-
-	template<class A>
-	struct eq<A, A> {
-		static const bool result = true;
-	};
-
 
 	// Push values to lua
 	template <typename Ret>
@@ -83,9 +73,9 @@ public:
 		return _get<Ret>(L);
 	}
 
-	template <typename... Args>
-	static void get_all(lua_State * L, Args&&... args) {
-		/*args... = */std::initializer_list<int>{(get(L, std::forward<Args>(args)), 0)...};
+	template <typename ... Args>
+	static void get_all(lua_State * L) {
+		/*args... = */std::initializer_list<int>{(get<Args>(L), 0)...};
 	}
 
 	template<typename Ret, typename ... Args>
@@ -130,6 +120,11 @@ public:
 	static float GetFloat(lua_State *& pL);
 	static std::string GetString(lua_State *& pL);
 	static bool GetBool(lua_State *& pL);
+
+	static int GetInteger(int params);
+	static float GetFloat(int params);
+	static std::string GetString(int params);
+	static bool GetBool(int params);
 
 	static std::string GetMetaTable(const std::string & pObjectName);
 	static std::string GetMetaTableAndCheck(const std::string & pObjectName);

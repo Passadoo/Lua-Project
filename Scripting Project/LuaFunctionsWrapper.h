@@ -2,6 +2,7 @@
 
 #include "LuaManager.h"
 #include "ILuaMember.h"
+#include <vector>
 
 class LuaFunctionsWrapper
 {
@@ -15,23 +16,29 @@ private:
 	struct eq<A, A> {
 		static const bool result = true;
 	};
+	////////////////////////////////////////////////
+	
+	/*template <typename ...Args>
+	struct ReturnHolder {
+		std::vector<Args...> rets;
+	};*/
 
 public:
 
 	template<typename Ret, typename Clazz, typename ...Args>
 	inline static int FunctionWrapper2(lua_State * L) {
-		const int params = sizeof...(args);
+		const int params = sizeof...(Args);
 		Clazz* luaMember = reinterpret_cast<Clazz*>(lua_touserdata(LuaManager::GetCurrentState(), lua_upvalueindex(1)));
+		std::string function = LuaManager::GetString(params + 1);
 
-		//Args... args = getArgs(Args...);
-
-		Args... args = LuaManager::get_all;
-		std::string function = LuaManager::GetString();
-
-		//push(luaMember->MemberFunction<Ret, Args...>(function, arg1));
-		ILuaMember::CallFunc(function, args);
-		/*if (eq<void, Ret>::result)
-			return 1;*/
+		if (!eq<void, Ret>::result)
+		{
+			LuaManager::PrintStackSize();
+			bool r = ILuaMember::CallMemFuncRet<Ret>(function, LuaManager::get<Args>(LuaManager::GetCurrentState())...);
+			LuaManager::push(LuaManager::GetCurrentState(), r);
+			
+			return 1;
+		}
 
 		return 0;
 	}
@@ -58,26 +65,6 @@ public:
 
 	template<typename Clazz, typename Ret, typename ...Arg>
 	static int FunctionWrapper(lua_State * L);
-
-	
-
-private:
-	/*template <std::size_t n, typename = std::make_index_sequence<n>>
-	struct nth_element_impl;
-
-	template <std::size_t n, std::size_t ...ignore>
-	struct nth_element_impl<n, std::index_sequence<ignore...>> {
-		template <typename Tn>
-		static Tn f(decltype((void*)ignore)..., Tn*, ...);
-	};
-
-	template <typename T>
-	struct wrapper { using type = T; };
-
-	template <std::size_t n, typename ...T>
-	using nth_element = typename decltype(
-		nth_element_impl<n>::f(static_cast<wrapper<T>*>(0)...)
-		)::type;*/
 };
 
 template<typename Clazz, typename Ret, typename ...Arg>

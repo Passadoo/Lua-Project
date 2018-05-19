@@ -653,8 +653,12 @@ void Editor::initLuaManager()
 	ret = mEnemy2->CallMemFuncRet<bool>("TestLuaFunction6", 1, 5);
 	std::cout << (ret? "true": "false") << std::endl;
 
+	bool ret4 = false;
+	ret4 = ILuaMember::CallMemFuncRet<bool>("TestLuaFunction6", 1, 5);
+	std::cout << (ret4 ? "true" : "false") << std::endl;
+	LuaFunctionsWrapper::AddCFunction2<bool, Enemy, int, int>(mEnemy);
+
 	//mEnemy->RegisterCaller("TestLuaFunction1", mEnemy, &Enemy::TestLuaFunction1);
-	//LuaFunctionsWrapper::AddCFunction2<void, Enemy>(mEnemy);
 
 	int ret2 = false;
 	ret2 = LuaManager::CallLuaFuncRet<int>("Update", 0, 1, 2, 3);
