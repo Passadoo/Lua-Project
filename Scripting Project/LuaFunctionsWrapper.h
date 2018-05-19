@@ -23,36 +23,50 @@ private:
 		std::vector<Args...> rets;
 	};*/
 
+	template<typename Ret, typename... Args>
+	struct Func {
+		template<typename Ret, typename... Args> struct Function {
+			static void PushToStack(const std::string &name) {
+				LuaManager::push<Ret>(LuaManager::GetCurrentState(), ILuaMember::CallMemFunc<Ret>(name, LuaManager::get<Args>(LuaManager::GetCurrentState())...));
+			}
+		};
+		template<> struct Function<void, Args...> {
+			static void PushToStack(const std::string &name) {
+				ILuaMember::CallMemFunc<Ret>(name, LuaManager::get<Args>(LuaManager::GetCurrentState())...);
+			}
+		};
+	};
+
+	template <typename Ret, typename... Args>
+	static void PushToStack(const std::string &name) {
+		Func<Ret, Args...>::Function<Ret, Args...>::PushToStack(name);
+	}
+
 public:
 
-	template<typename Ret, typename Clazz, typename ...Args>
+	template<typename Clazz, typename Ret, typename ...Args>
 	inline static int FunctionWrapper2(lua_State * L) {
 		const int params = sizeof...(Args);
 		Clazz* luaMember = reinterpret_cast<Clazz*>(lua_touserdata(LuaManager::GetCurrentState(), lua_upvalueindex(1)));
 		std::string function = LuaManager::GetString(params + 1);
 
+		PushToStack<Ret, Args...>(function);
 		if (!eq<void, Ret>::result)
-		{
-			LuaManager::PrintStackSize();
-			bool r = ILuaMember::CallMemFuncRet<Ret>(function, LuaManager::get<Args>(LuaManager::GetCurrentState())...);
-			LuaManager::push(LuaManager::GetCurrentState(), r);
-			
 			return 1;
-		}
-
 		return 0;
 	}
 
-	template<typename Ret, typename Clazz, typename ...Args>
-	static void AddCFunction2(Clazz* pPointer) {
+	template<typename Clazz, typename Ret, typename ...Args>
+	static void AddCFunction2(Clazz* pPointer, std::string luafuncname) {
 		ILuaMember* ptr = dynamic_cast<ILuaMember*>(pPointer);
 		if (ptr == nullptr)
 			std::cout << "ERROR: wrong class in [" << __func__ << "]" << std::endl;
 		else
 		{
 			lua_pushlightuserdata(LuaManager::GetCurrentState(), pPointer);
-			lua_pushcclosure(LuaManager::GetCurrentState(), LuaFunctionsWrapper::FunctionWrapper2<Ret, Clazz, Args...>, 1);
-			lua_setglobal(LuaManager::GetCurrentState(), "MemberFunction2");
+			std::cout << "args: " << sizeof...(Args) << std::endl;
+			lua_pushcclosure(LuaManager::GetCurrentState(), LuaFunctionsWrapper::FunctionWrapper2<Clazz, Ret, Args...>, 1);
+			lua_setglobal(LuaManager::GetCurrentState(), luafuncname.c_str());
 		}
 	}
 

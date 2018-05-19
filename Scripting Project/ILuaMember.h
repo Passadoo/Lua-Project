@@ -41,19 +41,29 @@ public:
 		MapHolder<Ret, Args...>::CallbackMap[name] = std::bind(Callback, pClass, p...);
 	}
 
-	template <typename... Args>
-	static void CallMemFunc(const std::string &name, Args &&... args) {
-		CALL_VOID_ERROR(Args...)
-		std::cout << "Called function [" << name << "]" << std::endl;
-		MapHolder<void, Args...>::CallbackMap[name](std::forward<Args>(args)...);
-	}
+	template<typename Ret, typename... Args>
+	struct Func{
+		template<typename Ret, typename... Args> struct Function {
+			static Ret CallMemFunc(const std::string &name, Args &&... args) {
+				CALL_RET_ERROR(Ret, Args...)
+				std::cout << "Called function [" << name << "]" << std::endl;
+				return MapHolder<Ret, Args...>::CallbackMap[name](std::forward<Args>(args)...);
+			}
+		};
+		template<> struct Function<void, Args...> {
+			static void CallMemFunc(const std::string &name, Args &&... args) {
+				CALL_RET_ERROR(void, Args...)
+				std::cout << "Called function [" << name << "]" << std::endl;
+				MapHolder<void, Args...>::CallbackMap[name](std::forward<Args>(args)...);
+			}
+		};
+	};
 
 	template <typename Ret, typename... Args>
-	static Ret CallMemFuncRet(const std::string &name, Args &&... args) {
-		CALL_RET_ERROR(Ret, Args...)
-		std::cout << "Called function [" << name << "]" << std::endl;
-		return MapHolder<Ret, Args...>::CallbackMap[name](std::forward<Args>(args)...);
+	static Ret CallMemFunc(const std::string &name, Args &&... args) {
+		return Func<Ret, Args...>::Function<Ret, Args...>::CallMemFunc(name, std::forward<Args>(args)...);
 	}
+	
 };
 
 template <typename Ret, typename... Args>

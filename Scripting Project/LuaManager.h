@@ -11,16 +11,24 @@
 class LuaManager
 {
 private:
-	inline static void _push(lua_State * pL, int arg) {
+	template <typename Arg>
+	inline static void _push(lua_State * pL, Arg arg) {
+		return 0;
+	}
+	template <>
+	inline static void _push<int>(lua_State * pL, int arg) {
 		LuaManager::PushInteger(pL, arg);
 	}
-	inline static void _push(lua_State * pL, bool arg) {
+	template <>
+	inline static void _push<bool>(lua_State * pL, bool arg) {
 		LuaManager::PushBool(pL, arg);
 	}
-	inline static void _push(lua_State * pL, std::string arg) {
+	template <>
+	inline static void _push<std::string>(lua_State * pL, std::string arg) {
 		LuaManager::PushString(pL, arg);
 	}
-	inline static void _push(lua_State * pL, float arg) {
+	template <>
+	inline static void _push<float>(lua_State * pL, float arg) {
 		LuaManager::PushFloat(pL, arg);
 	}
 
@@ -50,12 +58,12 @@ public:
 	// Push values to lua
 	template <typename Arg>
 	static void push(lua_State * L, Arg&& arg) {
-		return _push(L, std::forward<Arg>(arg));
+		return _push<Arg>(L, std::forward<Arg>(arg));
 	}
 	
 	template <typename... Args>
 	static void push_all(lua_State * L, Args&&... args) {
-		std::initializer_list<int>{(push(L, std::forward<Args>(args)), 0)...};
+		std::initializer_list<int>{(push<Args>(L, std::forward<Args>(args)), 0)...};
 	}
 
 	template<typename ... Args>

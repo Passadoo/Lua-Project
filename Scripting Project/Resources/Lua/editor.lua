@@ -23,12 +23,18 @@ function Update(ptr, a, b, c)
 	print("called Update")
 	--print(ptr + " " + a + " " + b + " " + c)
 	--ptr::func();
-	ret = MemberFunction2("TestLuaFunction6", 2, 3);
-	--print(ret)
-	--if (ret == true) then
-	--	print("returned true")
-	--elseif
-	--	print("returned false")
-	--end
+	cFunc1("TestLuaFunction4", 2)
+	m2()
+
 	return 10
+end
+
+function m2()
+	ret = cFunc2("TestLuaFunction6", 2, 3)
+	--print(ret)
+	if (ret == true) then
+		print("Returned true")
+	else
+		print("Returned false")
+	end
 end
