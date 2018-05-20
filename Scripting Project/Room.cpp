@@ -191,8 +191,8 @@ void Room::LoadRoom()
 
 		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("SetDirection", mEnemies[i]), mEnemies[i], &Enemy::SetDirection, _1);
 		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("SetPosition", mEnemies[i]), mEnemies[i], &Enemy::SetPosition, _1, _2);
-		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemies[i]), (Entity*&)mEnemies[i], &Enemy::GetPosX);
-		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosY", mEnemies[i]), (Entity*&)mEnemies[i], &Enemy::GetPosY);
+		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemies[i]), (Entity*)mEnemies[i], &Enemy::GetPosX);
+		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosY", mEnemies[i]), (Entity*)mEnemies[i], &Enemy::GetPosY);
 		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("SetTime", mEnemies[i]), mEnemies[i], &Enemy::SetTime, _1);
 		LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetTime", mEnemies[i]), mEnemies[i], &Enemy::GetTime);
 	}

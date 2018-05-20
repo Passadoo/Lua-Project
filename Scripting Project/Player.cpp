@@ -30,9 +30,9 @@ Player::~Player()
 {
 }
 
-void Player::SetPosition(Vector2f pPosition)
+void Player::SetPosition(float x, float y)
 {
-	SetPos(pPosition.x, pPosition.y);
+	SetPos(x, y);
 	mSprite.setPosition(Entity::GetPos());
 }
 

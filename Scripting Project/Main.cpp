@@ -18,6 +18,7 @@
 #include "Editor.h"
 #include "MouseInput.h"
 
+// Change to use the editor
 #define USE_EDITOR false
 
 int main()

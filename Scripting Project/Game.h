@@ -2,11 +2,12 @@
 
 #include "Dungeon.h"
 #include <iostream>
+#include "Keyboard.h"
 
 // Lua
 #include "LuaFunctionsWrapper.h"
 
-class Game
+class Game : public ILuaMember
 {
 private:
 	enum eGameState
@@ -24,8 +25,7 @@ private:
 	sf::Texture mLoseTexture;
 	sf::Sprite mLoseSprite;
 
-	void playerUpdate(float dt);
-	void roomUpdate();
+	MKeyboard* keyboard;
 	void bulletUpdate(float dt);
 
 	void RemoveBullet(int index);

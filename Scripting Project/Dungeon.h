@@ -40,11 +40,6 @@ public:
 	bool RoomDownExists();
 	bool RoomLeftExists();
 
-	Vector2f GetCurrentRoomUpDoorLocation();
-	Vector2f GetCurrentRoomRightDoorLocation();
-	Vector2f GetCurrentRoomDownDoorLocation();
-	Vector2f GetCurrentRoomLeftDoorLocation();
-
 	void SwitchRoomUp();
 	void SwitchRoomRight();
 	void SwitchRoomDown();
@@ -61,6 +56,9 @@ public:
 	bool NoObstacle(float x, float y);
 	bool NoEnemy(float x, float y);
 	bool NoDoor(float x, float y);
+
+	float GetYDoorX(float x);
+	float GetXDoorY(float y);
 
 	int GetNrOfRemainingRooms()const;
 };

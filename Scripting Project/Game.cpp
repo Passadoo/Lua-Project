@@ -1,216 +1,5 @@
 #include "Game.h"
 
-void Game::playerUpdate(float dt)
-{
-	Vector2f nextPos;
-	LuaManager::CallLuaFunc<void>("SetMoveInitFalse");
-
-	if (Keyboard::isKeyPressed(Keyboard::D))
-	{
-		lua_playerMovement(Defined::RIGHT, nextPos);
-		
-	}
-	if (Keyboard::isKeyPressed(Keyboard::S))
-	{
-		lua_playerMovement(Defined::DOWN, nextPos);
-
-	}
-	if (Keyboard::isKeyPressed(Keyboard::A))
-	{
-		lua_playerMovement(Defined::LEFT, nextPos);
-
-	}
-	if (Keyboard::isKeyPressed(Keyboard::W))
-	{
-		lua_playerMovement(Defined::UP, nextPos);
-
-	}
-
-	if (LuaManager::CallLuaFunc<bool>("GetMoveInit"))
-	{
-		bool canMove = true;
-
-		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
-		{
-			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
-			{
-				canMove = false;
-			}
-		}
-
-		bool enteredDoor = false;
-
-		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfDoors(); i++)
-		{
-			if (mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().y == nextPos.y)
-			{
-				std::cout << "entered door" << std::endl;
-				enteredDoor = true;
-			}
-		}
-
-		if (enteredDoor)
-		{
-			roomUpdate();
-		}
-		else if (canMove)
-		{
-			mPlayer->SetPosition(nextPos);
-		}
-	}
-
-	mPlayer->Update(dt);
-}
-
-void Game::roomUpdate()
-{
-	LuaManager::CallLuaFunc<void>("EnterRoom", (int)Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
-
-	if (LuaManager::CallLuaFunc<bool>("GetEnteredDoorUp"))
-	{
-		if (!mDungeon->RoomUpExists())
-		{
-			if (mDungeon->AddRoomUp())
-			{
-				mDungeon->LoadCurrentRoom();
-				Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
-				}
-			}
-			else
-			{
-				std::cout << "No more rooms exist in this direction" << std::endl;
-			}
-		}
-		else
-		{
-			if (mDungeon->UpRoomHasDownDoor())
-			{
-				mDungeon->SwitchRoomUp();
-				Vector2f newLocation = mDungeon->GetCurrentRoomDownDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y - Defined::GRID_CELL_SIZE));
-				}
-			}
-			else
-			{
-				std::cout << "A room exists but it does not have the required door" << std::endl;
-			}
-		}
-	}
-	if (LuaManager::CallLuaFunc<bool>("GetEnteredDoorRight"))
-	{
-		if (!mDungeon->RoomRightExists())
-		{
-			if (mDungeon->AddRoomRight())
-			{
-				mDungeon->LoadCurrentRoom();
-				Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
-				}
-			}
-			else
-			{
-				std::cout << "No more rooms exist in this direction" << std::endl;
-			}
-		}
-		else
-		{
-			if (mDungeon->RightRoomHasLeftDoor())
-			{
-				mDungeon->SwitchRoomRight();
-				Vector2f newLocation = mDungeon->GetCurrentRoomLeftDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x + Defined::GRID_CELL_SIZE, newLocation.y));
-				}
-			}
-			else
-			{
-				std::cout << "A room exists but it does not have the required door" << std::endl;
-			}
-		}
-	}
-	if (LuaManager::CallLuaFunc<bool>("GetEnteredDoorDown"))
-	{
-		if (!mDungeon->RoomDownExists())
-		{
-			if (mDungeon->AddRoomDown())
-			{
-				mDungeon->LoadCurrentRoom();
-				Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
-				}
-			}
-			else
-			{
-				std::cout << "No more rooms exist in this direction" << std::endl;
-			}
-		}
-		else
-		{
-			if (mDungeon->DownRoomHasUpDoor())
-			{
-				mDungeon->SwitchRoomDown();
-				Vector2f newLocation = mDungeon->GetCurrentRoomUpDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x, newLocation.y + Defined::GRID_CELL_SIZE));
-				}
-			}
-			else
-			{
-				std::cout << "A room exists but it does not have the required door" << std::endl;
-			}
-		}
-	}
-	if (LuaManager::CallLuaFunc<bool>("GetEnteredDoorLeft"))
-	{
-		std::cout << "Entered door left" << std::endl;
-		if (!mDungeon->RoomLeftExists())
-		{
-			if (mDungeon->AddRoomLeft())
-			{
-				mDungeon->LoadCurrentRoom();
-				Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
-				}
-			}
-			else
-			{
-				std::cout << "No more rooms exist in this direction" << std::endl;
-			}
-		}
-		else
-		{
-			if (mDungeon->LeftRoomHasRightDoor())
-			{
-				mDungeon->SwitchRoomLeft();
-				Vector2f newLocation = mDungeon->GetCurrentRoomRightDoorLocation();
-				if (newLocation.x >= 0.0f)
-				{
-					mPlayer->SetPosition(Vector2f(newLocation.x - Defined::GRID_CELL_SIZE, newLocation.y));
-				}
-			}
-			else
-			{
-				std::cout << "A room exists but it does not have the required door" << std::endl;
-			}
-		}
-	}
-
-	std::cout << "There are " << mDungeon->GetNrOfRemainingRooms() << " rooms remaining" << std::endl;
-}
-
 void Game::bulletUpdate(float dt)
 {
 	if (Keyboard::isKeyPressed(Keyboard::Space))
@@ -309,6 +98,8 @@ void Game::initGame()
 	mNrOfBullets = 0;
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
+	keyboard = new MKeyboard();
+
 	
 	mCurrentState = ePLAYING;
 
@@ -341,6 +132,7 @@ void Game::closeGame()
 
 	delete mPlayer;
 	delete mDungeon;
+	delete keyboard;
 
 	LuaManager::CloseLuaManager();
 }
@@ -391,6 +183,10 @@ void Game::Draw(RenderWindow & window)
 
 void Game::Update(float dt, RenderWindow& window)
 {
+	mDungeon->Update(dt);
+	LuaManager::CallLuaFunc<void>("UpdatePlayer", Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
+	mPlayer->Update(dt);
+	bulletUpdate(dt);
 	if (mCurrentState == ePLAYING)
 	{
 		mDungeon->Update(dt);
@@ -436,14 +232,42 @@ void Game::initLuaManager()
 
 	LuaManager::LoadScript(Defined::LUA_GAME_LOGIC_PATH);
 
+	LuaFunctionsWrapper::RegisterCFunction("SetPosition", mPlayer, &Player::SetPosition, _1, _2);
 	LuaFunctionsWrapper::RegisterCFunction("SetDirection", mPlayer, &Player::SetDirection, _1);
 	LuaFunctionsWrapper::RegisterCFunction("GetDirection", mPlayer, &Player::GetDirection);
-	LuaFunctionsWrapper::RegisterCFunction("GetPosX", (Entity*&)mPlayer, &Player::GetPosX);
-	LuaFunctionsWrapper::RegisterCFunction("GetPosY", (Entity*&)mPlayer, &Player::GetPosY);
+	LuaFunctionsWrapper::RegisterCFunction("GetPosX", (Entity*)mPlayer, &Player::GetPosX);
+	LuaFunctionsWrapper::RegisterCFunction("GetPosY", (Entity*)mPlayer, &Player::GetPosY);
 
 	LuaFunctionsWrapper::RegisterCFunction("NoObstacle", mDungeon, &Dungeon::NoObstacle, _1, _2);
 	LuaFunctionsWrapper::RegisterCFunction("NoEnemy", mDungeon, &Dungeon::NoEnemy, _1, _2);
 	LuaFunctionsWrapper::RegisterCFunction("NoDoor", mDungeon, &Dungeon::NoDoor, _1, _2);
+
+	LuaFunctionsWrapper::RegisterCFunction("IsKeyPressed", keyboard, &MKeyboard::IsKeyPressed, _1);
+
+	// Functions for update the position of the player when entering a room
+	LuaFunctionsWrapper::RegisterCFunction("RoomUpExists", mDungeon, &Dungeon::RoomUpExists);
+	LuaFunctionsWrapper::RegisterCFunction("RoomRightExists", mDungeon, &Dungeon::RoomRightExists);
+	LuaFunctionsWrapper::RegisterCFunction("RoomLeftExists", mDungeon, &Dungeon::RoomLeftExists);
+	LuaFunctionsWrapper::RegisterCFunction("RoomDownExists", mDungeon, &Dungeon::RoomDownExists);
+
+	LuaFunctionsWrapper::RegisterCFunction("AddRoomUp", mDungeon, &Dungeon::AddRoomUp);
+	LuaFunctionsWrapper::RegisterCFunction("AddRoomRight", mDungeon, &Dungeon::AddRoomRight);
+	LuaFunctionsWrapper::RegisterCFunction("AddRoomLeft", mDungeon, &Dungeon::AddRoomLeft);
+	LuaFunctionsWrapper::RegisterCFunction("AddRoomDown", mDungeon, &Dungeon::AddRoomDown);
+
+	LuaFunctionsWrapper::RegisterCFunction("LoadCurrentRoom", mDungeon, &Dungeon::LoadCurrentRoom);
+
+	LuaFunctionsWrapper::RegisterCFunction("UpRoomHasDownDoor", mDungeon, &Dungeon::UpRoomHasDownDoor);
+	LuaFunctionsWrapper::RegisterCFunction("SwitchRoomUp", mDungeon, &Dungeon::SwitchRoomUp);
+	LuaFunctionsWrapper::RegisterCFunction("RightRoomHasLeftDoor", mDungeon, &Dungeon::RightRoomHasLeftDoor);
+	LuaFunctionsWrapper::RegisterCFunction("SwitchRoomRight", mDungeon, &Dungeon::SwitchRoomRight);
+	LuaFunctionsWrapper::RegisterCFunction("DownRoomHasUpDoor", mDungeon, &Dungeon::DownRoomHasUpDoor);
+	LuaFunctionsWrapper::RegisterCFunction("SwitchRoomDown", mDungeon, &Dungeon::SwitchRoomDown);
+	LuaFunctionsWrapper::RegisterCFunction("LeftRoomHasRightDoor", mDungeon, &Dungeon::LeftRoomHasRightDoor);
+	LuaFunctionsWrapper::RegisterCFunction("SwitchRoomLeft", mDungeon, &Dungeon::SwitchRoomLeft);
+
+	LuaFunctionsWrapper::RegisterCFunction("GetYDoorX", mDungeon, &Dungeon::GetYDoorX, _1);
+	LuaFunctionsWrapper::RegisterCFunction("GetXDoorY", mDungeon, &Dungeon::GetXDoorY, _1);
 
 	LuaManager::LoadScript(Defined::LUA_ENEMY_PATH);
 }
