@@ -46,7 +46,8 @@ void LuaManager::LoadScript(const std::string & pPath)
 	}
 	else
 	{
-		std::cout << "[" << pPath << "] Script loaded successfully" << std::endl;
+		if (Defined::DEBUG)
+			std::cout << "[" << pPath << "] Script loaded successfully" << std::endl;
 	}
 }
 

@@ -278,35 +278,14 @@ void Game::bulletUpdate(float dt)
 	}
 }
 
-void Game::enemyUpdate(float dt)
-{
-
-}
-
 Game::Game()
 {
-	mBullets = new Bullet*[5];
-	mNrOfBullets = 0;
-	mPlayer = new Player(2, 2);
-	mDungeon = new Dungeon();
-
-	initLuaManager();
-
-	mDungeon->LoadCurrentRoom();
+	initGame();
 }
 
 Game::~Game()
 {
-	for (int i = 0; i < mNrOfBullets; i++)
-	{
-		delete mBullets[i];
-	}
-	delete[] mBullets;
-
-	delete mPlayer;
-	delete mDungeon;
-
-	LuaManager::CloseLuaManager();
+	closeGame();
 }
 
 void Game::RemoveBullet(int index)
@@ -322,6 +301,32 @@ void Game::RemoveBullet(int index)
 	}
 }
 
+void Game::initGame()
+{
+	mBullets = new Bullet*[5];
+	mNrOfBullets = 0;
+	mPlayer = new Player(2, 2);
+	mDungeon = new Dungeon();
+
+	initLuaManager();
+
+	mDungeon->LoadCurrentRoom();
+}
+
+void Game::closeGame()
+{
+	for (int i = 0; i < mNrOfBullets; i++)
+	{
+		delete mBullets[i];
+	}
+	delete[] mBullets;
+
+	delete mPlayer;
+	delete mDungeon;
+
+	LuaManager::CloseLuaManager();
+}
+
 void Game::Draw(RenderWindow & window)
 {
 	for (int i = 0; i<mNrOfBullets; i++)
@@ -333,11 +338,17 @@ void Game::Draw(RenderWindow & window)
 	mDungeon->Draw(window);
 }
 
-void Game::Update(float dt)
+void Game::Update(float dt, RenderWindow& window)
 {
 	mDungeon->Update(dt);
 	playerUpdate(dt);
 	bulletUpdate(dt);
+
+	if (!mDungeon->NoEnemy(mPlayer->GetPosX(), mPlayer->GetPosY()))
+	{
+		closeGame();
+		initGame();
+	}
 }
 
 void Game::initLuaManager()
