@@ -415,4 +415,9 @@ bool Dungeon::NoDoor(float x, float y)
 	return empty;
 }
 
+int Dungeon::GetNrOfRemainingRooms() const
+{
+	return mRoomInfo.size();
+}
+
 
