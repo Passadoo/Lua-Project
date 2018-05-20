@@ -292,7 +292,7 @@ Game::Game()
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
 	
-	mCurrentState = /*ePLAYING*/ eLOST;
+	mCurrentState = ePLAYING;
 
 	if(!mWinTexture.loadFromFile("Resources/WinTexture.png"))
 	{
