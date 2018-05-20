@@ -108,6 +108,8 @@ function UpdatePlayerInRoom(x, y, cellSize, worldWidth, worldHeight)
 			end
 		end
 	end
+
+	print("There are " .. GetNrOfRemainingRooms() .. " rooms remaining")
 end
 
 function SetPlayerBeforeDoor(x, y, cellSize)

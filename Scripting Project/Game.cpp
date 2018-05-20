@@ -6,7 +6,7 @@ void Game::bulletUpdate(float dt)
 	{
 		if (mNrOfBullets < 5)
 		{
-			mBullets[mNrOfBullets] = new Bullet(mPlayer->GetPos().x, mPlayer->GetPos().y, (Defined::eDirection)mPlayer->GetDirection());
+			mBullets[mNrOfBullets] = new Bullet((int)mPlayer->GetPos().x, (int)mPlayer->GetPos().y, (Defined::eDirection)mPlayer->GetDirection());
 			mNrOfBullets++;
 		}
 	}
@@ -39,6 +39,15 @@ void Game::bulletUpdate(float dt)
 		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfObstacles(); i++)
 		{
 			if (mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetObstacles()[i]->GetPos().y == nextPos.y)
+			{
+				noWall = false;
+			}
+		}
+
+		// Remove bullet if hit a door
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfDoors(); i++)
+		{
+			if (mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().x == nextPos.x && mDungeon->GetCurrentRoom().GetDoors()[i]->GetPos().y == nextPos.y)
 			{
 				noWall = false;
 			}
@@ -99,7 +108,6 @@ void Game::initGame()
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
 	keyboard = new MKeyboard();
-
 	
 	mCurrentState = ePLAYING;
 
@@ -140,23 +148,9 @@ void Game::closeGame()
 void Game::RestartGame()
 {
 	//Delete old
-	for (int i = 0; i < mNrOfBullets; i++)
-	{
-		delete mBullets[i];
-	}
-	delete[] mBullets;
-	delete mPlayer;
-	delete mDungeon;
-	LuaManager::CloseLuaManager();
-
+	closeGame();
 	//Create new
-	mBullets = new Bullet*[5];
-	mNrOfBullets = 0;
-	mPlayer = new Player(2, 2);
-	mDungeon = new Dungeon();
-	mCurrentState = ePLAYING;
-	initLuaManager();
-	mDungeon->LoadCurrentRoom();
+	initGame();
 }
 
 void Game::Draw(RenderWindow & window)
@@ -183,14 +177,11 @@ void Game::Draw(RenderWindow & window)
 
 void Game::Update(float dt, RenderWindow& window)
 {
-	mDungeon->Update(dt);
-	LuaManager::CallLuaFunc<void>("UpdatePlayer", Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
-	mPlayer->Update(dt);
-	bulletUpdate(dt);
 	if (mCurrentState == ePLAYING)
 	{
 		mDungeon->Update(dt);
-		playerUpdate(dt);
+		LuaManager::CallLuaFunc<void>("UpdatePlayer", Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
+		mPlayer->Update(dt);
 		bulletUpdate(dt);
 
 		if (mDungeon->GetNrOfRemainingRooms() <= 0)
@@ -268,6 +259,8 @@ void Game::initLuaManager()
 
 	LuaFunctionsWrapper::RegisterCFunction("GetYDoorX", mDungeon, &Dungeon::GetYDoorX, _1);
 	LuaFunctionsWrapper::RegisterCFunction("GetXDoorY", mDungeon, &Dungeon::GetXDoorY, _1);
+
+	LuaFunctionsWrapper::RegisterCFunction("GetNrOfRemainingRooms", mDungeon, &Dungeon::GetNrOfRemainingRooms);
 
 	LuaManager::LoadScript(Defined::LUA_ENEMY_PATH);
 }
