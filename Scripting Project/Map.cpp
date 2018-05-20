@@ -93,21 +93,22 @@ bool Map::ReadMap(const string & path)
 
 		while (word.size() == 1)
 		{
-			//chars.push_back(word[0]); //adding "p" to char list
-			//ifs >> word;
-			//mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the player is facing
-			//ifs >> word;
-			chars.push_back(word[0]); //adding "e" to the char list
-			ifs >> word;
-			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the enemy is facing
-			ifs >> word;
-			chars.push_back(word[0]); //adding "o" to char list for obstacle placement
-			ifs >> word;
+			if (word[0] == 'e')
+			{
+				chars.push_back(word[0]); //adding "e" to the char list
+				ifs >> word;
+				mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the enemy is facing
+				ifs >> word;
+			}
+			if (word[0] == 'o')
+			{
+				chars.push_back(word[0]); //adding "o" to char list for obstacle placement
+				ifs >> word;
+			}
 			chars.push_back(word[0]); //adding "d" to char list for door placement
 			ifs >> word;
 			mDirections.push_back(word[0]); //adding "l", "r", "u" or "d" to char list, indicating the direction the door is facing
 			ifs >> word; 
-
 		}
 		if (word == "@Map")
 		{

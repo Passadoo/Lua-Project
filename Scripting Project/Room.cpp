@@ -174,6 +174,7 @@ void Room::RemoveEnemy(int index)
 
 void Room::LoadRoom()
 {
+	std::cout << "Loading " << mFilePath << std::endl;
 	Map::setObjects(mFilePath, mObstacles, mNrOfObstacles, mEnemies, mNrOfEnemies, mDoors, mNrOfDoors);
 
 	for (int i = 0; i < mNrOfEnemies; i++)
