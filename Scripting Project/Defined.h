@@ -7,6 +7,8 @@ using namespace std;
 class Defined
 {
 public:
+	static const bool DEBUG;
+
 	//Object
 	enum ObjectTypes { AIR = 0, PLAYER, OBSTACLE, ENEMY, DOOR};
 
@@ -39,5 +41,13 @@ public:
 	static const string ENEMY_PATH;
 	static const string PLAYER_PATH;
 	static const string BULLET_PATH;
+
+	// Script paths
+	static const string LUA_TEST_PATH;
+	static const string LUA_TEST2_PATH;
+	static const string LUA_EDITOR_PATH;
+	static const string LUA_GAME_LOGIC_PATH;
+	static const string LUA_ENEMY_PATH;
+
 };
 

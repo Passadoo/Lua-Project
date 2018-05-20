@@ -8,6 +8,12 @@
 #include <fstream>
 #include <cctype>
 
+#include "LuaManager.h"
+#include "LuaFunctionsWrapper.h"
+
+// Testing Lua
+#include "Enemy.h"
+
 class Editor
 {
 public:
@@ -61,4 +67,7 @@ private:
 	// Utilities
 	sf::Vector2i mouseToWorldCoord();
 	char fromKeyToStr(sf::Keyboard::Key key);
+
+	// Lua
+	void initLuaManager();
 };

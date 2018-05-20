@@ -20,36 +20,23 @@
 
 #define USE_EDITOR false
 
-//void ConsoleThread(lua_State* L) {
-//	char command[1000];
-//	while (GetConsoleWindow()) {
-//		memset(command, 0, 1000);
-//		std::cin.getline(command, 1000);
-//		if (luaL_loadstring(L, command) || lua_pcall(L, 0, 0, 0))
-//		{
-//
-//			std::cout << lua_tostring(L, -1) << '\n';
-//			lua_pop(L, 1);
-//		}
-//	}
-//}
-
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(189);
-
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-
 
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(Defined::WINDOW_WIDTH, Defined::WINDOW_HEIGHT), "Scriptning Project!", sf::Style::Close | sf::Style::Resize);
 
 	sf::Clock clock;
 
-	Game* game = new Game();
-	Editor* editor = new Editor();
+	Game* game = nullptr;
+	Editor* editor = nullptr;
+
+	if (USE_EDITOR)
+		editor = new Editor();
+	else
+		game = new Game();
 
 	sf::Time time;
 	sf::Event event;
@@ -58,8 +45,11 @@ int main()
 	{
 		while (window.pollEvent(event))
 		{
-			MouseInput::ProcessInput(window, event);
-			editor->EnterText();
+			if (USE_EDITOR)
+			{
+				MouseInput::ProcessInput(window, event);
+				editor->EnterText();
+			}
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
@@ -98,10 +88,10 @@ int main()
 		window.display();
 	}
 
-	delete game;
-	delete editor;
-
-	lua_close(L);
+	if (game)
+		delete game;
+	if (editor)
+		delete editor;
 
 	return 0;
 }

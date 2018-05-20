@@ -2,6 +2,8 @@
 #include <string>
 #include "Map.h"
 
+#include "LuaFunctionsWrapper.h"
+
 using namespace std;
 
 
@@ -22,6 +24,11 @@ private:
 	bool mHasDoorDown;
 	bool mHasDoorLeft;
 	bool mExists;
+
+	static int luaSetInt(lua_State * pL);
+	static int luaSetPosition(lua_State * pL);
+	static int luaGetFloat(lua_State * pL);
+	static int luaSetFloat(lua_State * pL);
 
 public:
 	Room();

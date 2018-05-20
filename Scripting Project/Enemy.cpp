@@ -1,7 +1,5 @@
 #include "Enemy.h"
 
-
-
 Enemy::Enemy()
 {
 	if (!mTexture.loadFromFile(Defined::ENEMY_PATH))
@@ -13,6 +11,7 @@ Enemy::Enemy()
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
 	mCurrentHealth = Defined::ENEMY_HEALTH;
+	mTime = 0.0f;
 }
 
 Enemy::Enemy(float pPosX, float pPosY)
@@ -26,15 +25,16 @@ Enemy::Enemy(float pPosX, float pPosY)
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
 	mCurrentHealth = Defined::ENEMY_HEALTH;
+	mTime = 0.0f;
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::SetPosition(Vector2f pPosition)
+void Enemy::SetPosition(float x, float y)
 {
-	SetPos(pPosition.x, pPosition.y);
+	SetPos(x, y);
 	mSprite.setPosition(Entity::GetPos());
 }
 
@@ -43,9 +43,9 @@ Vector2f Enemy::GetPos() const
 	return Entity::GetPos();
 }
 
-void Enemy::SetDirection(Defined::eDirection pDir)
+void Enemy::SetDirection(int pDir)
 {
-	mDirection = pDir;
+	mDirection = (Defined::eDirection)pDir;
 }
 
 Defined::eDirection Enemy::GetDirection() const
@@ -91,5 +91,12 @@ void Enemy::Draw(RenderWindow & window)
 
 void Enemy::Update(float dt)
 {
-
+}
+float Enemy::GetTime()
+{
+	return mTime;
+}
+void Enemy::SetTime(float pTime)
+{
+	mTime = pTime;
 }

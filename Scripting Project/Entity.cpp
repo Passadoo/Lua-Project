@@ -29,12 +29,12 @@ Vector2f Entity::GetPos() const
 	return this->mPosition;
 }
 
-float Entity::GetPosX() const
+float Entity::GetPosX()
 {
 	return this->mPosition.x;
 }
 
-float Entity::GetPosY() const
+float Entity::GetPosY()
 {
 	return this->mPosition.y;
 }

@@ -20,12 +20,11 @@ public:
 
 	void SetPosition(Vector2f pPosition);
 	Vector2f GetPos()const;
-	void SetDirection(Defined::eDirection pDir);
-	Defined::eDirection GetDirection()const;
+	void SetDirection(/*Defined::eDirection*/int pDir);
+	/*Defined::eDirection*/int GetDirection();
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
-
 
 };
 

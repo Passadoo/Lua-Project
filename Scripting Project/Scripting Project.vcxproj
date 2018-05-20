@@ -139,6 +139,8 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ILuaMember.cpp" />
+    <ClCompile Include="LuaFunctionsWrapper.cpp" />
     <ClCompile Include="LuaManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -156,12 +158,21 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="ILuaMember.h" />
+    <ClInclude Include="LuaFunctionsWrapper.h" />
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Lua\Enemy.lua" />
+    <None Include="Resources\Lua\gameLogic.lua" />
+    <None Include="Resources\Lua\editor.lua" />
+    <None Include="Resources\Lua\test.lua" />
+    <None Include="Resources\Lua\test2.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

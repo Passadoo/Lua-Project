@@ -2,6 +2,8 @@
 
 Editor::Editor()
 {
+	initLuaManager();
+
 	initObjects();
 	mTextField.setPosition(Defined::WINDOW_WIDTH / 2.0f, Defined::WINDOW_HEIGHT / 2.0f);
 
@@ -19,6 +21,8 @@ Editor::Editor()
 
 Editor::~Editor()
 {
+	LuaManager::CloseLuaManager();
+
 	if (mObjects)
 	{
 		delete[] mObjects;
@@ -65,8 +69,10 @@ void Editor::Draw(sf::RenderWindow & window)
 		// Draw toCreate
 		float border = 10;
 		drawSelectionBox(window, 0, 0, border);
-		mObjectTypes[mToCreate]->sprite.setPosition(border, border);
-		window.draw(mObjectTypes[mToCreate]->sprite);
+
+		int ret = LuaManager::CallLuaFunc<int>("GetToCreate");
+		mObjectTypes[ret]->sprite.setPosition(border, border);
+		window.draw(mObjectTypes[ret]->sprite);
 
 		// Draw textbox for saveing the level
 		if (mSaveLevel)
@@ -186,21 +192,18 @@ void Editor::processInput()
 	{
 		if (MouseInput::wheelUp())
 		{
-			mToCreate--;
-			if (mToCreate < 0)
-				mToCreate = END - 1;
+			LuaManager::CallLuaFunc<void>("decrementToCreate", (int)START, (int)END);
 		}
 		if (MouseInput::wheelDown())
 		{
-			mToCreate++;
-			if (mToCreate >= END)
-				mToCreate = START;
+			LuaManager::CallLuaFunc<void>("incrementToCreate", (int)START, (int)END);
 		}
 
 		if (MouseInput::isPressed(sf::Mouse::Left))
 		{
-			if (mToCreate != NONE)
-				createObject((OBJECT_TYPES)mToCreate);
+			int ret = LuaManager::CallLuaFunc<int>("GetToCreate");
+			if (ret != NONE)
+				createObject((OBJECT_TYPES)ret);
 		}
 		if (MouseInput::isPressed(sf::Mouse::Right))
 		{
@@ -550,4 +553,11 @@ char Editor::fromKeyToStr(sf::Keyboard::Key key)
 	}
 
 	return '?';
+}
+
+void Editor::initLuaManager()
+{
+	LuaManager::InitLuaManager();
+
+	LuaManager::LoadScript(Defined::LUA_EDITOR_PATH);
 }
