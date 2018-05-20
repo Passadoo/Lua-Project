@@ -377,4 +377,9 @@ float Dungeon::GetXDoorY(float y)
 	return x;
 }
 
+int Dungeon::GetNrOfRemainingRooms() const
+{
+	return mRoomInfo.size();
+}
+
 

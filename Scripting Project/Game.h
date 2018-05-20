@@ -10,17 +10,26 @@
 class Game : public ILuaMember
 {
 private:
+	enum eGameState
+	{
+		ePLAYING = 0, eWON, eLOST
+	};
+
 	Bullet ** mBullets;
 	int mNrOfBullets;
-
 	Player* mPlayer;
-
 	Dungeon * mDungeon;
+	eGameState mCurrentState;
+	sf::Texture mWinTexture;
+	sf::Sprite mWinSprite;
+	sf::Texture mLoseTexture;
+	sf::Sprite mLoseSprite;
 
 	MKeyboard* keyboard;
 	void bulletUpdate(float dt);
 
 	void RemoveBullet(int index);
+	void RestartGame();
 
 	void initGame();
 	void closeGame();

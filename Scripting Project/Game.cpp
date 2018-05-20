@@ -100,6 +100,23 @@ void Game::initGame()
 	mDungeon = new Dungeon();
 	keyboard = new MKeyboard();
 
+	
+	mCurrentState = ePLAYING;
+
+	if(!mWinTexture.loadFromFile("Resources/WinTexture.png"))
+	{
+		std::cout << "WinTexture could not be loaded" << std::endl;
+	}
+	if (!mLoseTexture.loadFromFile("Resources/LoseTexture.png"))
+	{
+		std::cout << "LoseTexture could not be loaded" << std::endl;
+	}
+
+	mWinSprite.setTexture(mWinTexture);
+	mWinSprite.setPosition(200.0f, 200.0f);
+	mLoseSprite.setTexture(mLoseTexture);
+	mLoseSprite.setPosition(200.0f, 200.0f);
+
 	initLuaManager();
 
 	mDungeon->LoadCurrentRoom();
@@ -120,15 +137,48 @@ void Game::closeGame()
 	LuaManager::CloseLuaManager();
 }
 
+void Game::RestartGame()
+{
+	//Delete old
+	for (int i = 0; i < mNrOfBullets; i++)
+	{
+		delete mBullets[i];
+	}
+	delete[] mBullets;
+	delete mPlayer;
+	delete mDungeon;
+	LuaManager::CloseLuaManager();
+
+	//Create new
+	mBullets = new Bullet*[5];
+	mNrOfBullets = 0;
+	mPlayer = new Player(2, 2);
+	mDungeon = new Dungeon();
+	mCurrentState = ePLAYING;
+	initLuaManager();
+	mDungeon->LoadCurrentRoom();
+}
+
 void Game::Draw(RenderWindow & window)
 {
-	for (int i = 0; i<mNrOfBullets; i++)
+	if (mCurrentState == ePLAYING)
 	{
-		mBullets[i]->Draw(window);
-	}
+		for (int i = 0; i < mNrOfBullets; i++)
+		{
+			mBullets[i]->Draw(window);
+		}
 
-	mPlayer->Draw(window);
-	mDungeon->Draw(window);
+		mPlayer->Draw(window);
+		mDungeon->Draw(window);
+	}
+	else if (mCurrentState == eWON)
+	{
+		window.draw(mWinSprite);
+	}
+	else if (mCurrentState == eLOST)
+	{
+		window.draw(mLoseSprite);
+	}
 }
 
 void Game::Update(float dt, RenderWindow& window)
@@ -137,11 +187,42 @@ void Game::Update(float dt, RenderWindow& window)
 	LuaManager::CallLuaFunc<void>("UpdatePlayer", Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
 	mPlayer->Update(dt);
 	bulletUpdate(dt);
-
-	if (!mDungeon->NoEnemy(mPlayer->GetPosX(), mPlayer->GetPosY()))
+	if (mCurrentState == ePLAYING)
 	{
-		closeGame();
-		initGame();
+		mDungeon->Update(dt);
+		playerUpdate(dt);
+		bulletUpdate(dt);
+
+		if (mDungeon->GetNrOfRemainingRooms() <= 0)
+		{
+			mCurrentState = eWON;
+		}
+		
+		bool hitEnemy = false;
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfEnemies(); i++)
+		{
+			if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPosX() == mPlayer->GetPosX() && mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPosY() == mPlayer->GetPosY())
+			{
+				hitEnemy = true;
+			}
+		}
+		if (hitEnemy)
+			mCurrentState = eLOST;
+
+	}
+	else if (mCurrentState == eWON)
+	{
+		if (Keyboard::isKeyPressed(Keyboard::P))
+		{
+			RestartGame();
+		}
+	}
+	else if (mCurrentState == eLOST)
+	{
+		if (Keyboard::isKeyPressed(Keyboard::P))
+		{
+			RestartGame();
+		}
 	}
 }
 
