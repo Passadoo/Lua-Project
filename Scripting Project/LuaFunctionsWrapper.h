@@ -67,7 +67,7 @@ public:
 	}
 
 	template<typename Ret, typename Clazz, typename ...Args, typename ...T>
-	static void RegisterCFunction(std::string name, Clazz*& pClass, Ret(Clazz::*Callback)(Args...), T... p) {
+	static void RegisterCFunction(std::string name, Clazz* pClass, Ret(Clazz::*Callback)(Args...), T... p) {
 		ILuaMember::RegisterCaller(name, pClass, Callback, p...);
 		LuaFunctionsWrapper::AddCFunction<Ret, Clazz, Args...>(pClass, name);
 	}

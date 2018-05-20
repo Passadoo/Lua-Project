@@ -16,9 +16,8 @@ public:
 	Player();
 	Player(int pXPos, int pYPos);
 	~Player();
-	
 
-	void SetPosition(Vector2f pPosition);
+	void SetPosition(float x, float y);
 	Vector2f GetPos()const;
 	void SetDirection(/*Defined::eDirection*/int pDir);
 	/*Defined::eDirection*/int GetDirection();

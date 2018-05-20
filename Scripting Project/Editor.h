@@ -7,6 +7,7 @@
 #include "MouseInput.h"
 #include <fstream>
 #include <cctype>
+#include "Keyboard.h"
 
 #include "LuaManager.h"
 #include "LuaFunctionsWrapper.h"
@@ -66,7 +67,6 @@ private:
 
 	// Utilities
 	sf::Vector2i mouseToWorldCoord();
-	char fromKeyToStr(sf::Keyboard::Key key);
 
 	// Lua
 	void initLuaManager();

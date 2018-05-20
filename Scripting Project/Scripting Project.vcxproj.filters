@@ -100,6 +100,9 @@
     <ClCompile Include="LuaFunctionsWrapper.cpp">
       <Filter>Lua\FunctionWrapper</Filter>
     </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -150,14 +153,11 @@
     <ClInclude Include="ILuaMember.h">
       <Filter>Lua\FunctionWrapper</Filter>
     </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Lua\test.lua">
-      <Filter>Lua\Scripts</Filter>
-    </None>
-    <None Include="Resources\Lua\test2.lua">
-      <Filter>Lua\Scripts</Filter>
-    </None>
     <None Include="Resources\Lua\editor.lua">
       <Filter>Lua\Scripts</Filter>
     </None>

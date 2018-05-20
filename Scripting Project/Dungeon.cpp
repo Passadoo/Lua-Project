@@ -244,66 +244,6 @@ bool Dungeon::RoomLeftExists()
 	return mRooms[mCurrentRoomX - 1][mCurrentRoomY].Exists();
 }
 
-Vector2f Dungeon::GetCurrentRoomUpDoorLocation()
-{
-	Vector2f location = Vector2f(-1, -1);
-
-	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
-	{
-		if (GetCurrentRoom().GetDoors()[i]->GetPosY() == 0.0f)
-		{
-			location = Vector2f(GetCurrentRoom().GetDoors()[i]->GetPos());
-		}
-	}
-
-	return location;
-}
-
-Vector2f Dungeon::GetCurrentRoomRightDoorLocation()
-{
-	Vector2f location = Vector2f(-1, -1);
-
-	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
-	{
-		if (GetCurrentRoom().GetDoors()[i]->GetPosX() == (Defined::GRID_CELL_SIZE * (Defined::WORLD_WIDTH - 1)));
-		{
-			location = Vector2f(GetCurrentRoom().GetDoors()[i]->GetPos());
-		}
-	}
-
-	return location;
-}
-
-Vector2f Dungeon::GetCurrentRoomDownDoorLocation()
-{
-	Vector2f location = Vector2f(-1, -1);
-
-	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
-	{
-		if (GetCurrentRoom().GetDoors()[i]->GetPosY() == (Defined::GRID_CELL_SIZE * (Defined::WORLD_HEIGHT - 1)))
-		{
-			location = Vector2f(GetCurrentRoom().GetDoors()[i]->GetPos());
-		}
-	}
-
-	return location;
-}
-
-Vector2f Dungeon::GetCurrentRoomLeftDoorLocation()
-{
-	Vector2f location = Vector2f(-1, -1);
-
-	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
-	{
-		if (GetCurrentRoom().GetDoors()[i]->GetPosX() == 0.0f)
-		{
-			location = Vector2f(GetCurrentRoom().GetDoors()[i]->GetPos());
-		}
-	}
-
-	return location;
-}
-
 void Dungeon::SwitchRoomUp()
 {
 	mCurrentRoomY -= 1;
@@ -413,6 +353,28 @@ bool Dungeon::NoDoor(float x, float y)
 			empty = false;
 	}
 	return empty;
+}
+
+float Dungeon::GetYDoorX(float x)
+{
+	float y = -1;
+	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
+	{
+		if (GetCurrentRoom().GetDoors()[i]->GetPosX() == x)
+			y = GetCurrentRoom().GetDoors()[i]->GetPosY();
+	}
+	return y;
+}
+
+float Dungeon::GetXDoorY(float y)
+{
+	float x = -1;
+	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
+	{
+		if (GetCurrentRoom().GetDoors()[i]->GetPosY() == y)
+			x = GetCurrentRoom().GetDoors()[i]->GetPosX();
+	}
+	return x;
 }
 
 
