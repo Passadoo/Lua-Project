@@ -345,19 +345,6 @@ void Game::closeGame()
 	LuaManager::CloseLuaManager();
 }
 
-void Game::RemoveBullet(int index)
-{
-	if (mNrOfBullets > index)
-	{
-		delete mBullets[index];
-		for (int i = index; i < mNrOfBullets - 1; i++)
-		{
-			mBullets[i] = mBullets[i + 1];
-		}
-		mNrOfBullets--;
-	}
-}
-
 void Game::RestartGame()
 {
 	//Delete old
