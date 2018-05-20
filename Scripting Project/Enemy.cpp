@@ -21,7 +21,7 @@ Enemy::Enemy(float pPosX, float pPosY)
 		//Error
 	}
 	mSprite.setTexture(mTexture);
-	SetPos(pPosX * Defined::GRID_CELL_SIZE, pPosY * Defined::GRID_CELL_SIZE);
+	SetPos((int)(pPosX * Defined::GRID_CELL_SIZE), (int)(pPosY * Defined::GRID_CELL_SIZE));
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
 	mCurrentHealth = Defined::ENEMY_HEALTH;
@@ -34,7 +34,7 @@ Enemy::~Enemy()
 
 void Enemy::SetPosition(float x, float y)
 {
-	SetPos(x, y);
+	SetPos((int)x, (int)y);
 	mSprite.setPosition(Entity::GetPos());
 }
 

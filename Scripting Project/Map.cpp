@@ -23,7 +23,7 @@ void Map::fillGrid(const vector<string>& lines, const vector<char>& chars)
 			objType = Defined::AIR;
 			Map::mObjectTypes[i][j] = objType;
 
-			for (int k = 0; k < chars.size(); k++)
+			for (int k = 0; k < (int)chars.size(); k++)
 			{
 				if (temp == chars.at(k))
 				{
@@ -71,7 +71,7 @@ Map::~Map()
 bool Map::ReadMap(const string & path)
 {
 	std::ifstream ifs;
-	char input;
+	char input = ' ';
 
 	ifs.open(path);
 
@@ -195,29 +195,9 @@ void Map::setObjects(string filepath, Obstacle **& pObstacles, int & pNrOfObstac
 				pObstacles[tempObstacles] = new Obstacle(i, j);
 				tempObstacles++;
 			}
-			//if (Map::mObjectTypes[i][j] == Defined::PLAYER)
-			//{
-			//	pPlayer = new Player(i, j);
-			//	if (mDirections[0] == 'l')
-			//	{
-			//		pPlayer->SetDirection(Defined::LEFT);
-			//	}
-			//	if (mDirections[0] == 'r')
-			//	{
-			//		pPlayer->SetDirection(Defined::RIGHT);
-			//	}
-			//	if (mDirections[0] == 'u')
-			//	{
-			//		pPlayer->SetDirection(Defined::UP);
-			//	}
-			//	if (mDirections[0] == 'd')
-			//	{
-			//		pPlayer->SetDirection(Defined::DOWN);
-			//	}
-			//}
 			if (Map::mObjectTypes[i][j] == Defined::ENEMY)
 			{
-				pEnemies[tempEnemies] = new Enemy(i, j);
+				pEnemies[tempEnemies] = new Enemy((float)i, (float)j);
 				if (mDirections[0] == 'l')
 				{
 					pEnemies[tempEnemies]->SetDirection(Defined::LEFT);

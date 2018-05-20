@@ -19,8 +19,8 @@ public:
 
 	void SetPosition(float x, float y);
 	Vector2f GetPos()const;
-	void SetDirection(/*Defined::eDirection*/int pDir);
-	/*Defined::eDirection*/int GetDirection();
+	void SetDirection(int pDir);
+	int GetDirection();
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);

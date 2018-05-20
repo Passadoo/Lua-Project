@@ -30,7 +30,7 @@ Editor::~Editor()
 
 	if (mObjectTypes.size() != 0)
 	{
-		for (int i = 0; i < mObjectTypes.size(); i++)
+		for (int i = 0; i < (int)mObjectTypes.size(); i++)
 		{
 			delete mObjectTypes[i];
 		}
@@ -60,7 +60,7 @@ void Editor::Draw(sf::RenderWindow & window)
 				position = x + y * Defined::WORLD_WIDTH;
 				if (mObjects[position]->objType != NONE)
 				{
-					mObjects[position]->sprite.setPosition(x * Defined::GRID_CELL_SIZE, y * Defined::GRID_CELL_SIZE);
+					mObjects[position]->sprite.setPosition((float)(x * Defined::GRID_CELL_SIZE), (float)(y * Defined::GRID_CELL_SIZE));
 					window.draw(mObjects[position]->sprite);
 				}
 			}
@@ -389,8 +389,8 @@ void Editor::drawSelectionBox(sf::RenderWindow &window, float x, float y, float 
 sf::Vector2i Editor::mouseToWorldCoord()
 {
 	sf::Vector2i pos;
-	pos.x = ((float)(MouseInput::GetX() / (float)Defined::WINDOW_WIDTH) * Defined::WORLD_WIDTH);
-	pos.y = ((float)(MouseInput::GetY() / (float)Defined::WINDOW_HEIGHT) * Defined::WORLD_HEIGHT);
+	pos.x = (int)((float)(MouseInput::GetX() / (float)Defined::WINDOW_WIDTH) * Defined::WORLD_WIDTH);
+	pos.y = (int)((float)(MouseInput::GetY() / (float)Defined::WINDOW_HEIGHT) * Defined::WORLD_HEIGHT);
 	return pos;
 }
 

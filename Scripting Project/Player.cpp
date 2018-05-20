@@ -32,7 +32,7 @@ Player::~Player()
 
 void Player::SetPosition(float x, float y)
 {
-	SetPos(x, y);
+	SetPos((int)x, (int)y);
 	mSprite.setPosition(Entity::GetPos());
 }
 
@@ -41,12 +41,12 @@ Vector2f Player::GetPos()const
 	return Entity::GetPos();
 }
 
-void Player::SetDirection(/*Defined::eDirection*/int pDir)
+void Player::SetDirection(int pDir)
 {
 	mDirection = (Defined::eDirection)pDir;
 }
 
-/*Defined::eDirection*/int Player::GetDirection()
+int Player::GetDirection()
 {
 	return mDirection;
 }
