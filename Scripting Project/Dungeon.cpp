@@ -3,7 +3,7 @@
 Dungeon::Dungeon()
 {
 	ifstream ifs;
-	char input;
+	char input = ' ';
 
 	ifs.open(Defined::ROOM_INFO_PATH);
 
@@ -26,7 +26,7 @@ Dungeon::Dungeon()
 
 	ifs.close();
 
-	for (int i = 0; i < fileNames.size(); i++)
+	for (int i = 0; i < (int)fileNames.size(); i++)
 	{
 		RoomInfo tempInfo;
 		tempInfo.mFilename = fileNames[i];
@@ -66,7 +66,7 @@ Dungeon::Dungeon()
 	int index = -1;
 	bool found = false;
 
-	for (int i = 0; i < mRoomInfo.size() && !found; i++)
+	for (int i = 0; i < (int)mRoomInfo.size() && !found; i++)
 	{
 		if (mRoomInfo[i].mFilename == "StartRoom.txt")
 		{
@@ -116,7 +116,7 @@ bool Dungeon::AddRoomUp()
 
 	if (mRooms[mCurrentRoomX][mCurrentRoomY].HasDoorUp() && !mRooms[mCurrentRoomX][mCurrentRoomY - 1].Exists()) 
 	{
-		for (int i = 0; i < mRoomInfo.size() && !roomFound; i++)
+		for (int i = 0; i < (int)mRoomInfo.size() && !roomFound; i++)
 		{
 			if (mRoomInfo[i].mHasDoorDown)
 			{
@@ -145,7 +145,7 @@ bool Dungeon::AddRoomRight()
 
 	if (mRooms[mCurrentRoomX][mCurrentRoomY].HasDoorRight() && !mRooms[mCurrentRoomX + 1][mCurrentRoomY].Exists())
 	{
-		for (int i = 0; i < mRoomInfo.size() && !roomFound; i++)
+		for (int i = 0; i < (int)mRoomInfo.size() && !roomFound; i++)
 		{
 			if (mRoomInfo[i].mHasDoorLeft)
 			{
@@ -174,7 +174,7 @@ bool Dungeon::AddRoomDown()
 
 	if (mRooms[mCurrentRoomX][mCurrentRoomY].HasDoorDown() && !mRooms[mCurrentRoomX][mCurrentRoomY + 1].Exists())
 	{
-		for (int i = 0; i < mRoomInfo.size() && !roomFound; i++)
+		for (int i = 0; i < (int)mRoomInfo.size() && !roomFound; i++)
 		{
 			if (mRoomInfo[i].mHasDoorUp)
 			{
@@ -203,7 +203,7 @@ bool Dungeon::AddRoomLeft()
 
 	if (mRooms[mCurrentRoomX][mCurrentRoomY].HasDoorLeft() && !mRooms[mCurrentRoomX - 1][mCurrentRoomY].Exists())
 	{
-		for (int i = 0; i < mRoomInfo.size() && !roomFound; i++)
+		for (int i = 0; i < (int)mRoomInfo.size() && !roomFound; i++)
 		{
 			if (mRoomInfo[i].mHasDoorRight)
 			{
@@ -377,7 +377,7 @@ float Dungeon::GetXDoorY(float y)
 	return x;
 }
 
-int Dungeon::GetNrOfRemainingRooms() const
+int Dungeon::GetNrOfRemainingRooms()
 {
 	return mRoomInfo.size();
 }

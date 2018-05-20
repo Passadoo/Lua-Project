@@ -60,6 +60,6 @@ public:
 	float GetYDoorX(float x);
 	float GetXDoorY(float y);
 
-	int GetNrOfRemainingRooms()const;
+	int GetNrOfRemainingRooms();
 };
 
