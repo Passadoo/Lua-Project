@@ -78,7 +78,7 @@ int main()
 			if (USE_EDITOR)
 				editor->Update(deltaTime);
 			else
-				game->Update(deltaTime);
+				game->Update(deltaTime, window);
 			clock.restart();
 		}
 		if (USE_EDITOR)

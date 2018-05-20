@@ -27,17 +27,19 @@ private:
 	void playerUpdate(float dt);
 	void roomUpdate();
 	void bulletUpdate(float dt);
-	void enemyUpdate(float dt);
 
 	void RemoveBullet(int index);
 	void RestartGame();
+
+	void initGame();
+	void closeGame();
 
 public:
 	Game();
 	~Game();
 
 	void Draw(RenderWindow &window);
-	void Update(float dt);
+	void Update(float dt, RenderWindow& window);
 
 	// Lua
 	void initLuaManager();

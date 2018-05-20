@@ -280,12 +280,30 @@ void Game::bulletUpdate(float dt)
 	}
 }
 
-void Game::enemyUpdate(float dt)
+Game::Game()
 {
-
+	initGame();
 }
 
-Game::Game()
+Game::~Game()
+{
+	closeGame();
+}
+
+void Game::RemoveBullet(int index)
+{
+	if (mNrOfBullets > index)
+	{
+		delete mBullets[index];
+		for (int i = index; i < mNrOfBullets - 1; i++)
+		{
+			mBullets[i] = mBullets[i + 1];
+		}
+		mNrOfBullets--;
+	}
+}
+
+void Game::initGame()
 {
 	mBullets = new Bullet*[5];
 	mNrOfBullets = 0;
@@ -313,7 +331,7 @@ Game::Game()
 	mDungeon->LoadCurrentRoom();
 }
 
-Game::~Game()
+void Game::closeGame()
 {
 	for (int i = 0; i < mNrOfBullets; i++)
 	{
@@ -384,7 +402,7 @@ void Game::Draw(RenderWindow & window)
 	}
 }
 
-void Game::Update(float dt)
+void Game::Update(float dt, RenderWindow& window)
 {
 	if (mCurrentState == ePLAYING)
 	{
