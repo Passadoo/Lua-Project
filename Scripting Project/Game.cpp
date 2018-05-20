@@ -292,15 +292,21 @@ Game::Game()
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
 	
-	mCurrentState = /*ePLAYING*/ eWON;
+	mCurrentState = /*ePLAYING*/ eLOST;
 
 	if(!mWinTexture.loadFromFile("Resources/WinTexture.png"))
 	{
 		std::cout << "WinTexture could not be loaded" << std::endl;
 	}
+	if (!mLoseTexture.loadFromFile("Resources/LoseTexture.png"))
+	{
+		std::cout << "LoseTexture could not be loaded" << std::endl;
+	}
 
 	mWinSprite.setTexture(mWinTexture);
 	mWinSprite.setPosition(200.0f, 200.0f);
+	mLoseSprite.setTexture(mLoseTexture);
+	mLoseSprite.setPosition(200.0f, 200.0f);
 
 	initLuaManager();
 
@@ -370,12 +376,11 @@ void Game::Draw(RenderWindow & window)
 	}
 	else if (mCurrentState == eWON)
 	{
-		std::cout << "Drawing mWinSprite" << std::endl;
 		window.draw(mWinSprite);
 	}
 	else if (mCurrentState == eLOST)
 	{
-
+		window.draw(mLoseSprite);
 	}
 }
 
@@ -391,6 +396,18 @@ void Game::Update(float dt)
 		{
 			mCurrentState = eWON;
 		}
+		
+		bool hitEnemy = false;
+		for (int i = 0; i < mDungeon->GetCurrentRoom().GetNrOfEnemies(); i++)
+		{
+			if (mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPosX() == mPlayer->GetPosX() && mDungeon->GetCurrentRoom().GetEnemies()[i]->GetPosY() == mPlayer->GetPosY())
+			{
+				hitEnemy = true;
+			}
+		}
+		if (hitEnemy)
+			mCurrentState = eLOST;
+
 	}
 	else if (mCurrentState == eWON)
 	{
@@ -401,7 +418,10 @@ void Game::Update(float dt)
 	}
 	else if (mCurrentState == eLOST)
 	{
-
+		if (Keyboard::isKeyPressed(Keyboard::P))
+		{
+			RestartGame();
+		}
 	}
 }
 

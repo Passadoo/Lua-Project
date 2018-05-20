@@ -21,6 +21,8 @@ private:
 	eGameState mCurrentState;
 	sf::Texture mWinTexture;
 	sf::Sprite mWinSprite;
+	sf::Texture mLoseTexture;
+	sf::Sprite mLoseSprite;
 
 	void playerUpdate(float dt);
 	void roomUpdate();
