@@ -9,12 +9,18 @@
 class Game
 {
 private:
+	enum eGameState
+	{
+		ePLAYING = 0, eWON, eLOST
+	};
+
 	Bullet ** mBullets;
 	int mNrOfBullets;
-
 	Player* mPlayer;
-
 	Dungeon * mDungeon;
+	eGameState mCurrentState;
+	sf::Texture mWinTexture;
+	sf::Sprite mWinSprite;
 
 	void playerUpdate(float dt);
 	void roomUpdate();
@@ -22,6 +28,7 @@ private:
 	void enemyUpdate(float dt);
 
 	void RemoveBullet(int index);
+	void RestartGame();
 
 public:
 	Game();

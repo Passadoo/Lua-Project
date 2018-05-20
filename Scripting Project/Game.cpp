@@ -207,6 +207,8 @@ void Game::roomUpdate()
 			}
 		}
 	}
+
+	std::cout << "There are " << mDungeon->GetNrOfRemainingRooms() << " rooms remaining" << std::endl;
 }
 
 void Game::bulletUpdate(float dt)
@@ -289,6 +291,16 @@ Game::Game()
 	mNrOfBullets = 0;
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
+	
+	mCurrentState = /*ePLAYING*/ eWON;
+
+	if(!mWinTexture.loadFromFile("Resources/WinTexture.png"))
+	{
+		std::cout << "WinTexture could not be loaded" << std::endl;
+	}
+
+	mWinSprite.setTexture(mWinTexture);
+	mWinSprite.setPosition(200.0f, 200.0f);
 
 	initLuaManager();
 
@@ -322,22 +334,75 @@ void Game::RemoveBullet(int index)
 	}
 }
 
+void Game::RestartGame()
+{
+	//Delete old
+	for (int i = 0; i < mNrOfBullets; i++)
+	{
+		delete mBullets[i];
+	}
+	delete[] mBullets;
+	delete mPlayer;
+	delete mDungeon;
+	LuaManager::CloseLuaManager();
+
+	//Create new
+	mBullets = new Bullet*[5];
+	mNrOfBullets = 0;
+	mPlayer = new Player(2, 2);
+	mDungeon = new Dungeon();
+	mCurrentState = ePLAYING;
+	initLuaManager();
+	mDungeon->LoadCurrentRoom();
+}
+
 void Game::Draw(RenderWindow & window)
 {
-	for (int i = 0; i<mNrOfBullets; i++)
+	if (mCurrentState == ePLAYING)
 	{
-		mBullets[i]->Draw(window);
-	}
+		for (int i = 0; i < mNrOfBullets; i++)
+		{
+			mBullets[i]->Draw(window);
+		}
 
-	mPlayer->Draw(window);
-	mDungeon->Draw(window);
+		mPlayer->Draw(window);
+		mDungeon->Draw(window);
+	}
+	else if (mCurrentState == eWON)
+	{
+		std::cout << "Drawing mWinSprite" << std::endl;
+		window.draw(mWinSprite);
+	}
+	else if (mCurrentState == eLOST)
+	{
+
+	}
 }
 
 void Game::Update(float dt)
 {
-	mDungeon->Update(dt);
-	playerUpdate(dt);
-	bulletUpdate(dt);
+	if (mCurrentState == ePLAYING)
+	{
+		mDungeon->Update(dt);
+		playerUpdate(dt);
+		bulletUpdate(dt);
+
+		if (mDungeon->GetNrOfRemainingRooms() <= 0)
+		{
+			mCurrentState = eWON;
+		}
+	}
+	else if (mCurrentState == eWON)
+	{
+		if (Keyboard::isKeyPressed(Keyboard::P))
+		{
+			RestartGame();
+		}
+	}
+	else if (mCurrentState == eLOST)
+	{
+
+	}
 }
 
 void Game::initLuaManager()

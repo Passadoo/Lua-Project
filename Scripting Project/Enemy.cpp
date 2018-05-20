@@ -91,11 +91,14 @@ void Enemy::Draw(RenderWindow & window)
 
 void Enemy::Update(float dt)
 {
+
 }
+
 float Enemy::GetTime()
 {
 	return mTime;
 }
+
 void Enemy::SetTime(float pTime)
 {
 	mTime = pTime;

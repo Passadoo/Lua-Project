@@ -61,5 +61,7 @@ public:
 	bool NoObstacle(float x, float y);
 	bool NoEnemy(float x, float y);
 	bool NoDoor(float x, float y);
+
+	int GetNrOfRemainingRooms()const;
 };
 
