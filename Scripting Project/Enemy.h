@@ -9,14 +9,16 @@ private:
 	int mCurrentHealth;
 
 	Defined::eDirection mDirection;
+
+	float mTime;
 public:
 	Enemy();
 	Enemy(float pPosX, float pPosY);
 	~Enemy();
 
-	void SetPosition(Vector2f pPosition);
+	void SetPosition(float x, float y);
 	Vector2f GetPos()const;
-	void SetDirection(Defined::eDirection pDir);
+	void SetDirection(int pDir);
 	Defined::eDirection GetDirection()const;
 	void TakeDamage();
 	int GetHealth()const;
@@ -24,14 +26,7 @@ public:
 	void Draw(RenderWindow &window);
 	void Update(float dt);
 
-	void TestLuaFunction1();
-	float TestLuaFunction7();
-	void TestLuaFunction2(int i);
-	int TestLuaFunction3(int i);
-	void TestLuaFunction4(int i);
-	void TestLuaFunction5(int i, int j);
-	bool TestLuaFunction6(int i, int j);
-
-	int mI = 0;
+	float GetTime();
+	void SetTime(float pTime);
 };
 

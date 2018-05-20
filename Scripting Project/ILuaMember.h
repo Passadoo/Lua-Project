@@ -32,7 +32,6 @@ private:
 	static unsigned int freeID;
 	unsigned int id;
 	std::string luaObject;
-	//static std::map<ILuaMember*, std::string> m_pointers;
 
 public:
 	ILuaMember() {id = freeID++;};
@@ -51,7 +50,8 @@ public:
 			std::cout << "Class of function [" << name << "] is not a Lua member" << std::endl;
 			return;
 		}
-		std::cout << "Register function [" << name << "] with [" << params << "] arguments" << std::endl;
+		if (Defined::DEBUG)
+			std::cout << "Register function [" << name << "] with [" << params << "] arguments" << std::endl;
 		MapHolder<Ret, Args...>::CallbackMap[name] = std::bind(Callback, pClass, p...);
 	}
 

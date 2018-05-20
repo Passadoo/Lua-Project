@@ -25,10 +25,6 @@ public:
 	void Draw(sf::RenderWindow &window);
 	void EnterText();
 
-	// Functions called from Lua
-	static int initNew(lua_State * pL);
-	static int setPos(lua_State * pL);
-
 private:
 	enum OBJECT_TYPES { NONE, OBSTACLE, DOOR, ENEMY, END, START = NONE};
 	struct Obj
@@ -52,9 +48,6 @@ private:
 	std::string mText;
 	sf::Text mTextField;
 	bool mKeys[sf::Keyboard::KeyCount];
-
-	Enemy* mEnemy;
-	Enemy* mEnemy2;
 
 private:
 	void loadObjectTexture(Obj* obj, const std::string & objectPath);

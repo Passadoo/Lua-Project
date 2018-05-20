@@ -66,7 +66,6 @@ void Game::roomUpdate()
 {
 	LuaManager::CallLuaFunc<void>("EnterRoom", (int)Defined::GRID_CELL_SIZE, (int)Defined::WORLD_WIDTH, (int)Defined::WORLD_HEIGHT);
 
-	LuaManager::PrintStackSize();
 	if (LuaManager::CallLuaFunc<bool>("GetEnteredDoorUp"))
 	{
 		if (!mDungeon->RoomUpExists())
@@ -262,9 +261,10 @@ Game::Game()
 	mNrOfBullets = 0;
 	mPlayer = new Player(2, 2);
 	mDungeon = new Dungeon();
-	mDungeon->LoadCurrentRoom();
 
 	initLuaManager();
+
+	mDungeon->LoadCurrentRoom();
 }
 
 Game::~Game()
@@ -322,21 +322,18 @@ void Game::initLuaManager()
 	LuaFunctionsWrapper::RegisterCFunction("GetDirection", mPlayer, &Player::GetDirection);
 	LuaFunctionsWrapper::RegisterCFunction("GetPosX", (Entity*&)mPlayer, &Player::GetPosX);
 	LuaFunctionsWrapper::RegisterCFunction("GetPosY", (Entity*&)mPlayer, &Player::GetPosY);
+
+	LuaFunctionsWrapper::RegisterCFunction("NoObstacle", mDungeon, &Dungeon::NoObstacle, _1, _2);
+	LuaFunctionsWrapper::RegisterCFunction("NoEnemy", mDungeon, &Dungeon::NoEnemy, _1, _2);
+	LuaFunctionsWrapper::RegisterCFunction("NoDoor", mDungeon, &Dungeon::NoDoor, _1, _2);
+
+	LuaManager::LoadScript(Defined::LUA_ENEMY_PATH);
 }
 
 void Game::lua_playerMovement(int dir, Vector2f& pos)
 {
 	if (LuaManager::CallLuaFuncS<bool>("MovePlayer", 3, dir, Defined::GRID_CELL_SIZE))
 	{
-		float y = LuaManager::GetFloat();
-		float x = LuaManager::GetFloat();
-		pos = Vector2f(x, y);
+		pos = Vector2f(LuaManager::GetFloat(), LuaManager::GetFloat());
 	}
-	/*LuaManager::CallLuaFuncS<void>("MovePlayer", 3, dir, Defined::GRID_CELL_SIZE);
-	if (LuaManager::GetBool())
-	{
-		float y = LuaManager::GetFloat();
-		float x = LuaManager::GetFloat();
-		pos = Vector2f(x, y);
-	}*/
 }

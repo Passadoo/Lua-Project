@@ -1,7 +1,8 @@
 #pragma once
 #include "Room.h"
+#include "ILuaMember.h"
 
-class Dungeon
+class Dungeon : public ILuaMember
 {
 private:
 	Room ** mRooms;
@@ -51,5 +52,9 @@ public:
 
 	void Draw(RenderWindow &window);
 	void Update(float dt);
+
+	bool NoObstacle(float x, float y);
+	bool NoEnemy(float x, float y);
+	bool NoDoor(float x, float y);
 };
 

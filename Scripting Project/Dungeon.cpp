@@ -334,4 +334,37 @@ void Dungeon::Update(float dt)
 	mRooms[mCurrentRoomX][mCurrentRoomY].Update(dt);
 }
 
+bool Dungeon::NoObstacle(float x, float y)
+{
+	bool empty = true;
+	for (int i = 0; i < GetCurrentRoom().GetNrOfObstacles(); i++)
+	{
+		if (GetCurrentRoom().GetObstacles()[i]->GetPos() == sf::Vector2f(x, y))
+			empty = false;
+	}
+	return empty;
+}
+
+bool Dungeon::NoEnemy(float x, float y)
+{
+	bool empty = true;
+	for (int i = 0; i < GetCurrentRoom().GetNrOfEnemies(); i++)
+	{
+		if (GetCurrentRoom().GetEnemies()[i]->GetPos() == sf::Vector2f(x, y))
+			empty = false;
+	}
+	return empty;
+}
+
+bool Dungeon::NoDoor(float x, float y)
+{
+	bool empty = true;
+	for (int i = 0; i < GetCurrentRoom().GetNrOfDoors(); i++)
+	{
+		if (GetCurrentRoom().GetDoors()[i]->GetPos() == sf::Vector2f(x, y))
+			empty = false;
+	}
+	return empty;
+}
+
 

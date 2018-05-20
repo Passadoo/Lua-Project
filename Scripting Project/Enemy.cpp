@@ -11,6 +11,7 @@ Enemy::Enemy()
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
 	mCurrentHealth = Defined::ENEMY_HEALTH;
+	mTime = 0.0f;
 }
 
 Enemy::Enemy(float pPosX, float pPosY)
@@ -24,15 +25,16 @@ Enemy::Enemy(float pPosX, float pPosY)
 	mSprite.setPosition(GetPos());
 	mDirection = Defined::RIGHT;
 	mCurrentHealth = Defined::ENEMY_HEALTH;
+	mTime = 0.0f;
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::SetPosition(Vector2f pPosition)
+void Enemy::SetPosition(float x, float y)
 {
-	SetPos(pPosition.x, pPosition.y);
+	SetPos(x, y);
 	mSprite.setPosition(Entity::GetPos());
 }
 
@@ -41,9 +43,9 @@ Vector2f Enemy::GetPos() const
 	return Entity::GetPos();
 }
 
-void Enemy::SetDirection(Defined::eDirection pDir)
+void Enemy::SetDirection(int pDir)
 {
-	mDirection = pDir;
+	mDirection = (Defined::eDirection)pDir;
 }
 
 Defined::eDirection Enemy::GetDirection() const
@@ -89,46 +91,12 @@ void Enemy::Draw(RenderWindow & window)
 
 void Enemy::Update(float dt)
 {
-
 }
-
-void Enemy::TestLuaFunction1()
+float Enemy::GetTime()
 {
-	std::cout << "Called " << __func__ << std::endl;
+	return mTime;
 }
-
-float Enemy::TestLuaFunction7()
+void Enemy::SetTime(float pTime)
 {
-	std::cout << "Called " << __func__ << std::endl;
-	return 1.0f;
-}
-
-void Enemy::TestLuaFunction2(int i)
-{
-	std::cout << "Called " << __func__ << ", Return: " << i << std::endl;
-}
-
-int Enemy::TestLuaFunction3(int i)
-{
-	std::cout << "Called func [" << __func__ << "], that returns value: " << i + 1 << std::endl;
-	return i + 1;
-}
-
-void Enemy::TestLuaFunction4(int i)
-{
-	mI += i;
-	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
-}
-
-void Enemy::TestLuaFunction5(int i, int j)
-{
-	mI += i;
-	std::cout << "Called func [" << __func__ << "], mI: " << mI << std::endl;
-}
-
-bool Enemy::TestLuaFunction6(int i, int j)
-{
-	mI += i;
-	std::cout << "Called func [" << __func__ << "], mI: " << mI << ", i: " << i << ", j: " <<j  << std::endl;
-	return true;
+	mTime = pTime;
 }

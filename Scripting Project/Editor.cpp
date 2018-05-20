@@ -21,13 +21,6 @@ Editor::Editor()
 
 Editor::~Editor()
 {
-	/*Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
-	if (enemy)
-		delete enemy;*/
-	if (mEnemy)
-		delete mEnemy;
-	if (mEnemy2)
-		delete mEnemy2;
 	LuaManager::CloseLuaManager();
 
 	if (mObjects)
@@ -52,19 +45,6 @@ void Editor::Update(float dt)
 
 void Editor::ProcessInputs()
 {
-	// Lua test
-	/*if (Keyboard::isKeyPressed(Keyboard::Key::F))
-	{
-		Enemy* enemy = LuaManager::GetObjectPtrEmpty<Enemy>("enemy", "Test");
-		if (enemy->GetPosX() == 0 && enemy->GetPosY() == 0)
-		{
-			lua_getglobal(LuaManager::GetCurrentState(), "setPos");
-			LuaManager::PushFloat(10.0f);
-			LuaManager::PushFloat(15.2f);
-			LuaManager::CallLuaFunction("setPos", 2, 0);
-		}
-	}*/
-
 	processInput();
 }
 
@@ -150,36 +130,6 @@ void Editor::EnterText()
 			}
 		}
 	}
-}
-
-int Editor::initNew(lua_State * pL)
-{
-	std::cout << "Called function [" << __func__ << "]" << std::endl;
-	
-	// Monster is a C++ class defined somewhere...
-	Enemy** monster = reinterpret_cast<Enemy**>(lua_newuserdata(LuaManager::GetCurrentState(), sizeof(Enemy*)));
-	*monster = new Enemy();
-	luaL_getmetatable(LuaManager::GetCurrentState(), LuaManager::GetMetaTable("Test").c_str());
-	lua_setmetatable(LuaManager::GetCurrentState(), -2);
-	std::cout << "[C++] Created enemy" << std::endl;
-	
-	return 1;
-}
-
-int Editor::setPos(lua_State * pL)
-{
-	std::cout << std::endl << "Called function [" << __func__ << "]" << std::endl;
-
-	float y = LuaManager::GetFloat();
-	float x = LuaManager::GetFloat();
-	Enemy* enemy = LuaManager::GetObjectPtr<Enemy>("Test");
-	if (enemy)
-	{
-		std::cout << "old pos: (" << enemy->GetPosX() << "; " << enemy->GetPosY() << ")" << std::endl;
-		enemy->SetPosition(sf::Vector2f(x, y));
-		std::cout << "new pos: (" << enemy->GetPosX() << "; " << enemy->GetPosY() << ")" << std::endl;
-	}
-	return 0;
 }
 
 void Editor::loadObjectTexture(Obj* obj, const std::string & objectPath)
@@ -609,65 +559,5 @@ void Editor::initLuaManager()
 {
 	LuaManager::InitLuaManager();
 
-	// Register C/C++ functions
-	/*luaL_Reg functionList[] = { {"new", initNew}, { "setPos", setPos }, {NULL, NULL} };
-	LuaManager::RegisterObjectFunctions("Test", functionList);
-
-	// Load Lua script
-	LuaManager::LoadScript(Defined::LUA_TEST_PATH);
-
-	// Test calling Lua function "init"
-	LuaManager::CallLuaFunction("init");*/
-	//-------------------------------------------------------------------------------------
-	/*mEnemy = new Enemy();
-
-	LuaManager::LoadScript(Defined::LUA_TEST2_PATH);
-
-	mEnemy->AddFunction<void, Enemy, int>("TestLuaFunction2", mEnemy, &Enemy::TestLuaFunction2);
-
-	LuaFunctionsWrapper::AddCFunction<Enemy, void, int>(mEnemy);
-	
-	LuaManager::CallLuaFunction("callCFunc");*/
-
 	LuaManager::LoadScript(Defined::LUA_EDITOR_PATH);
-
-	mEnemy = new Enemy();
-	mEnemy2 = new Enemy();
-
-	//mEnemy->RegisterCaller("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
-	//LuaFunctionsWrapper::AddCFunction<void, Enemy, int>(mEnemy, "TestLuaFunction4");
-
-	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction4", mEnemy, &Enemy::TestLuaFunction4, _1);
-	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction6", mEnemy2, &Enemy::TestLuaFunction6, _1, _2);
-	LuaFunctionsWrapper::RegisterCFunction("TestLuaFunction7", mEnemy, &Enemy::TestLuaFunction7);
-	LuaManager::PrintStackSize();
-
-	ILuaMember::CallMemFunc<void>("TestLuaFunction4", 1);
-
-	bool ret = false;
-	ret = mEnemy2->CallMemFunc<bool>("TestLuaFunction6", 1, 5);
-	std::cout << (ret? "true": "false") << std::endl;
-
-	int ret2 = 0;
-	ret2 = LuaManager::CallLuaFunc<int>("Update", 0, 1, 2, 3);
-	std::cout << ret2 << std::endl;
-	LuaManager::PrintStackSize();
-
-	LuaManager::CallLuaFunc<bool>("m4");
-	LuaManager::PrintStackSize();
-
-	/*luaL_Reg functionList[] = { { "call", call },{ NULL, NULL } };
-	LuaManager::RegisterObjectFunctions("Enemy", functionList);*/
-
-	LuaFunctionsWrapper::RegisterObject(mEnemy2);
-	LuaFunctionsWrapper::RegisterObject(mEnemy);
-
-	LuaManager::LoadScript(Defined::LUA_ENEMY_PATH);
-
-	LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemy), (Entity*&)mEnemy, &Enemy::GetPosX);
-	LuaFunctionsWrapper::RegisterCFunction(LuaFunctionsWrapper::GenerateFuncName("GetPosX", mEnemy2), (Entity*&)mEnemy2, &Enemy::GetPosX);
-	mEnemy2->SetPos(10, 0);
-	mEnemy->SetPos(100, 0);
-	LuaManager::CallLuaFunc<void>("UpdateEnemy", mEnemy2, mEnemy2->GetLuaObject());
-	LuaManager::CallLuaFunc<void>("UpdateEnemy", mEnemy, mEnemy->GetLuaObject());
 }

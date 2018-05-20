@@ -73,27 +73,11 @@ public:
 	}
 
 	static std::string GenerateFuncName(const std::string & funcName, ILuaMember* luaMember) {
-		const void * ptr = static_cast<const void*>(luaMember);
-		std::stringstream ss;
-		ss << ptr;
 		return funcName + std::to_string(luaMember->GetID());
 	}
 
 	static void RegisterObject(ILuaMember* member) {
 		unsigned int luaObjectIndex = freeLuaObject++;
 		member->SetLuaObject(std::to_string(luaObjectIndex));
-
-		luaL_Reg functionList[] = { { "call", call },{ NULL, NULL } };
-		LuaManager::RegisterObjectFunctions(std::to_string(luaObjectIndex), functionList);
-	};
-
-	static int call(lua_State * pL) {
-		std::string function = LuaManager::GetString();
-		std::string luaObject = LuaManager::GetString();
-
-		ILuaMember* luaMember = LuaManager::GetObjectPtr<ILuaMember>(luaObject);
-
-		LuaManager::push(LuaManager::GetCurrentState(), luaMember->CallMemFunc<float>(LuaFunctionsWrapper::GenerateFuncName(function, luaMember)));
-		return 1;
 	};
 };
